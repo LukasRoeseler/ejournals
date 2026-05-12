@@ -695,16 +695,24 @@ function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'
 function spin(){ return '<span class="spinner-sm"></span>'; }
 function fmtNum(n){ return (n===null||n===undefined) ? '—' : Number(n).toLocaleString('en'); }
 
+var LAST_FETCH_ERROR = null;
 async function fetchJSON(url, timeout){
   timeout = timeout || 12000;
   var ctrl = new AbortController();
   var t = setTimeout(function(){ ctrl.abort(); }, timeout);
   try {
-    var r = await fetch(url, { signal: ctrl.signal, headers: { 'Accept': 'application/json' } });
+    // No custom headers — keeps it a "simple" CORS request (no preflight)
+    var r = await fetch(url, { signal: ctrl.signal });
     clearTimeout(t);
-    if (!r.ok) return null;
+    if (!r.ok) {
+      LAST_FETCH_ERROR = 'HTTP ' + r.status + ' for ' + url.slice(0, 120);
+      return null;
+    }
     return await r.json();
-  } catch(e){ return null; }
+  } catch(e){
+    LAST_FETCH_ERROR = (e && e.name || 'error') + ': ' + (e && e.message || String(e)) + ' for ' + url.slice(0, 120);
+    return null;
+  }
 }
 
 function doiSortKey(doi){
@@ -718,29 +726,51 @@ function doiSortKey(doi){
 /* ============================================
    DATACITE — fetch all DOIs for a journal
 ============================================ */
-async function fetchDataciteDOIs(journal){
-  // Build query: prefix:10.17879 AND (suffix:p1* OR suffix:p2* ...)
+async function fetchDataciteDOIs(journal, onStatus){
   if (!journal.doiPrefixes || !journal.doiPrefixes.length) return [];
 
-  var suffixQuery = journal.doiPrefixes.map(function(p){ return 'suffix:'+p+'*'; }).join(' OR ');
-  var fullQuery = 'prefix:10.17879 AND (' + suffixQuery + ')';
+  // Fetch each prefix separately (simpler query, no parentheses).
+  // Most journals have only one prefix; fnp and mfiphs have two.
+  var allRecords = [];
+  var seenDois = {};
 
-  var collected = [];
-  var page = 1;
-  var maxPages = Math.ceil(MAX_PUBS_PER_JOURNAL / DATACITE_PAGE_SIZE) + 1;
+  for (var pi = 0; pi < journal.doiPrefixes.length; pi++) {
+    var prefix = journal.doiPrefixes[pi];
+    var query = 'prefix:10.17879 AND suffix:' + prefix + '*';
 
-  while (page <= maxPages) {
-    var url = 'https://api.datacite.org/dois?query=' + encodeURIComponent(fullQuery)
-            + '&page%5Bsize%5D=' + DATACITE_PAGE_SIZE
-            + '&page%5Bnumber%5D=' + page;
-    var data = await fetchJSON(url, 20000);
-    if (!data || !data.data) break;
-    collected = collected.concat(data.data);
-    if (data.data.length < DATACITE_PAGE_SIZE) break;
-    if (collected.length >= MAX_PUBS_PER_JOURNAL) break;
-    page++;
+    var page = 1;
+    var maxPages = Math.ceil(MAX_PUBS_PER_JOURNAL / DATACITE_PAGE_SIZE) + 1;
+
+    while (page <= maxPages) {
+      if (onStatus) onStatus('Fetching DataCite page ' + page + ' for "' + prefix + '" (' + allRecords.length + ' records so far)…');
+
+      var url = 'https://api.datacite.org/dois?query=' + encodeURIComponent(query)
+              + '&page%5Bsize%5D=' + DATACITE_PAGE_SIZE
+              + '&page%5Bnumber%5D=' + page;
+      var data = await fetchJSON(url, 25000);
+
+      if (!data) {
+        // Network or HTTP error - LAST_FETCH_ERROR is set
+        if (onStatus) onStatus('DataCite request failed: ' + (LAST_FETCH_ERROR || 'unknown error'));
+        break;
+      }
+      if (!data.data || !data.data.length) break;
+
+      data.data.forEach(function(rec){
+        var doi = rec.attributes && rec.attributes.doi;
+        if (doi && !seenDois[doi]) {
+          seenDois[doi] = true;
+          allRecords.push(rec);
+        }
+      });
+
+      if (data.data.length < DATACITE_PAGE_SIZE) break;
+      if (allRecords.length >= MAX_PUBS_PER_JOURNAL) break;
+      page++;
+    }
   }
-  return collected.slice(0, MAX_PUBS_PER_JOURNAL);
+
+  return allRecords.slice(0, MAX_PUBS_PER_JOURNAL);
 }
 
 /* Parse a DataCite record into a publication object */
@@ -1026,6 +1056,7 @@ async function loadAll(){
     document.getElementById(id).textContent = '—';
   });
   ALL_PUBS = [];
+  LAST_FETCH_ERROR = null;
 
   /* Handle no-DOI journals: show notice and stop */
   if (j.hasNoDoi) {
@@ -1050,26 +1081,37 @@ async function loadAll(){
   setLoaderProgress(10);
 
   /* 1 — DataCite: fetch DOIs + metadata in one go */
-  var records = await fetchDataciteDOIs(j);
+  var records = await fetchDataciteDOIs(j, function(msg){
+    if (reqId === currentRequestId) {
+      document.getElementById('status-text').textContent = msg;
+    }
+  });
 
   if (reqId !== currentRequestId) return; // user switched journals; abort
 
   if (!records.length) {
     showLoader(false);
+    var errorMsg = LAST_FETCH_ERROR
+      ? '<p style="font-family:var(--font-mono);font-size:11px;color:var(--red);background:var(--red-bg);padding:8px;border-radius:4px;margin-top:8px;">Last error: '+escH(LAST_FETCH_ERROR)+'</p>'
+      : '';
     document.getElementById('pub-list').innerHTML =
       '<div class="notice-card error">'
       +'<strong>No publications found</strong>'
       +'<p>DataCite returned no records for DOI prefix(es) <code>'+j.doiPrefixes.map(function(p){return '10.17879/'+p;}).join(', ')+'</code>.</p>'
       +'<p>The journal may not have any registered DOIs yet, or the DOI prefix mapping in this dashboard may need updating.</p>'
+      +errorMsg
       +'</div>';
     document.getElementById('status-dot').className = 'status-dot error';
-    document.getElementById('status-text').textContent = 'No DOIs found in DataCite.';
+    document.getElementById('status-text').textContent = LAST_FETCH_ERROR ? 'Error: ' + LAST_FETCH_ERROR.slice(0,80) : 'No DOIs found in DataCite.';
     document.getElementById('ojs-note').textContent = 'No DataCite records found.';
     btn.disabled = false; btn.textContent = '↺ Refresh';
     return;
   }
 
-  ALL_PUBS = records.map(pubFromDataciteRecord).filter(Boolean);
+  ALL_PUBS = records.map(function(rec){
+    try { return pubFromDataciteRecord(rec); }
+    catch(e) { console.error('Parse error:', e, rec); return null; }
+  }).filter(Boolean);
   document.getElementById('sum-pubs').textContent = ALL_PUBS.length;
 
   /* Initial render with metadata so user sees something fast */
