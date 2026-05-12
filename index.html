@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>R2D2 — Dissemination Dashboard</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23fff'/%3E%3Ctext x='3' y='27' font-family='Arial Black,Arial,sans-serif' font-weight='900' font-size='30' fill='%231a7f8e'%3ER%3C/text%3E%3C/svg%3E">
+<title>Münster E-Journals Dashboard</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231e8bc3'/%3E%3Ctext x='6' y='24' font-family='Arial Black,Arial,sans-serif' font-weight='900' font-size='20' fill='%23fff'%3EM%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -22,7 +22,6 @@
   --bg-chip: #f0f4f7;
   --border: #e3e7eb;
   --border-mid: #c5cdd5;
-  --border-blue: #1e8bc3;
   --text: #1a1d20;
   --text-secondary: #4a5158;
   --text-muted: #8990a0;
@@ -35,14 +34,14 @@
   --amber: #b45309;
   --amber-bg: #fef3c7;
   --amber-border: #fcd34d;
+  --red: #dc2626;
+  --red-bg: #fee2e2;
+  --red-border: #fca5a5;
   --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
-body {
-  font-family: var(--font); background: var(--bg); color: var(--text);
-  font-size: 14px; line-height: 1.55; -webkit-font-smoothing: antialiased;
-}
+body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
 
 /* ── HEADER ── */
 .site-header {
@@ -53,26 +52,16 @@ body {
 }
 
 /* ── JOURNAL SELECTOR ── */
-.journal-selector-wrap {
-  position: relative; display: flex; align-items: center;
-}
-
+.journal-selector-wrap { position: relative; display: flex; align-items: center; }
 .journal-selector-btn {
   display: flex; align-items: center; gap: 10px;
   padding: 12px 18px; height: 100%;
   background: none; border: none; border-right: 1px solid var(--border);
   cursor: pointer; font-family: var(--font); font-size: 13px;
-  color: var(--text); font-weight: 500;
-  transition: background 0.15s;
+  color: var(--text); font-weight: 500; transition: background 0.15s;
   min-width: 260px; max-width: 380px;
 }
 .journal-selector-btn:hover { background: var(--bg-soft); }
-
-.journal-selector-btn .journal-icon {
-  width: 32px; height: 32px; border-radius: 6px;
-  object-fit: contain; flex-shrink: 0;
-  background: var(--bg-chip); border: 1px solid var(--border);
-}
 .journal-icon-placeholder {
   width: 32px; height: 32px; border-radius: 6px; flex-shrink: 0;
   background: var(--r2-blue-light); border: 1px solid var(--r2-blue-border);
@@ -87,13 +76,9 @@ body {
 .journal-selector-btn .journal-name small {
   display: block; font-size: 10.5px; color: var(--text-muted); font-weight: 400;
 }
-.journal-selector-btn .chevron {
-  flex-shrink: 0; color: var(--text-muted);
-  transition: transform 0.2s;
-}
+.journal-selector-btn .chevron { flex-shrink: 0; color: var(--text-muted); transition: transform 0.2s; }
 .journal-selector-btn.open .chevron { transform: rotate(180deg); }
 
-/* Dropdown panel */
 .journal-dropdown {
   position: absolute; top: calc(100% + 2px); left: 0;
   width: 420px; max-height: 480px;
@@ -105,9 +90,7 @@ body {
   transition: opacity 0.18s, transform 0.18s;
   transform-origin: top left;
 }
-.journal-dropdown.open {
-  opacity: 1; transform: translateY(0) scaleY(1); pointer-events: all;
-}
+.journal-dropdown.open { opacity: 1; transform: translateY(0) scaleY(1); pointer-events: all; }
 
 .journal-search-wrap {
   padding: 10px 12px; border-bottom: 1px solid var(--border);
@@ -125,29 +108,16 @@ body {
   position: absolute; left: 22px; top: 50%; transform: translateY(-50%);
   color: var(--text-muted); pointer-events: none;
 }
-
-.journal-list {
-  overflow-y: auto; max-height: 400px;
-  padding: 6px 0;
-}
+.journal-list { overflow-y: auto; max-height: 400px; padding: 6px 0; }
 .journal-list::-webkit-scrollbar { width: 5px; }
 .journal-list::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 3px; }
-
 .journal-option {
   display: flex; align-items: center; gap: 10px;
-  padding: 8px 14px; cursor: pointer;
-  transition: background 0.1s;
+  padding: 8px 14px; cursor: pointer; transition: background 0.1s;
   border-left: 3px solid transparent;
 }
 .journal-option:hover { background: var(--bg-soft); }
-.journal-option.selected {
-  background: var(--r2-blue-light); border-left-color: var(--r2-blue);
-}
-.journal-option .jopt-icon {
-  width: 28px; height: 28px; border-radius: 5px;
-  object-fit: contain; flex-shrink: 0;
-  background: var(--bg-chip); border: 1px solid var(--border);
-}
+.journal-option.selected { background: var(--r2-blue-light); border-left-color: var(--r2-blue); }
 .jopt-icon-placeholder {
   width: 28px; height: 28px; border-radius: 5px; flex-shrink: 0;
   background: var(--r2-blue-light); border: 1px solid var(--r2-blue-border);
@@ -160,27 +130,17 @@ body {
   font-size: 12.5px; font-weight: 600; color: var(--text);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.journal-option .jopt-slug {
-  font-size: 10.5px; color: var(--text-muted); font-family: var(--font-mono);
-}
-.journal-option .jopt-tag {
-  font-size: 9.5px; font-weight: 600; padding: 2px 6px; border-radius: 3px;
-  flex-shrink: 0;
-}
-.jopt-tag-active { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.journal-option .jopt-slug { font-size: 10.5px; color: var(--text-muted); font-family: var(--font-mono); }
+.journal-option .jopt-tag { font-size: 9.5px; font-weight: 600; padding: 2px 6px; border-radius: 3px; flex-shrink: 0; }
+.jopt-tag-active   { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
 .jopt-tag-inactive { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
-
+.jopt-tag-nodoi    { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
 .journal-group-label {
   padding: 6px 14px 3px; font-size: 9.5px; font-weight: 700;
   color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em;
 }
+.no-results { padding: 24px; text-align: center; font-size: 12.5px; color: var(--text-muted); }
 
-.no-results {
-  padding: 24px; text-align: center;
-  font-size: 12.5px; color: var(--text-muted);
-}
-
-/* Header right brand */
 .header-brand {
   font-size: 13px; color: var(--text-muted); font-weight: 500;
   letter-spacing: 0.02em; display: flex; align-items: center;
@@ -193,31 +153,24 @@ body {
   display: grid; grid-template-columns: 240px 1fr; gap: 64px; align-items: start;
 }
 .page-sidebar { position: sticky; top: 24px; }
-
 .page-heading {
-  font-size: 30px; font-weight: 800; line-height: 1.1;
+  font-size: 26px; font-weight: 800; line-height: 1.15;
   color: var(--text); letter-spacing: -0.02em; margin-bottom: 6px;
 }
 .page-heading .accent { color: var(--r2-blue); }
-
 .page-sub {
   font-size: 12.5px; color: var(--text-secondary); font-weight: 400; line-height: 1.55;
   margin: 12px 0 24px; padding-left: 12px; border-left: 3px solid var(--r2-blue);
 }
 
-/* ── STAT ROWS ── */
 .stat-row {
   display: flex; justify-content: space-between; align-items: baseline;
   padding: 9px 0; border-bottom: 1px solid var(--border);
 }
 .stat-row:last-of-type { border-bottom: none; }
 .stat-label { font-size: 11.5px; color: var(--text-muted); font-weight: 500; }
-.stat-value {
-  font-size: 18px; font-weight: 700; color: var(--text);
-  font-variant-numeric: tabular-nums;
-}
+.stat-value { font-size: 18px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
 
-/* ── OJS NOTE ── */
 .ojs-note {
   font-size: 10.5px; color: var(--text-muted); margin-top: 14px; padding-top: 12px;
   border-top: 1px solid var(--border); line-height: 1.5;
@@ -225,7 +178,6 @@ body {
 .ojs-note a { color: var(--r2-blue); text-decoration: none; font-weight: 500; }
 .ojs-note a:hover { text-decoration: underline; }
 
-/* ── REFRESH BUTTON ── */
 .refresh-btn {
   margin-top: 18px; display: flex; align-items: center; justify-content: center;
   gap: 7px; width: 100%; padding: 9px 0;
@@ -234,10 +186,9 @@ body {
   cursor: pointer; letter-spacing: 0.04em; text-transform: uppercase;
   transition: all 0.15s;
 }
-.refresh-btn:hover { background: var(--r2-blue); color: #fff; }
+.refresh-btn:hover:not(:disabled) { background: var(--r2-blue); color: #fff; }
 .refresh-btn:disabled { opacity: 0.45; cursor: default; }
 
-/* ── LEGEND ── */
 .source-legend { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--border); }
 .legend-title {
   font-size: 10px; font-weight: 700; color: var(--text-muted);
@@ -249,13 +200,13 @@ body {
 }
 .legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
-/* ── SECTION HEADER + SORT ── */
 .section-header {
   display: flex; align-items: center; justify-content: space-between;
   padding-bottom: 12px; border-bottom: 2px solid var(--r2-blue);
   flex-wrap: wrap; gap: 8px;
 }
 .section-title { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+.section-issn { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); margin-left: 8px; font-weight: 400; }
 
 .sort-row { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
 .sort-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
@@ -268,7 +219,6 @@ body {
 .sort-btn:hover { background: var(--bg-chip); border-color: var(--r2-blue); }
 .sort-btn.active { background: var(--r2-blue); color: #fff; border-color: var(--r2-blue); }
 
-/* ── STATUS ── */
 .status-bar {
   display: flex; align-items: center; gap: 8px;
   font-size: 11.5px; color: var(--text-muted); padding: 12px 0 18px; font-weight: 400;
@@ -276,16 +226,14 @@ body {
 .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-muted); flex-shrink: 0; }
 .status-dot.loading { background: var(--r2-blue); animation: pulse 1s ease-in-out infinite; }
 .status-dot.done { background: var(--green); }
-.status-dot.error { background: #dc2626; }
+.status-dot.error { background: var(--red); }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-/* ── LOADER ── */
 .loader-wrap {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   padding: 60px 20px 40px; min-height: 280px; gap: 28px;
 }
 .loader-wrap.hidden { display: none; }
-
 .loader-orbit { position: relative; width: 88px; height: 88px; }
 .loader-orbit::before {
   content: ''; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--border);
@@ -301,15 +249,13 @@ body {
 .loader-orbit .orbit-dot:nth-child(3) { background: #e67e22; animation-delay: -0.8s; opacity: 0.75; }
 .loader-orbit .orbit-dot:nth-child(4) { background: #e74c3c; animation-delay: -1.2s; opacity: 0.6; }
 @keyframes orbitSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
 .loader-center {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-size: 20px; font-weight: 800; color: var(--r2-blue); letter-spacing: 0.04em;
-  animation: pulseText 1.4s ease-in-out infinite;
+  font-size: 14px; font-weight: 800; color: var(--r2-blue); letter-spacing: 0.02em;
+  animation: pulseText 1.4s ease-in-out infinite; text-align: center; line-height: 1;
 }
 @keyframes pulseText { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
-
-.loader-steps { display: flex; flex-direction: column; gap: 8px; max-width: 340px; width: 100%; }
+.loader-steps { display: flex; flex-direction: column; gap: 8px; max-width: 360px; width: 100%; }
 .loader-step {
   display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text-muted);
   padding: 7px 12px; background: var(--bg-soft); border: 1px solid var(--border);
@@ -324,21 +270,23 @@ body {
 .loader-step.done .step-dot { background: var(--green); }
 @keyframes pulseDot {
   0%, 100% { box-shadow: 0 0 0 0 rgba(30,139,195,0.5); }
-  50%       { box-shadow: 0 0 0 6px rgba(30,139,195,0); }
+  50%      { box-shadow: 0 0 0 6px rgba(30,139,195,0); }
 }
-
-.loader-progress { width: 100%; max-width: 340px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.loader-progress { width: 100%; max-width: 360px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
 .loader-progress-bar { height: 100%; background: linear-gradient(90deg, var(--r2-blue), #2ecc71); width: 0%; transition: width 0.5s ease-out; }
 
-/* ── No DOIs notice ── */
-.no-dois-notice {
-  text-align: center; padding: 48px 24px;
-  font-size: 14px; color: var(--text-muted); line-height: 1.7;
+.notice-card {
+  margin: 24px 0; padding: 20px 24px;
+  background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px;
+  border-left: 4px solid var(--amber);
 }
-.no-dois-notice strong { color: var(--text-secondary); display: block; font-size: 16px; margin-bottom: 8px; }
-.no-dois-notice a { color: var(--r2-blue); }
+.notice-card.error { border-left-color: var(--red); }
+.notice-card.info  { border-left-color: var(--r2-blue); }
+.notice-card strong { display: block; font-size: 14px; color: var(--text); margin-bottom: 6px; font-weight: 700; }
+.notice-card p { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 4px; }
+.notice-card a { color: var(--r2-blue); text-decoration: none; font-weight: 500; }
+.notice-card a:hover { text-decoration: underline; }
 
-/* ── PUB CARD ── */
 .pub-item {
   display: grid; grid-template-columns: 1fr 86px; gap: 22px; align-items: start;
   padding: 26px 0; border-bottom: 1px solid var(--border);
@@ -349,27 +297,21 @@ body {
 .pub-top-meta { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-bottom: 10px; }
 .tag { font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.02em; }
 .tag-section  { background: var(--r2-blue-light); color: var(--r2-blue-deep); border: 1px solid var(--r2-blue-border); }
-.tag-category { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
-.tag-type     { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
 .tag-date     { background: var(--bg-chip); color: var(--text-secondary); border: 1px solid var(--border); font-family: var(--font-mono); font-size: 10px; }
-
 .pub-title {
-  font-size: 19px; font-weight: 700; line-height: 1.3; color: var(--text);
+  font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--text);
   text-decoration: none; display: block; margin-bottom: 4px;
   letter-spacing: -0.015em; transition: color 0.15s;
 }
 .pub-title:hover { color: var(--r2-blue); }
-.pub-subtitle { font-size: 15px; font-weight: 400; color: var(--text-secondary); line-height: 1.35; margin-bottom: 10px; }
 .pub-authors { font-size: 13px; color: var(--text-secondary); font-weight: 400; margin-bottom: 14px; line-height: 1.5; }
 .author-link { display: inline-flex; align-items: center; gap: 3px; color: var(--text-secondary); text-decoration: none; white-space: nowrap; }
 a.author-link:hover { color: var(--r2-blue); }
 a.author-link:hover .orcid-icon { transform: scale(1.15); }
 .orcid-icon { width: 11px; height: 11px; vertical-align: -1px; transition: transform 0.15s; }
-
 .mbadge.mbadge-link { cursor: pointer; transition: all 0.15s; text-decoration: none; }
 .mbadge.mbadge-link:hover { border-color: var(--r2-blue); background: var(--r2-blue-light); color: var(--r2-blue-deep); }
 
-/* ── FOOTER ── */
 .site-footer {
   border-top: 1px solid var(--border); padding: 20px 48px;
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
@@ -381,20 +323,18 @@ a.author-link:hover .orcid-icon { transform: scale(1.15); }
 .site-footer .footer-sep { color: var(--border-mid); }
 .site-footer strong { color: var(--text-secondary); font-weight: 600; }
 
-/* ── ACTION BUTTONS ── */
 .pub-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
 .action-btn {
-  display: inline-flex; align-items: center; gap: 5px; padding: 6px 13px;
-  border-radius: 5px; font-size: 12px; font-weight: 600; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px;
+  border-radius: 5px; font-size: 11.5px; font-weight: 600; text-decoration: none;
   transition: all 0.15s; font-family: var(--font); border: 1.5px solid transparent;
 }
-.action-btn svg { width: 13px; height: 13px; }
+.action-btn svg { width: 12px; height: 12px; }
 .action-btn-primary { background: var(--r2-blue); color: #fff; border-color: var(--r2-blue); }
 .action-btn-primary:hover { background: var(--r2-blue-dark); border-color: var(--r2-blue-dark); }
 .action-btn-secondary { background: var(--bg); color: var(--r2-blue); border-color: var(--r2-blue); }
 .action-btn-secondary:hover { background: var(--r2-blue-light); }
 
-/* ── METRICS BLOCK ── */
 .metrics-block { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
 .metric-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .metric-group-label {
@@ -409,15 +349,7 @@ a.author-link:hover .orcid-icon { transform: scale(1.15); }
 }
 .mbadge .src-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 .mbadge .val { font-size: 12px; font-weight: 700; color: var(--text); margin-left: 2px; font-variant-numeric: tabular-nums; }
-.view-chip {
-  display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px;
-  border: 1px solid var(--r2-blue-border); border-radius: 5px;
-  font-size: 11.5px; font-weight: 600; color: var(--r2-blue-deep);
-  background: var(--r2-blue-light); white-space: nowrap;
-}
-.view-chip .val { font-size: 12px; font-weight: 700; margin-left: 2px; font-variant-numeric: tabular-nums; }
 
-/* ── SPARKLINES ── */
 .sparkline-wrap { margin-top: 4px; }
 .sparkline-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 4px; }
 .sparkline-svg { display: block; width: 100%; max-width: 440px; height: 40px; }
@@ -429,7 +361,6 @@ a.author-link:hover .orcid-icon { transform: scale(1.15); }
 @keyframes popDot { 0%{opacity:0;transform:scale(0);} 100%{opacity:1;transform:scale(1);} }
 .sparkline-axis { font-size: 9.5px; color: var(--text-muted); display: flex; justify-content: space-between; max-width: 440px; margin-top: 2px; font-variant-numeric: tabular-nums; }
 
-/* ── FOOTER LINKS ── */
 .pub-footer {
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
   margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
@@ -444,26 +375,15 @@ a.author-link:hover .orcid-icon { transform: scale(1.15); }
 .pub-link:hover { border-bottom-color: var(--r2-blue); }
 .link-sep { width: 1px; height: 11px; background: var(--border-mid); display: inline-block; }
 
-/* ── ALTMETRIC DONUT ── */
 .pub-donut { display: flex; flex-direction: column; align-items: center; gap: 5px; padding-top: 4px; }
 .donut-label { font-size: 9px; color: var(--text-muted); text-align: center; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
 
-/* ── SPINNER ── */
 .spinner-sm {
   display: inline-block; width: 9px; height: 9px;
   border: 1.5px solid var(--border); border-top-color: var(--r2-blue);
   border-radius: 50%; animation: spin 0.65s linear infinite; vertical-align: middle;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── API VIEWS/DL BADGE ── */
-.api-views-badge {
-  display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px;
-  border: 1px solid var(--r2-blue-border); border-radius: 5px;
-  font-size: 11.5px; font-weight: 600; color: var(--r2-blue-deep);
-  background: var(--r2-blue-light); white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-}
 
 @media (max-width: 780px) {
   .page-body { grid-template-columns: 1fr; gap: 28px; padding: 26px 18px; }
@@ -472,14 +392,13 @@ a.author-link:hover .orcid-icon { transform: scale(1.15); }
   .journal-selector-btn { min-width: 200px; max-width: 100%; }
   .journal-dropdown { width: calc(100vw - 36px); }
   .pub-item { grid-template-columns: 1fr 70px; gap: 16px; }
-  .page-heading { font-size: 26px; }
+  .page-heading { font-size: 22px; }
 }
 </style>
 </head>
 <body>
 
 <header class="site-header">
-  <!-- ── Journal Selector Dropdown ── -->
   <div class="journal-selector-wrap" id="journal-selector-wrap">
     <button class="journal-selector-btn" id="journal-selector-btn" onclick="toggleDropdown()" aria-haspopup="listbox" aria-expanded="false">
       <div class="journal-icon-placeholder" id="selector-icon">RR</div>
@@ -504,18 +423,18 @@ a.author-link:hover .orcid-icon { transform: scale(1.15); }
     </div>
   </div>
 
-  <div class="header-brand"><b>R2D2</b> · Dissemination Dashboard</div>
+  <div class="header-brand"><b>Münster</b>&nbsp;E-Journals · Dashboard</div>
 </header>
 
 <div class="page-body">
   <aside class="page-sidebar">
-    <h1 class="page-heading">R2D2<span class="accent">.</span></h1>
-    <p class="page-sub" id="sidebar-sub">Dissemination Dashboard — bibliometrics, altmetrics &amp; usage statistics for all publications.</p>
+    <h1 class="page-heading">Münster<span class="accent">.</span></h1>
+    <p class="page-sub" id="sidebar-sub">Dissemination dashboard — bibliometrics &amp; altmetrics for all e-journals hosted by the ULB Münster.</p>
 
     <div class="stat-row"><span class="stat-label">Publications</span><span class="stat-value" id="sum-pubs">—</span></div>
     <div class="stat-row"><span class="stat-label">Total citations</span><span class="stat-value" id="sum-cites">—</span></div>
-    <div class="stat-row"><span class="stat-label">Abstract views</span><span class="stat-value" id="sum-views">—</span></div>
-    <div class="stat-row"><span class="stat-label">PDF downloads</span><span class="stat-value" id="sum-pdfs">—</span></div>
+    <div class="stat-row"><span class="stat-label">First year</span><span class="stat-value" id="sum-firstyr">—</span></div>
+    <div class="stat-row"><span class="stat-label">Latest year</span><span class="stat-value" id="sum-lastyr">—</span></div>
     <div class="stat-row"><span class="stat-label">Open Access</span><span class="stat-value" id="sum-oa">—</span></div>
 
     <div class="ojs-note" id="ojs-note">Select a journal to begin.</div>
@@ -523,10 +442,9 @@ a.author-link:hover .orcid-icon { transform: scale(1.15); }
 
     <div class="source-legend">
       <div class="legend-title">Data sources</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#1e8bc3"></span>OJS REST API (metadata, views)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#e67e22"></span>DataCite (DOI registry, metadata)</div>
       <div class="legend-item"><span class="legend-dot" style="background:#2ecc71"></span>OpenAlex (citations, sparkline)</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#e67e22"></span>DataCite (citations)</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#e74c3c"></span>Crossref (citations)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#e74c3c"></span>Crossref (citations, where available)</div>
       <div class="legend-item"><span class="legend-dot" style="background:#1185fe"></span>Bluesky (social mentions)</div>
       <div class="legend-item"><span class="legend-dot" style="background:#9b59b6"></span>Altmetric (badge)</div>
     </div>
@@ -534,13 +452,12 @@ a.author-link:hover .orcid-icon { transform: scale(1.15); }
 
   <main>
     <div class="section-header">
-      <h2 class="section-title" id="section-title">All publications</h2>
+      <h2 class="section-title"><span id="section-title">Publications</span><span class="section-issn" id="section-issn"></span></h2>
       <div class="sort-row">
         <span class="sort-label">Sort:</span>
         <button class="sort-btn active" id="sort-newest" onclick="setSort('newest')">Newest</button>
         <button class="sort-btn" id="sort-oldest" onclick="setSort('oldest')">Oldest</button>
         <button class="sort-btn" id="sort-cites" onclick="setSort('cites')">Most cited</button>
-        <button class="sort-btn" id="sort-views" onclick="setSort('views')">Most viewed</button>
       </div>
     </div>
 
@@ -553,12 +470,12 @@ a.author-link:hover .orcid-icon { transform: scale(1.15); }
       <div class="loader-orbit">
         <div class="orbit-dot"></div><div class="orbit-dot"></div>
         <div class="orbit-dot"></div><div class="orbit-dot"></div>
-        <div class="loader-center">R2D2</div>
+        <div class="loader-center">load</div>
       </div>
       <div class="loader-steps" id="loader-steps">
-        <div class="loader-step" data-step="meta"><span class="step-dot"></span>Fetching article metadata from OJS</div>
-        <div class="loader-step" data-step="cites"><span class="step-dot"></span>Loading citations (OpenAlex, DataCite, Crossref)</div>
-        <div class="loader-step" data-step="views"><span class="step-dot"></span>Loading OJS usage statistics (views &amp; downloads)</div>
+        <div class="loader-step" data-step="dois"><span class="step-dot"></span>Fetching DOIs &amp; metadata from DataCite</div>
+        <div class="loader-step" data-step="cites"><span class="step-dot"></span>Loading citations (OpenAlex, Crossref)</div>
+        <div class="loader-step" data-step="social"><span class="step-dot"></span>Checking Bluesky for social mentions</div>
       </div>
       <div class="loader-progress"><div class="loader-progress-bar" id="loader-progress-bar"></div></div>
     </div>
@@ -568,65 +485,110 @@ a.author-link:hover .orcid-icon { transform: scale(1.15); }
 </div>
 
 <footer class="site-footer">
-  <span>Replication Research Dissemination Dashboard <strong>v0.2</strong></span>
+  <span>Münster E-Journals Dashboard <strong>v0.3</strong></span>
   <span class="footer-sep">·</span>
   <span><a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a></span>
   <span class="footer-sep">·</span>
   <span>Last update: <span id="footer-update-date">—</span></span>
   <span class="footer-sep">·</span>
-  <span><a href="https://github.com/LukasRoeseler/r2d2" target="_blank">GitHub ↗</a></span>
+  <span><a href="https://ejournals.uni-muenster.de" target="_blank">ULB Münster ↗</a></span>
 </footer>
 
 <script>
 /* ============================================
    JOURNAL REGISTRY — all ULB Münster eJournals
-   slug = the OJS path segment, used to build
-   API base and DOI fetch URLs.
-   dois_github: if set, fetches DOI list from a GitHub raw URL.
-   The OJS API base is always:
-     https://ejournals.uni-muenster.de/index.php/{slug}/api/v1
+   Each entry has:
+     slug:      the OJS path segment (used to build journal homepage URL)
+     name:      display name
+     abbr:      short label (2-4 chars) for the icon
+     active:    true if currently publishing; false if discontinued
+     issn:      one or more ISSNs (informational)
+     doiPrefixes: DataCite DOI sub-prefixes (the part after "10.17879/")
+                  e.g. ["fnp", "freeneuropathology"]
+                  Empty array means the journal does not register DOIs.
 ============================================ */
 var JOURNALS = [
-  {
-    slug: 'replicationresearch',
-    name: 'Replication Research',
-    abbr: 'RR',
-    active: true,
-    dois_github: 'https://raw.githubusercontent.com/LukasRoeseler/r2d2/refs/heads/main/dois.txt',
-    stats_github: 'https://api.github.com/repos/LukasRoeseler/r2d2/contents/statistics'
-  },
-  { slug: 'archiveorofacial',    name: 'Archive of Orofacial Data Science', abbr: 'AOD', active: true },
-  { slug: 'byzantinereview',     name: 'The Byzantine Review',              abbr: 'BR',  active: true },
-  { slug: 'fnp',                 name: 'Free Neuropathology',               abbr: 'FN',  active: true },
-  { slug: 'ifg',                 name: 'IfG Impulse',                       abbr: 'IFG', active: true },
-  { slug: 'jcsw',                name: 'Jahrbuch für Christliche Sozialwissenschaften', abbr: 'JCS', active: true },
-  { slug: 'mittelalterdigital',  name: 'Mittelalter Digital',               abbr: 'MD',  active: false },
-  { slug: 'mwpca',               name: 'Münster Working Paper Series in Social and Cultural Anthropology', abbr: 'MWP', active: true },
-  { slug: 'mfiphs',              name: 'Münstersche Fachzeitschrift für islamische und philosophische Studien', abbr: 'MFI', active: true },
-  { slug: 'nachbarsprache',      name: 'nachbarsprache niederländisch',     abbr: 'NN',  active: true },
-  { slug: 'ozean',               name: 'Online Zeitschrift zur Antiken Numismatik', abbr: 'OZeAN', active: true },
-  { slug: 'paradigma',           name: 'Paradigma',                         abbr: 'PAR', active: true },
-  { slug: 'pop',                 name: 'POP. Kultur & Kritik',              abbr: 'POP', active: true },
-  { slug: 'satura',              name: 'Satura',                            abbr: 'SAT', active: true },
-  { slug: 'sbi',                 name: 'Schule. Bildung. Inklusion',        abbr: 'SBI', active: true },
-  { slug: 'sun',                 name: 'Soziologie und Nachhaltigkeit',     abbr: 'SuN', active: true },
-  { slug: 'tjo',                 name: 'Teiresias Journal Online',          abbr: 'TJO', active: true },
-  { slug: 'tso',                 name: 'Teiresias Supplements Online',      abbr: 'TSO', active: true },
-  { slug: 'theologischerevue',   name: 'Theologische Revue',                abbr: 'TR',  active: true },
-  { slug: 'zkr',                 name: 'Zeitschrift für Kanonisches Recht', abbr: 'ZKR', active: true },
-  { slug: 'zfk',                 name: 'Zeitschrift für Kulturwissenschaften', abbr: 'ZfK', active: false },
-  { slug: 'zpth',                name: 'Zeitschrift für Pastoraltheologie', abbr: 'ZPTh', active: true },
-  { slug: 'zts',                 name: 'Zeitschrift für Theoretische Soziologie', abbr: 'ZTS', active: true }
+  { slug: 'replicationresearch', name: 'Replication Research', abbr: 'RR',
+    active: true, issn: '', doiPrefixes: ['replicationresearch'] },
+
+  { slug: 'aods', name: 'Archive of Orofacial Data Science', abbr: 'AOD',
+    active: true, issn: '2941-783X', doiPrefixes: ['aods'] },
+
+  { slug: 'byzrev', name: 'The Byzantine Review', abbr: 'BR',
+    active: true, issn: '2700-0524', doiPrefixes: ['byzrev'] },
+
+  { slug: 'fnp', name: 'Free Neuropathology', abbr: 'FN',
+    active: true, issn: '2699-4445', doiPrefixes: ['fnp', 'freeneuropathology'] },
+
+  { slug: 'ifgimpulse', name: 'IfG Impulse', abbr: 'IFG',
+    active: true, issn: '', doiPrefixes: ['ifgimpulse'] },
+
+  { slug: 'jcsw', name: 'Jahrbuch für Christliche Sozialwissenschaften', abbr: 'JCS',
+    active: true, issn: '0075-2592', doiPrefixes: ['jcsw'] },
+
+  { slug: 'mittelalterdigi', name: 'Mittelalter Digital', abbr: 'MD',
+    active: false, issn: '2702-9069', doiPrefixes: ['mittelalterdigi'] },
+
+  { slug: 'mwsca', name: 'Münster Working Paper Series in Social and Cultural Anthropology', abbr: 'MWP',
+    active: true, issn: '', doiPrefixes: ['mwsca'] },
+
+  { slug: 'mfiphs', name: 'Münstersche Fachzeitschrift für islamische und philosophische Studien', abbr: 'MFI',
+    active: true, issn: '2749-4330', doiPrefixes: ['mjiphs', 'mfiphs'] },
+
+  { slug: 'nn', name: 'nachbarsprache niederländisch', abbr: 'NN',
+    active: true, issn: '', doiPrefixes: ['nn'] },
+
+  { slug: 'ozean', name: 'Online Zeitschrift zur Antiken Numismatik', abbr: 'OZ',
+    active: true, issn: '2698-3079', doiPrefixes: ['ozean'] },
+
+  { slug: 'paradigma', name: 'Paradigma', abbr: 'PAR',
+    active: true, issn: '', doiPrefixes: ['paradigma'] },
+
+  { slug: 'pop', name: 'POP. Kultur & Kritik', abbr: 'POP',
+    active: true, issn: '2192-9408', doiPrefixes: [], hasNoDoi: true },
+
+  { slug: 'satura', name: 'Satura', abbr: 'SAT',
+    active: true, issn: '2700-2640', doiPrefixes: ['satura'] },
+
+  { slug: 'sbi', name: 'Schule. Bildung. Inklusion', abbr: 'SBI',
+    active: true, issn: '', doiPrefixes: [], hasNoDoi: true },
+
+  { slug: 'sun', name: 'Soziologie und Nachhaltigkeit', abbr: 'SuN',
+    active: true, issn: '2364-1282', doiPrefixes: ['sun'] },
+
+  { slug: 'tjo', name: 'Teiresias Journal Online', abbr: 'TJO',
+    active: true, issn: '', doiPrefixes: ['tjo'] },
+
+  { slug: 'tso', name: 'Teiresias Supplements Online', abbr: 'TSO',
+    active: true, issn: '', doiPrefixes: ['tso'] },
+
+  { slug: 'thrv', name: 'Theologische Revue', abbr: 'TR',
+    active: true, issn: '0040-568X', doiPrefixes: ['thrv'] },
+
+  { slug: 'zkr', name: 'Zeitschrift für Kanonisches Recht', abbr: 'ZKR',
+    active: true, issn: '', doiPrefixes: ['zkr'] },
+
+  { slug: 'ZfK', name: 'Zeitschrift für Kulturwissenschaften', abbr: 'ZfK',
+    active: false, issn: '1862-8060', doiPrefixes: [], hasNoDoi: true },
+
+  { slug: 'zpth', name: 'Zeitschrift für Pastoraltheologie', abbr: 'ZPTh',
+    active: true, issn: '0555-9308', doiPrefixes: ['zpth'] },
+
+  { slug: 'zts', name: 'Zeitschrift für Theoretische Soziologie', abbr: 'ZTS',
+    active: true, issn: '2195-0695', doiPrefixes: ['zts'] }
 ];
+
+/* Configuration */
+var MAX_PUBS_PER_JOURNAL = 500;     // cap for large journals like ZPTh (1700+ articles)
+var DATACITE_PAGE_SIZE = 250;       // DataCite allows up to 1000 per page
 
 /* ============================================
    STATE
 ============================================ */
-var ALL_PUBS     = [];
-var SECTIONS     = {};
-var CATEGORIES   = {};
-var currentSort  = 'newest';
-var currentJournal = JOURNALS[0]; // default: Replication Research
+var ALL_PUBS = [];
+var currentSort = 'newest';
+var currentJournal = JOURNALS[0];
+var currentRequestId = 0;
 
 /* ============================================
    DROPDOWN
@@ -637,53 +599,47 @@ function renderJournalList(filter) {
   filter = (filter || '').toLowerCase().trim();
   var list = document.getElementById('journal-list');
   var html = '';
-  var active = [], inactive = [];
+  var active = [], inactive = [], nodoi = [];
 
   JOURNALS.forEach(function(j) {
-    if (filter && j.name.toLowerCase().indexOf(filter) === -1 && j.slug.toLowerCase().indexOf(filter) === -1) return;
-    (j.active ? active : inactive).push(j);
+    if (filter && j.name.toLowerCase().indexOf(filter) === -1
+              && j.slug.toLowerCase().indexOf(filter) === -1) return;
+    if (j.hasNoDoi) nodoi.push(j);
+    else if (j.active) active.push(j);
+    else inactive.push(j);
   });
 
-  if (!active.length && !inactive.length) {
+  if (!active.length && !inactive.length && !nodoi.length) {
     list.innerHTML = '<div class="no-results">No journals match your search.</div>';
     return;
   }
 
   if (active.length) {
-    html += '<div class="journal-group-label">Active journals</div>';
+    html += '<div class="journal-group-label">Active journals · with DOIs</div>';
     active.forEach(function(j) { html += journalOptionHTML(j); });
   }
   if (inactive.length) {
     html += '<div class="journal-group-label">Discontinued</div>';
     inactive.forEach(function(j) { html += journalOptionHTML(j); });
   }
+  if (nodoi.length) {
+    html += '<div class="journal-group-label">Journals without DOI registration</div>';
+    nodoi.forEach(function(j) { html += journalOptionHTML(j); });
+  }
   list.innerHTML = html;
 }
 
 function journalOptionHTML(j) {
   var selected = j.slug === currentJournal.slug ? ' selected' : '';
-  var tag = j.active
-    ? '<span class="jopt-tag jopt-tag-active">Active</span>'
-    : '<span class="jopt-tag jopt-tag-inactive">Discontinued</span>';
-  var iconUrl = 'https://ejournals.uni-muenster.de/public/journals/'+getJournalId(j.slug)+'/pageHeaderLogoImage_en_US.png';
+  var tag;
+  if (j.hasNoDoi)     tag = '<span class="jopt-tag jopt-tag-nodoi">No DOIs</span>';
+  else if (!j.active) tag = '<span class="jopt-tag jopt-tag-inactive">Discontinued</span>';
+  else                tag = '<span class="jopt-tag jopt-tag-active">Active</span>';
   return '<div class="journal-option'+selected+'" onclick="selectJournal(\''+j.slug+'\')" role="option" aria-selected="'+(selected?'true':'false')+'">'
     + '<div class="jopt-icon-placeholder">'+escH(j.abbr)+'</div>'
-    + '<div class="jopt-text"><div class="jopt-name">'+escH(j.name)+'</div><div class="jopt-slug">'+j.slug+'</div></div>'
+    + '<div class="jopt-text"><div class="jopt-name">'+escH(j.name)+'</div><div class="jopt-slug">'+escH(j.slug)+(j.issn?' · '+escH(j.issn):'')+'</div></div>'
     + tag
     + '</div>';
-}
-
-// Known OJS journal IDs for logo fetching (subset)
-var JOURNAL_IDS = {
-  replicationresearch: 36,
-  fnp: 13,
-  sun: 20,
-  ozean: 22,
-  mfiphs: 37
-};
-
-function getJournalId(slug) {
-  return JOURNAL_IDS[slug] || '';
 }
 
 function toggleDropdown() {
@@ -699,37 +655,30 @@ function toggleDropdown() {
   }
 }
 
-function filterJournals(val) {
-  renderJournalList(val);
-}
+function filterJournals(val) { renderJournalList(val); }
 
 function selectJournal(slug) {
   var j = JOURNALS.find(function(x){ return x.slug === slug; });
   if (!j) return;
   currentJournal = j;
 
-  // Update button display
   document.getElementById('selector-icon').textContent = j.abbr;
-  document.getElementById('selector-name').childNodes[0].textContent = j.name + '\n';
-  document.getElementById('selector-slug').textContent = j.slug;
   var nameEl = document.getElementById('selector-name');
-  nameEl.innerHTML = escH(j.name) + '<small id="selector-slug">' + escH(j.slug) + '</small>';
+  nameEl.innerHTML = escH(j.name) + '<small>' + escH(j.slug) + '</small>';
 
-  // Close dropdown
   dropdownOpen = false;
   document.getElementById('journal-selector-btn').classList.remove('open');
   document.getElementById('journal-dropdown').classList.remove('open');
   document.getElementById('journal-selector-btn').setAttribute('aria-expanded','false');
 
-  // Reset & load
   document.getElementById('section-title').textContent = j.name;
+  document.getElementById('section-issn').textContent = j.issn ? ' · ISSN ' + j.issn : '';
   document.getElementById('sidebar-sub').textContent =
-    'Dissemination Dashboard — bibliometrics, altmetrics & usage statistics for ' + j.name + '.';
+    'Bibliometrics & altmetrics for ' + j.name + '.';
 
   loadAll();
 }
 
-// Close dropdown when clicking outside
 document.addEventListener('click', function(e) {
   if (dropdownOpen && !document.getElementById('journal-selector-wrap').contains(e.target)) {
     dropdownOpen = false;
@@ -745,149 +694,122 @@ document.addEventListener('click', function(e) {
 function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function spin(){ return '<span class="spinner-sm"></span>'; }
 function fmtNum(n){ return (n===null||n===undefined) ? '—' : Number(n).toLocaleString('en'); }
-function clean(s){ return (s||'').trim().replace(/^"|"$/g,''); }
-function normTitle(s){ return (s||'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim(); }
 
 async function fetchJSON(url, timeout){
-  timeout = timeout || 9000;
+  timeout = timeout || 12000;
   var ctrl = new AbortController();
   var t = setTimeout(function(){ ctrl.abort(); }, timeout);
   try {
-    var r = await fetch(url, { signal: ctrl.signal });
+    var r = await fetch(url, { signal: ctrl.signal, headers: { 'Accept': 'application/json' } });
     clearTimeout(t);
     if (!r.ok) return null;
     return await r.json();
   } catch(e){ return null; }
 }
-async function fetchText(url, timeout){
-  timeout = timeout || 9000;
-  var ctrl = new AbortController();
-  var t = setTimeout(function(){ ctrl.abort(); }, timeout);
-  try {
-    var r = await fetch(url + (url.indexOf('?')<0?'?':'&')+'nocache='+Date.now(), { signal: ctrl.signal });
-    clearTimeout(t);
-    if (!r.ok) return null;
-    return await r.text();
-  } catch(e){ return null; }
-}
 
-function doiSortKey(doi){ var m=doi.match(/(\d+)$/); return m?parseInt(m[1],10):0; }
-function ojsIdFromDoi(doi){ var m=doi.match(/(\d+)$/); return m?m[1]:null; }
-function sumObj(o){ return Object.values(o||{}).reduce(function(s,v){return s+v;},0); }
-
-/* ============================================
-   OJS BASE URL
-============================================ */
-function ojsBase(slug){
-  return 'https://ejournals.uni-muenster.de/index.php/' + slug + '/api/v1';
+function doiSortKey(doi){
+  // Try to extract year + sequence to get a chronological order
+  var m = doi.match(/(\d{4})[-/](\d+)/);
+  if (m) return parseInt(m[1],10)*100000 + parseInt(m[2],10);
+  var m2 = doi.match(/(\d+)$/);
+  return m2 ? parseInt(m2[1],10) : 0;
 }
 
 /* ============================================
-   OJS METADATA
+   DATACITE — fetch all DOIs for a journal
 ============================================ */
-async function loadSectionsAndCategories(slug){
-  SECTIONS = {}; CATEGORIES = {};
-  var base = ojsBase(slug);
-  var [s,c] = await Promise.all([
-    fetchJSON(base+'/sections?count=100'),
-    fetchJSON(base+'/categories?count=100')
-  ]);
-  if (s && s.items) s.items.forEach(function(sec){
-    var t=sec.title&&(sec.title.en_US||sec.title.en||Object.values(sec.title)[0]);
-    if(t) SECTIONS[sec.id]=t;
-  });
-  if (c && c.items) c.items.forEach(function(cat){
-    var t=cat.title&&(cat.title.en_US||cat.title.en||Object.values(cat.title)[0]);
-    if(t) CATEGORIES[cat.id]=t;
-  });
-}
+async function fetchDataciteDOIs(journal){
+  // Build query: prefix:10.17879 AND (suffix:p1* OR suffix:p2* ...)
+  if (!journal.doiPrefixes || !journal.doiPrefixes.length) return [];
 
-/* Fetch all DOIs from OJS API for a given journal */
-async function fetchDoisFromOJS(slug){
-  var base = ojsBase(slug);
-  var dois = [];
-  var page = 1, perPage = 100;
-  while(true){
-    var url = base + '/submissions?count='+perPage+'&offset='+((page-1)*perPage)+'&status=3'; // status=3 = published
-    var data = await fetchJSON(url, 15000);
-    if (!data || !data.items || !data.items.length) break;
-    data.items.forEach(function(sub){
-      var pub = (sub.publications||[]).find(function(p){ return p.id===sub.currentPublicationId; }) || (sub.publications||[])[0];
-      if (pub && pub.doiObject && pub.doiObject.identifier) {
-        dois.push(pub.doiObject.identifier.replace(/^https?:\/\/doi\.org\//i,''));
-      } else if (pub && pub.doi) {
-        dois.push(pub.doi.replace(/^https?:\/\/doi\.org\//i,''));
-      }
-    });
-    if (data.items.length < perPage) break;
+  var suffixQuery = journal.doiPrefixes.map(function(p){ return 'suffix:'+p+'*'; }).join(' OR ');
+  var fullQuery = 'prefix:10.17879 AND (' + suffixQuery + ')';
+
+  var collected = [];
+  var page = 1;
+  var maxPages = Math.ceil(MAX_PUBS_PER_JOURNAL / DATACITE_PAGE_SIZE) + 1;
+
+  while (page <= maxPages) {
+    var url = 'https://api.datacite.org/dois?query=' + encodeURIComponent(fullQuery)
+            + '&page%5Bsize%5D=' + DATACITE_PAGE_SIZE
+            + '&page%5Bnumber%5D=' + page;
+    var data = await fetchJSON(url, 20000);
+    if (!data || !data.data) break;
+    collected = collected.concat(data.data);
+    if (data.data.length < DATACITE_PAGE_SIZE) break;
+    if (collected.length >= MAX_PUBS_PER_JOURNAL) break;
     page++;
-    if (page > 20) break; // safety cap
   }
-  return dois;
+  return collected.slice(0, MAX_PUBS_PER_JOURNAL);
 }
 
-async function loadOJSSubmission(slug, ojsId){
-  if (!ojsId) return null;
-  return await fetchJSON(ojsBase(slug)+'/submissions/'+ojsId);
-}
+/* Parse a DataCite record into a publication object */
+function pubFromDataciteRecord(rec){
+  var a = rec.attributes || {};
+  var doi = a.doi;
+  if (!doi) return null;
 
-function pickOJSPub(sub){
-  if (!sub||!sub.publications) return null;
-  return sub.publications.find(function(p){ return p.id===sub.currentPublicationId; }) || sub.publications[0];
-}
+  // Prefer English title, otherwise first
+  var title = '';
+  if (a.titles && a.titles.length) {
+    var enTitle = a.titles.find(function(t){ return t.lang && /^en/i.test(t.lang); });
+    title = (enTitle || a.titles[0]).title || '';
+  }
 
-function pickPDFGalleyURL(sub, slug){
-  var pub = pickOJSPub(sub);
-  if (!pub||!pub.galleys) return null;
-  var pdf = pub.galleys.find(function(g){ return g.file&&g.file.mimetype==='application/pdf'; });
-  if (!pdf) return null;
-  return 'https://ejournals.uni-muenster.de/index.php/'+slug+'/article/view/'+sub.id+'/'+pdf.id;
-}
-
-function pickPDFDownloadURL(sub, slug){
-  var pub = pickOJSPub(sub);
-  if (!pub||!pub.galleys) return null;
-  var pdf = pub.galleys.find(function(g){ return g.file&&g.file.mimetype==='application/pdf'; });
-  if (!pdf) return null;
-  return 'https://ejournals.uni-muenster.de/index.php/'+slug+'/article/download/'+sub.id+'/'+pdf.id;
-}
-
-function getOJSMeta(sub, slug){
-  var pub = pickOJSPub(sub);
-  if (!pub) return null;
-  var loc = pub.locale||'en_US';
-  var title    = pub.title&&(pub.title[loc]||pub.title.en_US||Object.values(pub.title)[0]);
-  var subtitle = pub.subtitle&&(pub.subtitle[loc]||pub.subtitle.en_US||Object.values(pub.subtitle)[0]);
-  var datePub  = pub.datePublished||null;
+  // Authors
   var authorsList = [];
-  if (Array.isArray(pub.authors)){
-    authorsList = pub.authors.map(function(a){
-      var g=(a.givenName&&(a.givenName[loc]||a.givenName.en_US||Object.values(a.givenName)[0]))||'';
-      var f=(a.familyName&&(a.familyName[loc]||a.familyName.en_US||Object.values(a.familyName)[0]))||'';
-      return { name:(g+' '+f).trim()||'', orcid:a.orcid||null };
+  if (a.creators && a.creators.length) {
+    authorsList = a.creators.map(function(c){
+      var name = '';
+      if (c.familyName) {
+        name = c.familyName + (c.givenName ? ', ' + c.givenName : '');
+      } else if (c.name) {
+        name = c.name;
+      }
+      var orcid = null;
+      if (c.nameIdentifiers && c.nameIdentifiers.length) {
+        var idRec = c.nameIdentifiers.find(function(n){
+          return n.nameIdentifierScheme && n.nameIdentifierScheme.toUpperCase() === 'ORCID';
+        });
+        if (idRec && idRec.nameIdentifier) {
+          orcid = idRec.nameIdentifier.replace(/^https?:\/\/orcid\.org\//,'');
+        }
+      }
+      return { name: name, orcid: orcid };
     }).filter(function(a){ return a.name; });
   }
-  var sectionName = SECTIONS[sub.sectionId||pub.sectionId]||null;
-  var categoryNames = (pub.categoryIds||[]).map(function(id){ return CATEGORIES[id]; }).filter(Boolean);
-  return {
-    title:title, subtitle:subtitle, datePublished:datePub, authorsList:authorsList,
-    section:sectionName, categories:categoryNames,
-    pdfUrl:pickPDFGalleyURL(sub,slug), pdfDownloadUrl:pickPDFDownloadURL(sub,slug),
-    articleUrl:pub.urlPublished||null,
-    year:datePub?parseInt(datePub.slice(0,4),10):null
-  };
-}
 
-/* ============================================
-   OJS USAGE STATS via API
-============================================ */
-async function fetchOJSUsage(slug, submissionId){
-  // Try the OJS stats endpoint for a specific submission
-  var url = ojsBase(slug) + '/stats/publications/' + submissionId + '?dateStart=2000-01-01&dateEnd=2099-12-31';
-  var data = await fetchJSON(url, 8000);
-  if (!data) return null;
-  // Response: { abstractViews: N, galleyViews: N, pdfViews: N, htmlViews: N, ... }
-  return data;
+  var year = a.publicationYear || null;
+  var datePublished = null;
+  if (a.dates && a.dates.length) {
+    var pubDate = a.dates.find(function(d){ return d.dateType === 'Issued' || d.dateType === 'Available'; });
+    if (pubDate && pubDate.date) datePublished = pubDate.date;
+  }
+  if (!datePublished && year) datePublished = year + '-01-01';
+
+  // Container / journal info
+  var containerType = a.container && a.container.type;
+
+  // URL: prefer the OJS landing page from identifiers
+  var url = a.url || 'https://doi.org/' + doi;
+
+  return {
+    doi: doi,
+    title: title,
+    authorsList: authorsList,
+    year: year,
+    datePublished: datePublished,
+    url: url,
+    containerType: containerType,
+    doiKey: doiSortKey(doi),
+
+    oaCites: null,
+    crCites: null,
+    dcCites: a.citationCount != null ? a.citationCount : null,
+    crNotAvailable: false,
+    countsByYear: null,
+    bskyCount: null
+  };
 }
 
 /* ============================================
@@ -924,39 +846,22 @@ function buildSparkline(countsByYear, color, label){
 }
 
 /* ============================================
-   PUB OBJECT
-============================================ */
-function makePub(doi){
-  return {
-    doi:doi, ojsId:ojsIdFromDoi(doi), doiKey:doiSortKey(doi),
-    title:null, subtitle:null, authorsList:[], datePublished:null, year:null,
-    section:null, categories:[], pdfUrl:null, pdfDownloadUrl:null, articleUrl:'https://doi.org/'+doi,
-    oaCites:null, dcCites:null, crCites:null, crNotAvailable:false,
-    countsByYear:null,
-    ojsViews:null, ojsPdfs:null,
-    bskyCount:null
-  };
-}
-
-/* ============================================
    RENDER
 ============================================ */
 function buildCard(pub, idx){
-  var doiUrl   = 'https://doi.org/'+pub.doi;
-  var gsUrl    = 'https://scholar.google.com/scholar?q='+encodeURIComponent(pub.title||pub.doi);
+  var doiUrl = 'https://doi.org/' + pub.doi;
+  var gsUrl  = 'https://scholar.google.com/scholar?q=' + encodeURIComponent(pub.title||pub.doi);
+  var landingUrl = pub.url || doiUrl;
 
   var topTags = '<div class="pub-top-meta">';
-  if (pub.section) topTags += '<span class="tag tag-section">'+escH(pub.section)+'</span>';
-  pub.categories.forEach(function(c){ topTags += '<span class="tag tag-category">'+escH(c)+'</span>'; });
+  if (pub.containerType) topTags += '<span class="tag tag-section">'+escH(pub.containerType)+'</span>';
   if (pub.year) topTags += '<span class="tag tag-date">'+escH(pub.year)+'</span>';
   topTags += '</div>';
 
-  var titleBlock =
-    '<a href="'+doiUrl+'" target="_blank" class="pub-title">'+escH(pub.title||pub.doi)+'</a>'
-    +(pub.subtitle?'<div class="pub-subtitle">'+escH(pub.subtitle)+'</div>':'');
+  var titleBlock = '<a href="'+doiUrl+'" target="_blank" class="pub-title">'+escH(pub.title||pub.doi)+'</a>';
 
   var authorsBlock;
-  if (pub.authorsList&&pub.authorsList.length){
+  if (pub.authorsList && pub.authorsList.length){
     authorsBlock = '<div class="pub-authors">'+pub.authorsList.map(function(a){
       if (a.orcid){
         return '<a href="https://orcid.org/'+escH(a.orcid)+'" target="_blank" class="author-link">'
@@ -967,26 +872,21 @@ function buildCard(pub, idx){
       return '<span class="author-link">'+escH(a.name)+'</span>';
     }).join(', ')+'</div>';
   } else {
-    authorsBlock = '<div class="pub-authors"></div>';
+    authorsBlock = '';
   }
 
   var actions = '<div class="pub-actions">';
-  if (pub.pdfUrl) {
-    actions += '<a href="'+pub.pdfUrl+'" target="_blank" class="action-btn action-btn-primary">'
-      +'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 1h6l4 4v10H4V1z"/><path d="M10 1v4h4"/><path d="M6 9h4M6 12h4"/></svg>'
-      +'View PDF</a>';
-  }
-  if (pub.pdfDownloadUrl) {
-    actions += '<a href="'+pub.pdfDownloadUrl+'" target="_blank" download class="action-btn action-btn-secondary">'
-      +'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 1v10M4 7l4 4 4-4M2 14h12"/></svg>'
-      +'Download PDF</a>';
+  if (landingUrl && landingUrl !== doiUrl) {
+    actions += '<a href="'+landingUrl+'" target="_blank" class="action-btn action-btn-primary">'
+      +'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 1h6l4 4v10H4V1z"/><path d="M10 1v4h4"/></svg>'
+      +'Article page</a>';
   }
   actions += '</div>';
 
   var crossrefVal;
-  if (pub.crCites!==null) crossrefVal=fmtNum(pub.crCites);
-  else if (pub.crNotAvailable) crossrefVal='<span title="DOI registered with DataCite, not Crossref" style="color:var(--text-muted);font-weight:400">n/a</span>';
-  else crossrefVal=spin();
+  if (pub.crCites !== null) crossrefVal = fmtNum(pub.crCites);
+  else if (pub.crNotAvailable) crossrefVal = '<span title="Not registered with Crossref" style="color:var(--text-muted);font-weight:400">n/a</span>';
+  else crossrefVal = spin();
 
   var citeBadges = '<div class="metric-group">'
     +'<span class="metric-group-label">Citations:</span>'
@@ -995,23 +895,11 @@ function buildCard(pub, idx){
     +'<span class="mbadge"><span class="src-dot" style="background:#e74c3c"></span>Crossref <span class="val">'+crossrefVal+'</span></span>'
     +'</div>';
 
-  var bskyLink='https://bsky.app/search?q='+encodeURIComponent('https://doi.org/'+pub.doi);
+  var bskyLink = 'https://bsky.app/search?q=' + encodeURIComponent('https://doi.org/'+pub.doi);
   var bskyBadge = '<div class="metric-group">'
     +'<span class="metric-group-label">Social:</span>'
     +'<a href="'+bskyLink+'" target="_blank" class="mbadge mbadge-link"><span class="src-dot" style="background:#1185fe"></span>Bluesky posts <span class="val">'+(pub.bskyCount!==null?fmtNum(pub.bskyCount):spin())+'</span></a>'
     +'</div>';
-
-  // OJS API usage stats
-  var viewsRow;
-  if (pub.ojsViews !== null || pub.ojsPdfs !== null) {
-    viewsRow = '<div class="metric-group">'
-      +'<span class="metric-group-label">OJS usage:</span>'
-      +'<span class="view-chip">👁 Abstract views <span class="val">'+(pub.ojsViews!==null?fmtNum(pub.ojsViews):'—')+'</span></span>'
-      +'<span class="view-chip">⬇ PDF downloads <span class="val">'+(pub.ojsPdfs!==null?fmtNum(pub.ojsPdfs):'—')+'</span></span>'
-      +'</div>';
-  } else {
-    viewsRow = '';
-  }
 
   var citeSpark = pub.countsByYear ? buildSparkline(pub.countsByYear,'#2ecc71','Citations by year (OpenAlex)') : '';
 
@@ -1025,10 +913,10 @@ function buildCard(pub, idx){
     +'<a href="https://commons.datacite.org/doi.org/'+pub.doi+'" target="_blank" class="pub-link">DataCite</a>'
     +'</div>';
 
-  return '<div class="pub-item" style="animation-delay:'+(idx*0.07)+'s">'
+  return '<div class="pub-item" style="animation-delay:'+(Math.min(idx,12)*0.05)+'s">'
     +'<div>'
     +topTags+titleBlock+authorsBlock+actions
-    +'<div class="metrics-block">'+citeBadges+viewsRow+bskyBadge+citeSpark+'</div>'
+    +'<div class="metrics-block">'+citeBadges+bskyBadge+citeSpark+'</div>'
     +footer
     +'</div>'
     +'<div class="pub-donut">'
@@ -1038,40 +926,31 @@ function buildCard(pub, idx){
     +'</div>';
 }
 
-/* ============================================
-   SORT & RENDER
-============================================ */
 function setSort(mode){
   currentSort = mode;
-  ['newest','oldest','cites','views'].forEach(function(m){
-    document.getElementById('sort-'+m).classList.toggle('active', m===mode);
+  ['newest','oldest','cites'].forEach(function(m){
+    var el = document.getElementById('sort-'+m);
+    if (el) el.classList.toggle('active', m===mode);
   });
   renderPubs();
 }
 
 function sortedPubs(){
-  var copy=ALL_PUBS.slice();
-  if (currentSort==='newest') copy.sort(function(a,b){return b.doiKey-a.doiKey;});
-  else if (currentSort==='oldest') copy.sort(function(a,b){return a.doiKey-b.doiKey;});
-  else if (currentSort==='cites') copy.sort(function(a,b){return (b.oaCites||0)-(a.oaCites||0);});
-  else if (currentSort==='views') copy.sort(function(a,b){return (b.ojsViews||0)-(a.ojsViews||0);});
+  var copy = ALL_PUBS.slice();
+  if (currentSort==='newest') copy.sort(function(a,b){ return b.doiKey - a.doiKey; });
+  else if (currentSort==='oldest') copy.sort(function(a,b){ return a.doiKey - b.doiKey; });
+  else if (currentSort==='cites')  copy.sort(function(a,b){ return (b.oaCites||b.dcCites||0)-(a.oaCites||a.dcCites||0); });
   return copy;
 }
 
 function renderPubs(){
   var sorted = sortedPubs();
-  if (!sorted.length) {
-    document.getElementById('pub-list').innerHTML =
-      '<div class="no-dois-notice"><strong>No publications found</strong>Could not retrieve DOIs for this journal via the OJS API or GitHub. The journal may not have published articles yet, or its DOI metadata may be incomplete.</div>';
-    return;
-  }
+  if (!sorted.length) return;
   document.getElementById('pub-list').innerHTML = sorted.map(function(p,i){ return buildCard(p,i); }).join('');
   if (typeof window._altmetric_embed_init==='function') window._altmetric_embed_init();
 }
 
-/* ============================================
-   SUMMARY ANIMATION
-============================================ */
+/* Animation: count-up */
 function countUp(el, target, duration){
   if (!el) return;
   duration = duration||1000;
@@ -1099,21 +978,22 @@ function animateNumber(el,from,to,duration,formatter){
 function updateSummary(){
   var dur=1000;
   countUp(document.getElementById('sum-pubs'),ALL_PUBS.length,dur);
-  var c=ALL_PUBS.reduce(function(s,p){return s+(p.oaCites||0);},0);
+  var c = ALL_PUBS.reduce(function(s,p){ return s + (p.oaCites!==null ? p.oaCites : (p.dcCites||0)); },0);
   countUp(document.getElementById('sum-cites'),c,dur);
-  var v=ALL_PUBS.reduce(function(s,p){return s+(p.ojsViews||0);},0);
-  if(v) countUp(document.getElementById('sum-views'),v,dur);
-  else  document.getElementById('sum-views').textContent='—';
-  var d=ALL_PUBS.reduce(function(s,p){return s+(p.ojsPdfs||0);},0);
-  if(d) countUp(document.getElementById('sum-pdfs'),d,dur);
-  else  document.getElementById('sum-pdfs').textContent='—';
+
+  var years = ALL_PUBS.map(function(p){ return p.year; }).filter(function(y){ return y; }).map(Number);
+  if (years.length) {
+    document.getElementById('sum-firstyr').textContent = Math.min.apply(null, years);
+    document.getElementById('sum-lastyr').textContent  = Math.max.apply(null, years);
+  } else {
+    document.getElementById('sum-firstyr').textContent = '—';
+    document.getElementById('sum-lastyr').textContent  = '—';
+  }
   if(ALL_PUBS.length) countUp(document.getElementById('sum-oa'),'100%',dur);
   else                document.getElementById('sum-oa').textContent='—';
 }
 
-/* ============================================
-   LOADER HELPERS
-============================================ */
+/* Loader helpers */
 function setLoaderStep(stepName, state){
   var el=document.querySelector('.loader-step[data-step="'+stepName+'"]');
   if(!el) return;
@@ -1133,171 +1013,180 @@ function showLoader(show){
    MAIN LOAD
 ============================================ */
 async function loadAll(){
+  var reqId = ++currentRequestId;
   var j = currentJournal;
   var btn = document.getElementById('refresh-btn');
-  btn.disabled=true; btn.textContent='… Loading';
-  document.getElementById('status-dot').className='status-dot loading';
-  document.getElementById('status-text').textContent='Loading publications for '+j.name+'…';
-  document.getElementById('pub-list').innerHTML='';
-  document.getElementById('ojs-note').textContent='Loading…';
-  document.getElementById('sum-pubs').textContent='—';
-  document.getElementById('sum-cites').textContent='—';
-  document.getElementById('sum-views').textContent='—';
-  document.getElementById('sum-pdfs').textContent='—';
-  document.getElementById('sum-oa').textContent='—';
-  ALL_PUBS=[]; SECTIONS={}; CATEGORIES={};
+  btn.disabled = true; btn.textContent = '… Loading';
 
-  showLoader(true);
-  ['meta','cites','views'].forEach(function(s){ setLoaderStep(s,''); });
-  setLoaderStep('meta','active');
-  setLoaderProgress(10);
+  document.getElementById('status-dot').className = 'status-dot loading';
+  document.getElementById('status-text').textContent = 'Loading publications for ' + j.name + '…';
+  document.getElementById('pub-list').innerHTML = '';
+  document.getElementById('ojs-note').textContent = 'Loading…';
+  ['sum-pubs','sum-cites','sum-firstyr','sum-lastyr','sum-oa'].forEach(function(id){
+    document.getElementById(id).textContent = '—';
+  });
+  ALL_PUBS = [];
 
-  /* 1 — Sections/categories + DOI list in parallel */
-  var doisPromise;
-  if (j.dois_github) {
-    // Replication Research: fetch DOI list from GitHub
-    doisPromise = fetchText(j.dois_github).then(function(txt){
-      if (!txt) return [];
-      return txt.split('\n').map(function(l){ return l.trim().replace(/^https?:\/\/doi\.org\//i,''); }).filter(Boolean);
-    });
-  } else {
-    // Other journals: fetch DOIs from OJS API
-    doisPromise = fetchDoisFromOJS(j.slug);
+  /* Handle no-DOI journals: show notice and stop */
+  if (j.hasNoDoi) {
+    showLoader(false);
+    document.getElementById('pub-list').innerHTML =
+      '<div class="notice-card info">'
+      +'<strong>No DOIs assigned</strong>'
+      +'<p>'+escH(j.name)+' does not currently register DOIs with DataCite, so bibliometrics from OpenAlex, Crossref, DataCite and Altmetric cannot be aggregated automatically.</p>'
+      +'<p>You can browse this journal directly at <a href="https://ejournals.uni-muenster.de/'+escH(j.slug)+'/index" target="_blank">ejournals.uni-muenster.de/'+escH(j.slug)+'</a>.</p>'
+      +'</div>';
+    document.getElementById('status-dot').className = 'status-dot done';
+    document.getElementById('status-text').textContent = 'No DOIs for this journal.';
+    document.getElementById('ojs-note').innerHTML = 'This journal does not register DOIs.<br><a href="https://ejournals.uni-muenster.de/'+escH(j.slug)+'" target="_blank">Visit journal ↗</a>';
+    document.getElementById('footer-update-date').textContent = new Date().toISOString().slice(0,10);
+    btn.disabled = false; btn.textContent = '↺ Refresh';
+    return;
   }
 
-  var [rawDois, _] = await Promise.all([
-    doisPromise,
-    loadSectionsAndCategories(j.slug)
-  ]);
+  showLoader(true);
+  ['dois','cites','social'].forEach(function(s){ setLoaderStep(s,''); });
+  setLoaderStep('dois','active');
+  setLoaderProgress(10);
 
-  document.getElementById('status-text').textContent='Fetching metadata for '+rawDois.length+' publications…';
-  document.getElementById('sum-pubs').textContent = rawDois.length || '—';
+  /* 1 — DataCite: fetch DOIs + metadata in one go */
+  var records = await fetchDataciteDOIs(j);
 
-  ALL_PUBS = rawDois.map(makePub);
+  if (reqId !== currentRequestId) return; // user switched journals; abort
 
-  /* 2 — OJS metadata + DataCite fallback */
-  var ojsProms = ALL_PUBS.map(function(pub){
-    if (!pub.ojsId) return Promise.resolve();
-    return loadOJSSubmission(j.slug, pub.ojsId).then(function(sub){
-      if (!sub) return;
-      var meta = getOJSMeta(sub, j.slug);
-      if (!meta) return;
-      pub.title=meta.title; pub.subtitle=meta.subtitle; pub.authorsList=meta.authorsList||[];
-      pub.datePublished=meta.datePublished; pub.year=meta.year;
-      pub.section=meta.section; pub.categories=meta.categories;
-      pub.pdfUrl=meta.pdfUrl; pub.pdfDownloadUrl=meta.pdfDownloadUrl;
-      pub.articleUrl=meta.articleUrl||pub.articleUrl;
-    });
-  });
+  if (!records.length) {
+    showLoader(false);
+    document.getElementById('pub-list').innerHTML =
+      '<div class="notice-card error">'
+      +'<strong>No publications found</strong>'
+      +'<p>DataCite returned no records for DOI prefix(es) <code>'+j.doiPrefixes.map(function(p){return '10.17879/'+p;}).join(', ')+'</code>.</p>'
+      +'<p>The journal may not have any registered DOIs yet, or the DOI prefix mapping in this dashboard may need updating.</p>'
+      +'</div>';
+    document.getElementById('status-dot').className = 'status-dot error';
+    document.getElementById('status-text').textContent = 'No DOIs found in DataCite.';
+    document.getElementById('ojs-note').textContent = 'No DataCite records found.';
+    btn.disabled = false; btn.textContent = '↺ Refresh';
+    return;
+  }
 
-  var dcMetaProms = ALL_PUBS.map(function(pub){
-    return fetchJSON('https://api.datacite.org/dois/'+encodeURIComponent(pub.doi)).then(function(dc){
-      if(!dc||!dc.data||!dc.data.attributes) return;
-      var attrs=dc.data.attributes;
-      if(attrs.citationCount!=null) pub.dcCites=attrs.citationCount;
-      if(!pub.title&&attrs.titles&&attrs.titles[0]) pub.title=attrs.titles[0].title||null;
-      if(!pub.authorsList.length&&attrs.creators&&attrs.creators.length){
-        pub.authorsList=attrs.creators.map(function(c){
-          return {name:c.familyName?(c.familyName+', '+(c.givenName?c.givenName.charAt(0)+'.':'')):c.name||'',orcid:c.nameIdentifiers&&c.nameIdentifiers[0]&&c.nameIdentifiers[0].nameIdentifierScheme==='ORCID'?c.nameIdentifiers[0].nameIdentifier:null};
-        }).filter(function(a){return a.name;});
-      }
-      if(!pub.year&&attrs.publicationYear){ pub.year=attrs.publicationYear; pub.datePublished=pub.datePublished||(attrs.publicationYear+'-01-01'); }
-    });
-  });
+  ALL_PUBS = records.map(pubFromDataciteRecord).filter(Boolean);
+  document.getElementById('sum-pubs').textContent = ALL_PUBS.length;
 
-  await Promise.all(ojsProms.concat(dcMetaProms));
+  /* Initial render with metadata so user sees something fast */
+  renderPubs();
+  updateSummary();
 
-  setLoaderStep('meta','done');
+  setLoaderStep('dois','done');
   setLoaderStep('cites','active');
-  setLoaderStep('views','active');
-  setLoaderProgress(50);
+  setLoaderProgress(40);
+  showLoader(false); // hide loader; let badges fill in inline
+  document.getElementById('status-text').textContent =
+    'Loaded ' + ALL_PUBS.length + ' publication' + (ALL_PUBS.length!==1?'s':'') + '. Fetching citations…';
 
-  /* 3 — Citations + OJS usage stats via API + Bluesky in parallel */
-  document.getElementById('status-text').textContent='Fetching citations, usage stats & social mentions…';
+  /* 2 — OpenAlex + Crossref + Bluesky in parallel
+        Process in batches to avoid hammering rate limits */
+  var BATCH = 8;
+  for (var i = 0; i < ALL_PUBS.length; i += BATCH) {
+    if (reqId !== currentRequestId) return;
+    var batch = ALL_PUBS.slice(i, i + BATCH);
+    await Promise.all(batch.map(function(pub){
+      return Promise.all([
+        // OpenAlex
+        fetchJSON('https://api.openalex.org/works/https://doi.org/'+pub.doi).then(function(oa){
+          if (!oa) return;
+          pub.oaCites = oa.cited_by_count != null ? oa.cited_by_count : 0;
+          pub.countsByYear = oa.counts_by_year || [];
+        }),
+        // Crossref
+        fetchJSON('https://api.crossref.org/works/'+pub.doi).then(function(cr){
+          if (cr && cr.message && cr.message['is-referenced-by-count'] != null) {
+            pub.crCites = cr.message['is-referenced-by-count'];
+          } else {
+            pub.crNotAvailable = true;
+          }
+        }),
+        // Bluesky
+        fetchBlueskyMentions(pub)
+      ]);
+    }));
 
-  var oaProms = ALL_PUBS.map(function(pub){
-    return fetchJSON('https://api.openalex.org/works/https://doi.org/'+pub.doi).then(function(oa){
-      if(!oa) return;
-      pub.oaCites = oa.cited_by_count!=null ? oa.cited_by_count : null;
-      pub.countsByYear = oa.counts_by_year||[];
-    });
-  });
+    var pct = 40 + Math.round((i + BATCH) / ALL_PUBS.length * 55);
+    setLoaderProgress(Math.min(pct, 95));
+    // Re-render every batch so values stream in
+    renderPubs();
+    updateSummary();
+  }
 
-  var crProms = ALL_PUBS.map(function(pub){
-    return fetchJSON('https://api.crossref.org/works/'+pub.doi).then(function(cr){
-      if(cr&&cr.message&&cr.message['is-referenced-by-count']!=null) pub.crCites=cr.message['is-referenced-by-count'];
-      else pub.crNotAvailable=true;
-    });
-  });
-
-  // OJS API usage stats (views/downloads per submission)
-  var usageProms = ALL_PUBS.map(function(pub){
-    if (!pub.ojsId) return Promise.resolve();
-    return fetchOJSUsage(j.slug, pub.ojsId).then(function(stats){
-      if (!stats) return;
-      // abstractViews = full-text/abstract hits; pdfViews/galleyViews = downloads
-      if (stats.abstractViews != null) pub.ojsViews = stats.abstractViews;
-      if (stats.pdfViews != null)      pub.ojsPdfs  = stats.pdfViews;
-      else if (stats.galleyViews!=null) pub.ojsPdfs = stats.galleyViews;
-    });
-  });
-
-  var bskyProms = ALL_PUBS.map(function(pub){
-    var doiSuffix=pub.doi.split('/').pop()||pub.doi;
-    var urlParam='https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?url='+encodeURIComponent('https://doi.org/'+pub.doi)+'&limit=100';
-    var textSearch='https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?q='+encodeURIComponent(doiSuffix)+'&limit=100';
-    return Promise.all([
-      fetchJSON(urlParam).catch(function(){return null;}),
-      fetchJSON(textSearch).catch(function(){return null;})
-    ]).then(function(results){
-      var seen={},matched=[];
-      results.forEach(function(res){
-        if(!res||!res.posts) return;
-        res.posts.forEach(function(post){
-          if(seen[post.uri]) return;
-          var facets=(post.record&&post.record.facets)||[];
-          var facetMatch=facets.some(function(f){return(f.features||[]).some(function(feat){return feat.uri&&feat.uri.indexOf(pub.doi)!==-1;});});
-          var embed=post.record&&post.record.embed;
-          var embedMatch=false;
-          if(embed){var ext=embed.external||(embed.record&&embed.record.external);if(ext&&ext.uri&&ext.uri.indexOf(pub.doi)!==-1)embedMatch=true;}
-          var textMatch=(post.record&&post.record.text&&post.record.text.indexOf(pub.doi)!==-1);
-          if(facetMatch||embedMatch||textMatch){seen[post.uri]=true;matched.push(post);}
-        });
-      });
-      pub.bskyCount=matched.length;
-    }).catch(function(){pub.bskyCount=0;});
-  });
-
-  await Promise.all(oaProms.concat(crProms).concat(usageProms).concat(bskyProms));
+  if (reqId !== currentRequestId) return;
 
   setLoaderStep('cites','done');
-  setLoaderStep('views','done');
+  setLoaderStep('social','done');
   setLoaderProgress(100);
-
-  await new Promise(function(r){ setTimeout(r,300); });
-  showLoader(false);
 
   renderPubs();
   updateSummary();
 
-  var viewsFound = ALL_PUBS.some(function(p){ return p.ojsViews!==null; });
-  document.getElementById('ojs-note').innerHTML = viewsFound
-    ? 'OJS usage stats loaded via API.<br><a href="https://ejournals.uni-muenster.de/index.php/'+j.slug+'" target="_blank">Visit journal ↗</a>'
-    : 'OJS usage stats not available for this journal via public API.<br><a href="https://ejournals.uni-muenster.de/index.php/'+j.slug+'" target="_blank">Visit journal ↗</a>';
+  document.getElementById('ojs-note').innerHTML =
+    'Data refreshed from DataCite, OpenAlex, Crossref &amp; Bluesky.<br>'
+    +'<a href="https://ejournals.uni-muenster.de/'+escH(j.slug)+'/index" target="_blank">Visit journal ↗</a>';
 
-  var now=new Date();
+  var now = new Date();
   document.getElementById('footer-update-date').textContent = now.toISOString().slice(0,10);
-  document.getElementById('status-dot').className='status-dot done';
-  document.getElementById('status-text').textContent=
-    'Loaded '+ALL_PUBS.length+' publication'+(ALL_PUBS.length!==1?'s':'')+' for '+j.name
-    +' · '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})
-    +' · OJS · OpenAlex · DataCite · Crossref · Altmetric';
+  document.getElementById('status-dot').className = 'status-dot done';
+  document.getElementById('status-text').textContent =
+    'Loaded ' + ALL_PUBS.length + ' publication' + (ALL_PUBS.length!==1?'s':'') + ' for ' + j.name
+    + ' · ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})
+    + ' · DataCite · OpenAlex · Crossref · Altmetric · Bluesky';
 
-  btn.disabled=false; btn.textContent='↺ Refresh';
+  btn.disabled = false; btn.textContent = '↺ Refresh';
 }
 
-// Initialize dropdown list on page load
+/* Bluesky helper */
+async function fetchBlueskyMentions(pub){
+  var doiSuffix = pub.doi.split('/').pop() || pub.doi;
+  var urlParam   = 'https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?url='+encodeURIComponent('https://doi.org/'+pub.doi)+'&limit=100';
+  var textSearch = 'https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?q='+encodeURIComponent(doiSuffix)+'&limit=100';
+
+  try {
+    var results = await Promise.all([
+      fetchJSON(urlParam, 6000).catch(function(){return null;}),
+      fetchJSON(textSearch, 6000).catch(function(){return null;})
+    ]);
+    var seen = {}, matched = [];
+    results.forEach(function(res){
+      if (!res || !res.posts) return;
+      res.posts.forEach(function(post){
+        if (seen[post.uri]) return;
+        var facets = (post.record && post.record.facets) || [];
+        var facetMatch = facets.some(function(f){
+          return (f.features||[]).some(function(feat){
+            return feat.uri && feat.uri.indexOf(pub.doi) !== -1;
+          });
+        });
+        var embed = post.record && post.record.embed;
+        var embedMatch = false;
+        if (embed) {
+          var ext = embed.external || (embed.record && embed.record.external);
+          if (ext && ext.uri && ext.uri.indexOf(pub.doi) !== -1) embedMatch = true;
+        }
+        var textMatch = (post.record && post.record.text && post.record.text.indexOf(pub.doi) !== -1);
+        if (facetMatch || embedMatch || textMatch) {
+          seen[post.uri] = true;
+          matched.push(post);
+        }
+      });
+    });
+    pub.bskyCount = matched.length;
+  } catch(e) {
+    pub.bskyCount = 0;
+  }
+}
+
+/* Initialize */
 renderJournalList('');
+// Pre-render the section heading
+document.getElementById('section-title').textContent = currentJournal.name;
+document.getElementById('section-issn').textContent = currentJournal.issn ? ' · ISSN ' + currentJournal.issn : '';
 </script>
 <script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
 </body>
