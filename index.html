@@ -3,1232 +3,632 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Münster E-Journals Dashboard</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231e8bc3'/%3E%3Ctext x='6' y='24' font-family='Arial Black,Arial,sans-serif' font-weight='900' font-size='20' fill='%23fff'%3EM%3C/text%3E%3C/svg%3E">
+<title>e-Journals Münster</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%232563eb'/%3E%3Ctext x='5' y='23' font-family='Georgia,serif' font-weight='900' font-size='18' fill='%23fff'%3Eej%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --r2-blue: #1e8bc3;
-  --r2-blue-dark: #1a6fa8;
-  --r2-blue-light: #e6f3fa;
-  --r2-blue-border: #b8dcef;
-  --r2-blue-deep: #0d4f7a;
-  --bg: #ffffff;
-  --bg-soft: #fafbfc;
-  --bg-chip: #f0f4f7;
-  --border: #e3e7eb;
-  --border-mid: #c5cdd5;
-  --text: #1a1d20;
-  --text-secondary: #4a5158;
-  --text-muted: #8990a0;
-  --green: #15803d;
-  --green-bg: #dcfce7;
-  --green-border: #86efac;
-  --purple: #7c3aed;
-  --purple-bg: #f3e8ff;
-  --purple-border: #c4b5fd;
-  --amber: #b45309;
-  --amber-bg: #fef3c7;
-  --amber-border: #fcd34d;
-  --red: #dc2626;
-  --red-bg: #fee2e2;
-  --red-border: #fca5a5;
-  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#2563eb;--blue-mid:#1d4ed8;--blue-lt:#eff6ff;--blue-bdr:#bfdbfe;--blue-dk:#1e3a8a;
+  --bg:#fff;--bg-soft:#f8f9fb;--bg-chip:#f1f3f7;
+  --border:#e4e7ec;--border-mid:#c8cdd6;
+  --text:#111318;--text2:#3f4654;--textm:#8892a4;
+  --green:#16a34a;--green-bg:#f0fdf4;--green-bdr:#bbf7d0;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-bdr:#fde68a;
+  --red:#dc2626;--red-bg:#fef2f2;--red-bdr:#fecaca;
+  --serif:'Lora',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace;
 }
-
-body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
 
 /* ── HEADER ── */
-.site-header {
-  border-bottom: 2px solid var(--r2-blue);
-  background: var(--bg); padding: 0 48px;
-  display: flex; align-items: stretch; justify-content: space-between;
-  min-height: 64px;
-}
+.hdr{border-bottom:1px solid var(--border);background:var(--bg);padding:0 40px;display:flex;align-items:stretch;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.wordmark{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--serif);font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.01em;cursor:pointer;padding:14px 0}
+.wordmark .dot{color:var(--blue)}
+.wordmark .sub{font-family:var(--sans);font-size:10.5px;font-weight:500;color:var(--textm);letter-spacing:.06em;text-transform:uppercase;border-left:1px solid var(--border);padding-left:10px;margin-left:2px}
 
-/* ── JOURNAL SELECTOR ── */
-.journal-selector-wrap { position: relative; display: flex; align-items: center; }
-.journal-selector-btn {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 18px; height: 100%;
-  background: none; border: none; border-right: 1px solid var(--border);
-  cursor: pointer; font-family: var(--font); font-size: 13px;
-  color: var(--text); font-weight: 500; transition: background 0.15s;
-  min-width: 260px; max-width: 380px;
-}
-.journal-selector-btn:hover { background: var(--bg-soft); }
-.journal-icon-placeholder {
-  width: 32px; height: 32px; border-radius: 6px; flex-shrink: 0;
-  background: var(--r2-blue-light); border: 1px solid var(--r2-blue-border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 800; color: var(--r2-blue-deep);
-  font-family: var(--font-mono);
-}
-.journal-selector-btn .journal-name {
-  flex: 1; text-align: left; line-height: 1.3;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.journal-selector-btn .journal-name small {
-  display: block; font-size: 10.5px; color: var(--text-muted); font-weight: 400;
-}
-.journal-selector-btn .chevron { flex-shrink: 0; color: var(--text-muted); transition: transform 0.2s; }
-.journal-selector-btn.open .chevron { transform: rotate(180deg); }
+/* ── JOURNAL PICKER ── */
+.jsel{position:relative;display:flex;align-items:center}
+.jsel-btn{display:flex;align-items:center;gap:9px;padding:0 20px;height:100%;min-height:52px;background:none;border:none;border-left:1px solid var(--border);cursor:pointer;font-family:var(--sans);font-size:13px;color:var(--text);font-weight:500;transition:background .12s;min-width:240px;max-width:360px}
+.jsel-btn:hover{background:var(--bg-soft)}
+.jabbr{width:30px;height:30px;border-radius:5px;flex-shrink:0;background:var(--blue-lt);border:1px solid var(--blue-bdr);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--blue-dk);font-family:var(--mono)}
+.jabbr.none{background:var(--bg-chip);border-color:var(--border);color:var(--textm)}
+.jlbl{flex:1;text-align:left;line-height:1.25}
+.jlbl small{display:block;font-size:10px;color:var(--textm);font-weight:400;margin-top:1px}
+.chev{color:var(--textm);flex-shrink:0;transition:transform .18s}
+.jsel-btn.open .chev{transform:rotate(180deg)}
+.jdd{position:absolute;top:calc(100% + 4px);right:0;width:380px;max-height:440px;background:var(--bg);border:1px solid var(--border);border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.13);z-index:500;overflow:hidden;opacity:0;transform:translateY(-6px) scaleY(.96);pointer-events:none;transition:opacity .16s,transform .16s;transform-origin:top right}
+.jdd.open{opacity:1;transform:none;pointer-events:all}
+.dd-sw{padding:10px 12px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:2;display:flex;align-items:center;gap:8px}
+.dd-sw svg{color:var(--textm);flex-shrink:0}
+.dd-si{flex:1;border:none;outline:none;font-family:var(--sans);font-size:13px;color:var(--text);background:transparent}
+.dd-list{overflow-y:auto;max-height:370px;padding:5px 0}
+.dd-list::-webkit-scrollbar{width:4px}
+.dd-list::-webkit-scrollbar-thumb{background:var(--border-mid);border-radius:2px}
+.dd-gl{padding:8px 14px 3px;font-size:9px;font-weight:700;color:var(--textm);text-transform:uppercase;letter-spacing:.12em}
+.dd-it{display:flex;align-items:center;gap:9px;padding:7px 12px;cursor:pointer;border-left:3px solid transparent;transition:background .1s}
+.dd-it:hover{background:var(--bg-soft)}
+.dd-it.sel{background:var(--blue-lt);border-left-color:var(--blue)}
+.dd-ab{width:26px;height:26px;border-radius:4px;flex-shrink:0;background:var(--blue-lt);border:1px solid var(--blue-bdr);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--blue-dk);font-family:var(--mono)}
+.dd-ab.nd{background:var(--bg-chip);border-color:var(--border);color:var(--textm)}
+.dd-tx{flex:1;min-width:0}
+.dd-nm{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dd-sl{font-size:10px;color:var(--textm);font-family:var(--mono)}
+.dd-bg{font-size:9px;font-weight:600;padding:2px 5px;border-radius:3px;flex-shrink:0}
+.dd-bg.ac{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bdr)}
+.dd-bg.in{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bdr)}
+.dd-bg.nd{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bdr)}
+.dd-em{padding:24px;text-align:center;font-size:13px;color:var(--textm)}
 
-.journal-dropdown {
-  position: absolute; top: calc(100% + 2px); left: 0;
-  width: 420px; max-height: 480px;
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
-  z-index: 1000; overflow: hidden;
-  opacity: 0; transform: translateY(-6px) scaleY(0.97);
-  pointer-events: none;
-  transition: opacity 0.18s, transform 0.18s;
-  transform-origin: top left;
-}
-.journal-dropdown.open { opacity: 1; transform: translateY(0) scaleY(1); pointer-events: all; }
+/* ── LAYOUT ── */
+.wrap{max-width:1160px;margin:0 auto;padding:0 40px 80px}
 
-.journal-search-wrap {
-  padding: 10px 12px; border-bottom: 1px solid var(--border);
-  position: sticky; top: 0; background: var(--bg); z-index: 2;
-}
-.journal-search {
-  width: 100%; padding: 7px 12px 7px 32px;
-  border: 1px solid var(--border-mid); border-radius: 6px;
-  font-family: var(--font); font-size: 12.5px; color: var(--text);
-  background: var(--bg-soft); outline: none;
-  transition: border-color 0.15s;
-}
-.journal-search:focus { border-color: var(--r2-blue); background: #fff; }
-.journal-search-icon {
-  position: absolute; left: 22px; top: 50%; transform: translateY(-50%);
-  color: var(--text-muted); pointer-events: none;
-}
-.journal-list { overflow-y: auto; max-height: 400px; padding: 6px 0; }
-.journal-list::-webkit-scrollbar { width: 5px; }
-.journal-list::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 3px; }
-.journal-option {
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 14px; cursor: pointer; transition: background 0.1s;
-  border-left: 3px solid transparent;
-}
-.journal-option:hover { background: var(--bg-soft); }
-.journal-option.selected { background: var(--r2-blue-light); border-left-color: var(--r2-blue); }
-.jopt-icon-placeholder {
-  width: 28px; height: 28px; border-radius: 5px; flex-shrink: 0;
-  background: var(--r2-blue-light); border: 1px solid var(--r2-blue-border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 800; color: var(--r2-blue-deep);
-  font-family: var(--font-mono); letter-spacing: -0.03em;
-}
-.journal-option .jopt-text { flex: 1; min-width: 0; }
-.journal-option .jopt-name {
-  font-size: 12.5px; font-weight: 600; color: var(--text);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.journal-option .jopt-slug { font-size: 10.5px; color: var(--text-muted); font-family: var(--font-mono); }
-.journal-option .jopt-tag { font-size: 9.5px; font-weight: 600; padding: 2px 6px; border-radius: 3px; flex-shrink: 0; }
-.jopt-tag-active   { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
-.jopt-tag-inactive { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
-.jopt-tag-nodoi    { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
-.journal-group-label {
-  padding: 6px 14px 3px; font-size: 9.5px; font-weight: 700;
-  color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em;
-}
-.no-results { padding: 24px; text-align: center; font-size: 12.5px; color: var(--text-muted); }
+/* ── HOME ── */
+#hs{display:block}
+.hero{padding:64px 0 44px;border-bottom:1px solid var(--border);margin-bottom:44px}
+.hero h1{font-family:var(--serif);font-size:44px;font-weight:700;line-height:1.12;letter-spacing:-.02em;color:var(--text);margin-bottom:16px}
+.hero h1 em{color:var(--blue);font-style:normal}
+.hero p{font-size:16px;color:var(--text2);max-width:520px;line-height:1.7;margin-bottom:28px}
+.hint{display:inline-flex;align-items:center;gap:8px;background:var(--blue-lt);border:1px solid var(--blue-bdr);border-radius:8px;padding:10px 16px;font-size:13px;color:var(--blue-dk);font-weight:500}
+.hgl{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--text);margin-bottom:20px;letter-spacing:-.01em}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.hcard{border:1px solid var(--border);border-radius:10px;padding:16px 18px;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s;background:var(--bg);display:flex;flex-direction:column;gap:7px;text-align:left;font-family:var(--sans)}
+.hcard:hover{border-color:var(--blue);box-shadow:0 4px 16px rgba(37,99,235,.1);transform:translateY(-2px)}
+.hcard.nd{opacity:.55;cursor:default}
+.hcard.nd:hover{border-color:var(--border);box-shadow:none;transform:none}
+.hct{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hab{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--blue-dk);background:var(--blue-lt);border:1px solid var(--blue-bdr);border-radius:4px;padding:2px 7px}
+.hab.nd{color:var(--textm);background:var(--bg-chip);border-color:var(--border)}
+.htag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px}
+.htag.ac{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bdr)}
+.htag.in{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bdr)}
+.htag.nd{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bdr)}
+.hnm{font-size:13px;font-weight:600;color:var(--text);line-height:1.35}
+.hsl{font-size:10px;color:var(--textm);font-family:var(--mono)}
 
-.header-brand {
-  font-size: 13px; color: var(--text-muted); font-weight: 500;
-  letter-spacing: 0.02em; display: flex; align-items: center;
-}
-.header-brand b { color: var(--r2-blue-deep); font-weight: 700; }
+/* ── JOURNAL VIEW ── */
+#js{display:none}
+.jvh{padding:36px 0 26px;border-bottom:1px solid var(--border);margin-bottom:28px}
+.jvn{font-family:var(--serif);font-size:30px;font-weight:700;color:var(--text);letter-spacing:-.02em;line-height:1.15;margin-bottom:8px}
+.jvm{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.jvi{font-family:var(--mono);font-size:11px;color:var(--textm)}
+.jvl{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--blue);background:var(--blue-lt);border:1px solid var(--blue-bdr);border-radius:5px;padding:4px 10px;text-decoration:none;transition:background .12s}
+.jvl:hover{background:#dbeafe}
 
-/* ── PAGE LAYOUT ── */
-.page-body {
-  max-width: 1180px; margin: 0 auto; padding: 44px 48px;
-  display: grid; grid-template-columns: 240px 1fr; gap: 64px; align-items: start;
-}
-.page-sidebar { position: sticky; top: 24px; }
-.page-heading {
-  font-size: 26px; font-weight: 800; line-height: 1.15;
-  color: var(--text); letter-spacing: -0.02em; margin-bottom: 6px;
-}
-.page-heading .accent { color: var(--r2-blue); }
-.page-sub {
-  font-size: 12.5px; color: var(--text-secondary); font-weight: 400; line-height: 1.55;
-  margin: 12px 0 24px; padding-left: 12px; border-left: 3px solid var(--r2-blue);
-}
+/* ── STATS ── */
+.sstrip{display:flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:28px}
+.scell{flex:1;padding:18px 20px;text-align:center;border-right:1px solid var(--border)}
+.scell:last-child{border-right:none}
+.snum{font-family:var(--serif);font-size:28px;font-weight:700;color:var(--blue);line-height:1;margin-bottom:4px;font-variant-numeric:tabular-nums}
+.slbl{font-size:10px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
 
-.stat-row {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 9px 0; border-bottom: 1px solid var(--border);
-}
-.stat-row:last-of-type { border-bottom: none; }
-.stat-label { font-size: 11.5px; color: var(--text-muted); font-weight: 500; }
-.stat-value { font-size: 18px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+/* ── CHARTS ── */
+.crow{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:32px}
+.ccard{border:1px solid var(--border);border-radius:10px;padding:18px 20px;background:var(--bg)}
+.ctitle{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--textm);margin-bottom:12px}
+.cbody{width:100%;height:100px}
+.cbody svg{width:100%;height:100%;display:block}
+.cax{display:flex;justify-content:space-between;font-size:9px;color:var(--textm);font-family:var(--mono);margin-top:4px}
 
-.ojs-note {
-  font-size: 10.5px; color: var(--text-muted); margin-top: 14px; padding-top: 12px;
-  border-top: 1px solid var(--border); line-height: 1.5;
-}
-.ojs-note a { color: var(--r2-blue); text-decoration: none; font-weight: 500; }
-.ojs-note a:hover { text-decoration: underline; }
+/* ── SECTION HEADER ── */
+.sechdr{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--blue);padding-bottom:11px;margin-bottom:4px;flex-wrap:wrap;gap:8px}
+.secttl{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--text)}
+.srow{display:flex;align-items:center;gap:4px}
+.slabel{font-size:11px;color:var(--textm);font-weight:500;margin-right:3px}
+.sbtn{font-size:11px;font-weight:600;padding:4px 10px;font-family:var(--sans);border:1px solid var(--border-mid);border-radius:5px;background:var(--bg);color:var(--text2);cursor:pointer;transition:all .1s}
+.sbtn:hover{border-color:var(--blue);background:var(--blue-lt)}
+.sbtn.on{background:var(--blue);color:#fff;border-color:var(--blue)}
 
-.refresh-btn {
-  margin-top: 18px; display: flex; align-items: center; justify-content: center;
-  gap: 7px; width: 100%; padding: 9px 0;
-  border: 1.5px solid var(--r2-blue); background: var(--bg); color: var(--r2-blue);
-  border-radius: 6px; font-size: 11.5px; font-family: var(--font); font-weight: 700;
-  cursor: pointer; letter-spacing: 0.04em; text-transform: uppercase;
-  transition: all 0.15s;
-}
-.refresh-btn:hover:not(:disabled) { background: var(--r2-blue); color: #fff; }
-.refresh-btn:disabled { opacity: 0.45; cursor: default; }
+/* ── STATUS ── */
+.statbar{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--textm);padding:11px 0 15px}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--textm);flex-shrink:0}
+.sdot.L{background:var(--blue);animation:blink 1s ease-in-out infinite}
+.sdot.D{background:var(--green)}
+.sdot.E{background:var(--red)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
-.source-legend { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--border); }
-.legend-title {
-  font-size: 10px; font-weight: 700; color: var(--text-muted);
-  text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;
-}
-.legend-item {
-  display: flex; align-items: center; gap: 7px;
-  font-size: 11px; color: var(--text-secondary); padding: 3px 0;
-}
-.legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+/* ── PUB CARDS ── */
+.pit{display:grid;grid-template-columns:1fr 80px;gap:20px;align-items:start;padding:22px 0;border-bottom:1px solid var(--border);opacity:0;transform:translateY(6px);animation:fup .28s forwards}
+@keyframes fup{to{opacity:1;transform:none}}
+.pyr{display:inline-block;font-family:var(--mono);font-size:10px;color:var(--textm);background:var(--bg-chip);border:1px solid var(--border);border-radius:3px;padding:2px 7px;margin-bottom:8px}
+.ptitle{font-family:var(--serif);font-size:17px;font-weight:600;line-height:1.35;color:var(--text);text-decoration:none;display:block;margin-bottom:5px;transition:color .12s}
+.ptitle:hover{color:var(--blue)}
+.pauth{font-size:12.5px;color:var(--text2);margin-bottom:12px;line-height:1.55}
+.orc{color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:3px}
+.orc:hover{color:var(--blue)}
+.oid{width:11px;height:11px;vertical-align:-1px}
+.mrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.mb{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border:1px solid var(--border-mid);border-radius:5px;font-size:11.5px;font-weight:600;color:var(--text2);background:var(--bg);white-space:nowrap}
+.mb.hi{background:var(--green-bg);border-color:var(--green-bdr);color:var(--green)}
+.mb .mv{font-weight:700;font-variant-numeric:tabular-nums}
+.mb.hi .mv{color:var(--green)}
+.ds{width:6px;height:6px;border-radius:50%;display:inline-block}
+.spark-wrap{margin-top:4px}
+.spark-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--textm);margin-bottom:3px}
+.spl{stroke-dasharray:800;stroke-dashoffset:800;animation:draw .9s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.pfoot{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.doi-chip{font-size:10.5px;font-family:var(--mono);color:var(--blue);font-weight:500;background:var(--blue-lt);border:1px solid var(--blue-bdr);padding:2px 8px;border-radius:4px;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;transition:background .1s}
+.doi-chip:hover{background:#dbeafe}
+.el{font-size:11px;color:var(--blue);text-decoration:none;font-weight:600;border-bottom:1px solid transparent;transition:border-color .12s}
+.el:hover{border-bottom-color:var(--blue)}
+.lsep{width:1px;height:10px;background:var(--border-mid)}
+.pdnt{display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:2px}
+.dlbl{font-size:8.5px;color:var(--textm);text-align:center;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
 
-.section-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding-bottom: 12px; border-bottom: 2px solid var(--r2-blue);
-  flex-wrap: wrap; gap: 8px;
-}
-.section-title { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
-.section-issn { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); margin-left: 8px; font-weight: 400; }
+/* ── NOTICE ── */
+.note{padding:22px 26px;border-radius:10px;margin:20px 0;background:var(--bg-soft);border:1px solid var(--border)}
+.note.info{border-left:4px solid var(--blue)}
+.note.err{border-left:4px solid var(--red)}
+.note strong{font-weight:700;font-size:14px;display:block;margin-bottom:6px}
+.note p{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:4px}
+.note code{font-family:var(--mono);font-size:11px;background:var(--bg-chip);padding:1px 5px;border-radius:3px}
+.note a{color:var(--blue);font-weight:600}
 
-.sort-row { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
-.sort-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
-.sort-btn {
-  font-size: 11px; font-weight: 600; padding: 4px 10px;
-  border: 1px solid var(--border-mid); border-radius: 5px;
-  background: var(--bg); color: var(--text-secondary); cursor: pointer;
-  letter-spacing: 0.01em; transition: all 0.12s;
-}
-.sort-btn:hover { background: var(--bg-chip); border-color: var(--r2-blue); }
-.sort-btn.active { background: var(--r2-blue); color: #fff; border-color: var(--r2-blue); }
+/* ── FOOTER ── */
+.ft{border-top:1px solid var(--border);padding:18px 40px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--textm);max-width:1160px;margin:0 auto}
+.ft a{color:var(--blue);text-decoration:none}
+.ft a:hover{text-decoration:underline}
+.fts{color:var(--border-mid)}
+.spn{display:inline-block;width:9px;height:9px;border:1.5px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-.status-bar {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 11.5px; color: var(--text-muted); padding: 12px 0 18px; font-weight: 400;
-}
-.status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-muted); flex-shrink: 0; }
-.status-dot.loading { background: var(--r2-blue); animation: pulse 1s ease-in-out infinite; }
-.status-dot.done { background: var(--green); }
-.status-dot.error { background: var(--red); }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-.loader-wrap {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 60px 20px 40px; min-height: 280px; gap: 28px;
-}
-.loader-wrap.hidden { display: none; }
-.loader-orbit { position: relative; width: 88px; height: 88px; }
-.loader-orbit::before {
-  content: ''; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--border);
-}
-.loader-orbit .orbit-dot {
-  position: absolute; top: -5px; left: 50%; margin-left: -5px;
-  width: 10px; height: 10px; border-radius: 50%;
-  transform-origin: 5px 49px; animation: orbitSpin 1.6s linear infinite;
-  box-shadow: 0 0 10px rgba(30,139,195,0.5);
-}
-.loader-orbit .orbit-dot:nth-child(1) { background: #1e8bc3; animation-delay: 0s; }
-.loader-orbit .orbit-dot:nth-child(2) { background: #2ecc71; animation-delay: -0.4s; opacity: 0.85; }
-.loader-orbit .orbit-dot:nth-child(3) { background: #e67e22; animation-delay: -0.8s; opacity: 0.75; }
-.loader-orbit .orbit-dot:nth-child(4) { background: #e74c3c; animation-delay: -1.2s; opacity: 0.6; }
-@keyframes orbitSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-.loader-center {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-size: 14px; font-weight: 800; color: var(--r2-blue); letter-spacing: 0.02em;
-  animation: pulseText 1.4s ease-in-out infinite; text-align: center; line-height: 1;
-}
-@keyframes pulseText { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
-.loader-steps { display: flex; flex-direction: column; gap: 8px; max-width: 360px; width: 100%; }
-.loader-step {
-  display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text-muted);
-  padding: 7px 12px; background: var(--bg-soft); border: 1px solid var(--border);
-  border-radius: 6px; transition: all 0.3s;
-}
-.loader-step .step-dot {
-  width: 8px; height: 8px; border-radius: 50%; background: var(--border-mid); flex-shrink: 0; transition: all 0.3s;
-}
-.loader-step.active { border-color: var(--r2-blue); background: var(--r2-blue-light); color: var(--r2-blue-deep); font-weight: 600; }
-.loader-step.active .step-dot { background: var(--r2-blue); animation: pulseDot 1s ease-in-out infinite; box-shadow: 0 0 0 0 rgba(30,139,195,0.5); }
-.loader-step.done { color: var(--green); border-color: var(--green-border); background: var(--green-bg); }
-.loader-step.done .step-dot { background: var(--green); }
-@keyframes pulseDot {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(30,139,195,0.5); }
-  50%      { box-shadow: 0 0 0 6px rgba(30,139,195,0); }
-}
-.loader-progress { width: 100%; max-width: 360px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
-.loader-progress-bar { height: 100%; background: linear-gradient(90deg, var(--r2-blue), #2ecc71); width: 0%; transition: width 0.5s ease-out; }
-
-.notice-card {
-  margin: 24px 0; padding: 20px 24px;
-  background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px;
-  border-left: 4px solid var(--amber);
-}
-.notice-card.error { border-left-color: var(--red); }
-.notice-card.info  { border-left-color: var(--r2-blue); }
-.notice-card strong { display: block; font-size: 14px; color: var(--text); margin-bottom: 6px; font-weight: 700; }
-.notice-card p { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 4px; }
-.notice-card a { color: var(--r2-blue); text-decoration: none; font-weight: 500; }
-.notice-card a:hover { text-decoration: underline; }
-
-.pub-item {
-  display: grid; grid-template-columns: 1fr 86px; gap: 22px; align-items: start;
-  padding: 26px 0; border-bottom: 1px solid var(--border);
-  opacity: 0; transform: translateY(8px); animation: fadeUp 0.32s forwards;
-}
-@keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
-
-.pub-top-meta { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-bottom: 10px; }
-.tag { font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.02em; }
-.tag-section  { background: var(--r2-blue-light); color: var(--r2-blue-deep); border: 1px solid var(--r2-blue-border); }
-.tag-date     { background: var(--bg-chip); color: var(--text-secondary); border: 1px solid var(--border); font-family: var(--font-mono); font-size: 10px; }
-.pub-title {
-  font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--text);
-  text-decoration: none; display: block; margin-bottom: 4px;
-  letter-spacing: -0.015em; transition: color 0.15s;
-}
-.pub-title:hover { color: var(--r2-blue); }
-.pub-authors { font-size: 13px; color: var(--text-secondary); font-weight: 400; margin-bottom: 14px; line-height: 1.5; }
-.author-link { display: inline-flex; align-items: center; gap: 3px; color: var(--text-secondary); text-decoration: none; white-space: nowrap; }
-a.author-link:hover { color: var(--r2-blue); }
-a.author-link:hover .orcid-icon { transform: scale(1.15); }
-.orcid-icon { width: 11px; height: 11px; vertical-align: -1px; transition: transform 0.15s; }
-.mbadge.mbadge-link { cursor: pointer; transition: all 0.15s; text-decoration: none; }
-.mbadge.mbadge-link:hover { border-color: var(--r2-blue); background: var(--r2-blue-light); color: var(--r2-blue-deep); }
-
-.site-footer {
-  border-top: 1px solid var(--border); padding: 20px 48px;
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  font-size: 11.5px; color: var(--text-muted);
-  max-width: 1180px; margin: 0 auto;
-}
-.site-footer a { color: var(--r2-blue); text-decoration: none; }
-.site-footer a:hover { text-decoration: underline; }
-.site-footer .footer-sep { color: var(--border-mid); }
-.site-footer strong { color: var(--text-secondary); font-weight: 600; }
-
-.pub-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-.action-btn {
-  display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px;
-  border-radius: 5px; font-size: 11.5px; font-weight: 600; text-decoration: none;
-  transition: all 0.15s; font-family: var(--font); border: 1.5px solid transparent;
-}
-.action-btn svg { width: 12px; height: 12px; }
-.action-btn-primary { background: var(--r2-blue); color: #fff; border-color: var(--r2-blue); }
-.action-btn-primary:hover { background: var(--r2-blue-dark); border-color: var(--r2-blue-dark); }
-.action-btn-secondary { background: var(--bg); color: var(--r2-blue); border-color: var(--r2-blue); }
-.action-btn-secondary:hover { background: var(--r2-blue-light); }
-
-.metrics-block { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
-.metric-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.metric-group-label {
-  font-size: 10px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.08em; color: var(--text-muted); margin-right: 3px;
-}
-.mbadge {
-  display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px;
-  border: 1px solid var(--border-mid); border-radius: 5px;
-  font-size: 11.5px; font-weight: 600; color: var(--text-secondary);
-  background: var(--bg); white-space: nowrap;
-}
-.mbadge .src-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-.mbadge .val { font-size: 12px; font-weight: 700; color: var(--text); margin-left: 2px; font-variant-numeric: tabular-nums; }
-
-.sparkline-wrap { margin-top: 4px; }
-.sparkline-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 4px; }
-.sparkline-svg { display: block; width: 100%; max-width: 440px; height: 40px; }
-.spark-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: drawLine 1s cubic-bezier(0.4,0,0.2,1) forwards; }
-@keyframes drawLine { to { stroke-dashoffset: 0; } }
-.spark-area-mask { transform-origin: left center; animation: growArea 1s cubic-bezier(0.4,0,0.2,1) forwards; transform: scaleX(0); }
-@keyframes growArea { to { transform: scaleX(1); } }
-.spark-dot { opacity: 0; transform-origin: center; animation: popDot 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards; }
-@keyframes popDot { 0%{opacity:0;transform:scale(0);} 100%{opacity:1;transform:scale(1);} }
-.sparkline-axis { font-size: 9.5px; color: var(--text-muted); display: flex; justify-content: space-between; max-width: 440px; margin-top: 2px; font-variant-numeric: tabular-nums; }
-
-.pub-footer {
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-  margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
-}
-.doi-chip {
-  font-size: 11px; color: var(--r2-blue); text-decoration: none; font-family: var(--font); font-weight: 500;
-  background: var(--r2-blue-light); border: 1px solid var(--r2-blue-border); padding: 3px 9px; border-radius: 4px;
-  transition: background 0.15s; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.doi-chip:hover { background: #d6ebf6; }
-.pub-link { font-size: 11px; color: var(--r2-blue); text-decoration: none; border-bottom: 1px solid transparent; font-weight: 600; transition: border-color 0.15s; }
-.pub-link:hover { border-bottom-color: var(--r2-blue); }
-.link-sep { width: 1px; height: 11px; background: var(--border-mid); display: inline-block; }
-
-.pub-donut { display: flex; flex-direction: column; align-items: center; gap: 5px; padding-top: 4px; }
-.donut-label { font-size: 9px; color: var(--text-muted); text-align: center; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
-
-.spinner-sm {
-  display: inline-block; width: 9px; height: 9px;
-  border: 1.5px solid var(--border); border-top-color: var(--r2-blue);
-  border-radius: 50%; animation: spin 0.65s linear infinite; vertical-align: middle;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-@media (max-width: 780px) {
-  .page-body { grid-template-columns: 1fr; gap: 28px; padding: 26px 18px; }
-  .page-sidebar { position: static; }
-  .site-header { padding: 0 18px; flex-wrap: wrap; }
-  .journal-selector-btn { min-width: 200px; max-width: 100%; }
-  .journal-dropdown { width: calc(100vw - 36px); }
-  .pub-item { grid-template-columns: 1fr 70px; gap: 16px; }
-  .page-heading { font-size: 22px; }
+@media(max-width:720px){
+  .hdr,.ft{padding:0 16px}
+  .wrap{padding:0 16px 60px}
+  .jsel-btn{min-width:160px}
+  .jdd{width:calc(100vw - 20px);right:-10px}
+  .crow{grid-template-columns:1fr}
+  .sstrip{flex-wrap:wrap}
+  .scell{border-right:none;border-bottom:1px solid var(--border);min-width:50%}
+  .pit{grid-template-columns:1fr}
+  .hero h1{font-size:30px}
+  .hgrid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
-<header class="site-header">
-  <div class="journal-selector-wrap" id="journal-selector-wrap">
-    <button class="journal-selector-btn" id="journal-selector-btn" onclick="toggleDropdown()" aria-haspopup="listbox" aria-expanded="false">
-      <div class="journal-icon-placeholder" id="selector-icon">RR</div>
-      <div class="journal-name" id="selector-name">
-        Replication Research
-        <small id="selector-slug">replicationresearch</small>
-      </div>
-      <svg class="chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+<header class="hdr">
+  <div class="wordmark" onclick="showHome()">
+    e-Journals<span class="dot">.</span>Münster
+    <span class="sub">Dashboard</span>
+  </div>
+
+  <div class="jsel" id="jsel">
+    <button class="jsel-btn" id="jbtn" onclick="toggleDD()" aria-haspopup="listbox" aria-expanded="false">
+      <div class="jabbr none" id="jicon">—</div>
+      <div class="jlbl" id="jlbl">Choose a journal<small id="jsub">23 journals available</small></div>
+      <svg class="chev" width="14" height="14" viewBox="0 0 14 14" fill="none">
         <path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </button>
-
-    <div class="journal-dropdown" id="journal-dropdown" role="listbox">
-      <div class="journal-search-wrap">
-        <svg class="journal-search-icon" width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <div class="jdd" id="jdd" role="listbox">
+      <div class="dd-sw">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
           <circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="1.5"/>
           <path d="M9.5 9.5L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
-        <input type="text" class="journal-search" id="journal-search" placeholder="Search journals…" oninput="filterJournals(this.value)" autocomplete="off">
+        <input class="dd-si" id="dsi" placeholder="Search journals…" oninput="filterDD(this.value)" autocomplete="off">
       </div>
-      <div class="journal-list" id="journal-list"></div>
+      <div class="dd-list" id="ddl"></div>
     </div>
   </div>
-
-  <div class="header-brand"><b>Münster</b>&nbsp;E-Journals · Dashboard</div>
 </header>
 
-<div class="page-body">
-  <aside class="page-sidebar">
-    <h1 class="page-heading">Münster<span class="accent">.</span></h1>
-    <p class="page-sub" id="sidebar-sub">Dissemination dashboard — bibliometrics &amp; altmetrics for all e-journals hosted by the ULB Münster.</p>
-
-    <div class="stat-row"><span class="stat-label">Publications</span><span class="stat-value" id="sum-pubs">—</span></div>
-    <div class="stat-row"><span class="stat-label">Total citations</span><span class="stat-value" id="sum-cites">—</span></div>
-    <div class="stat-row"><span class="stat-label">First year</span><span class="stat-value" id="sum-firstyr">—</span></div>
-    <div class="stat-row"><span class="stat-label">Latest year</span><span class="stat-value" id="sum-lastyr">—</span></div>
-    <div class="stat-row"><span class="stat-label">Open Access</span><span class="stat-value" id="sum-oa">—</span></div>
-
-    <div class="ojs-note" id="ojs-note">Select a journal to begin.</div>
-    <button class="refresh-btn" id="refresh-btn" onclick="loadAll()" disabled>↺ Refresh</button>
-
-    <div class="source-legend">
-      <div class="legend-title">Data sources</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#e67e22"></span>DataCite (DOI registry, metadata)</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#2ecc71"></span>OpenAlex (citations, sparkline)</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#e74c3c"></span>Crossref (citations, where available)</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#1185fe"></span>Bluesky (social mentions)</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#9b59b6"></span>Altmetric (badge)</div>
+<div class="wrap">
+  <!-- HOME SCREEN -->
+  <div id="hs">
+    <div class="hero">
+      <h1>Open access journals<br>from <em>Universität Münster</em>.</h1>
+      <p>Bibliometrics and citation data for all e-journals hosted by the Universitäts- und Landesbibliothek Münster — powered by DataCite and OpenAlex.</p>
+      <div class="hint">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+          <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M7.5 4.5v4l2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        Pick a journal from the top-right dropdown, or click any card below
+      </div>
     </div>
-  </aside>
+    <div class="hgl">All journals — alphabetical</div>
+    <div class="hgrid" id="hgrid"></div>
+  </div>
 
-  <main>
-    <div class="section-header">
-      <h2 class="section-title"><span id="section-title">Publications</span><span class="section-issn" id="section-issn"></span></h2>
-      <div class="sort-row">
-        <span class="sort-label">Sort:</span>
-        <button class="sort-btn active" id="sort-newest" onclick="setSort('newest')">Newest</button>
-        <button class="sort-btn" id="sort-oldest" onclick="setSort('oldest')">Oldest</button>
-        <button class="sort-btn" id="sort-cites" onclick="setSort('cites')">Most cited</button>
+  <!-- JOURNAL VIEW -->
+  <div id="js">
+    <div class="jvh">
+      <div class="jvn" id="jvn">—</div>
+      <div class="jvm">
+        <span class="jvi" id="jvi"></span>
+        <a class="jvl" id="jvl" href="#" target="_blank">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 9L9 2M9 2H5M9 2v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Visit journal
+        </a>
       </div>
     </div>
 
-    <div class="status-bar">
-      <span class="status-dot" id="status-dot"></span>
-      <span id="status-text">Select a journal from the dropdown above to load publications.</span>
+    <div class="sstrip">
+      <div class="scell"><div class="snum" id="svp">—</div><div class="slbl">Publications</div></div>
+      <div class="scell"><div class="snum" id="svc">—</div><div class="slbl">Total citations</div></div>
+      <div class="scell"><div class="snum" id="svs">—</div><div class="slbl">Years active</div></div>
+      <div class="scell"><div class="snum">100%</div><div class="slbl">Open Access</div></div>
     </div>
 
-    <div class="loader-wrap hidden" id="loader-wrap">
-      <div class="loader-orbit">
-        <div class="orbit-dot"></div><div class="orbit-dot"></div>
-        <div class="orbit-dot"></div><div class="orbit-dot"></div>
-        <div class="loader-center">load</div>
+    <div class="crow">
+      <div class="ccard">
+        <div class="ctitle">Publications per year</div>
+        <div class="cbody" id="cpw"><svg id="cps"></svg></div>
+        <div class="cax" id="cpa"></div>
       </div>
-      <div class="loader-steps" id="loader-steps">
-        <div class="loader-step" data-step="dois"><span class="step-dot"></span>Fetching DOIs &amp; metadata from DataCite</div>
-        <div class="loader-step" data-step="cites"><span class="step-dot"></span>Loading citations (OpenAlex, Crossref)</div>
-        <div class="loader-step" data-step="social"><span class="step-dot"></span>Checking Bluesky for social mentions</div>
+      <div class="ccard">
+        <div class="ctitle">Citations per year (OpenAlex)</div>
+        <div class="cbody" id="ccw"><svg id="ccs"></svg></div>
+        <div class="cax" id="cca"></div>
       </div>
-      <div class="loader-progress"><div class="loader-progress-bar" id="loader-progress-bar"></div></div>
     </div>
 
-    <div id="pub-list"></div>
-  </main>
+    <div class="sechdr">
+      <span class="secttl">Publications</span>
+      <div class="srow">
+        <span class="slabel">Sort:</span>
+        <button class="sbtn on" id="sort-newest" onclick="setSort('newest')">Newest</button>
+        <button class="sbtn"    id="sort-oldest" onclick="setSort('oldest')">Oldest</button>
+        <button class="sbtn"    id="sort-cites"  onclick="setSort('cites')">Most cited</button>
+      </div>
+    </div>
+
+    <div class="statbar">
+      <span class="sdot L" id="sdot"></span>
+      <span id="stxt">Loading…</span>
+    </div>
+    <div id="plist"></div>
+  </div>
 </div>
 
-<footer class="site-footer">
-  <span>Münster E-Journals Dashboard <strong>v0.3</strong></span>
-  <span class="footer-sep">·</span>
-  <span><a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a></span>
-  <span class="footer-sep">·</span>
-  <span>Last update: <span id="footer-update-date">—</span></span>
-  <span class="footer-sep">·</span>
+<footer class="ft">
+  <span>e-Journals Münster Dashboard</span>
+  <span class="fts">·</span>
+  <span>Data: <a href="https://datacite.org" target="_blank">DataCite</a> + <a href="https://openalex.org" target="_blank">OpenAlex</a> + <a href="https://www.altmetric.com" target="_blank">Altmetric</a></span>
+  <span class="fts">·</span>
   <span><a href="https://ejournals.uni-muenster.de" target="_blank">ULB Münster ↗</a></span>
+  <span class="fts">·</span>
+  <span>Updated: <span id="ftu">—</span></span>
 </footer>
 
 <script>
-/* ============================================
-   JOURNAL REGISTRY — all ULB Münster eJournals
-   Each entry has:
-     slug:      the OJS path segment (used to build journal homepage URL)
-     name:      display name
-     abbr:      short label (2-4 chars) for the icon
-     active:    true if currently publishing; false if discontinued
-     issn:      one or more ISSNs (informational)
-     doiPrefixes: DataCite DOI sub-prefixes (the part after "10.17879/")
-                  e.g. ["fnp", "freeneuropathology"]
-                  Empty array means the journal does not register DOIs.
-============================================ */
-var JOURNALS = [
-  { slug: 'replicationresearch', name: 'Replication Research', abbr: 'RR',
-    active: true, issn: '', doiPrefixes: ['replicationresearch'] },
-
-  { slug: 'aods', name: 'Archive of Orofacial Data Science', abbr: 'AOD',
-    active: true, issn: '2941-783X', doiPrefixes: ['aods'] },
-
-  { slug: 'byzrev', name: 'The Byzantine Review', abbr: 'BR',
-    active: true, issn: '2700-0524', doiPrefixes: ['byzrev'] },
-
-  { slug: 'fnp', name: 'Free Neuropathology', abbr: 'FN',
-    active: true, issn: '2699-4445', doiPrefixes: ['fnp', 'freeneuropathology'] },
-
-  { slug: 'ifgimpulse', name: 'IfG Impulse', abbr: 'IFG',
-    active: true, issn: '', doiPrefixes: ['ifgimpulse'] },
-
-  { slug: 'jcsw', name: 'Jahrbuch für Christliche Sozialwissenschaften', abbr: 'JCS',
-    active: true, issn: '0075-2592', doiPrefixes: ['jcsw'] },
-
-  { slug: 'mittelalterdigi', name: 'Mittelalter Digital', abbr: 'MD',
-    active: false, issn: '2702-9069', doiPrefixes: ['mittelalterdigi'] },
-
-  { slug: 'mwsca', name: 'Münster Working Paper Series in Social and Cultural Anthropology', abbr: 'MWP',
-    active: true, issn: '', doiPrefixes: ['mwsca'] },
-
-  { slug: 'mfiphs', name: 'Münstersche Fachzeitschrift für islamische und philosophische Studien', abbr: 'MFI',
-    active: true, issn: '2749-4330', doiPrefixes: ['mjiphs', 'mfiphs'] },
-
-  { slug: 'nn', name: 'nachbarsprache niederländisch', abbr: 'NN',
-    active: true, issn: '', doiPrefixes: ['nn'] },
-
-  { slug: 'ozean', name: 'Online Zeitschrift zur Antiken Numismatik', abbr: 'OZ',
-    active: true, issn: '2698-3079', doiPrefixes: ['ozean'] },
-
-  { slug: 'paradigma', name: 'Paradigma', abbr: 'PAR',
-    active: true, issn: '', doiPrefixes: ['paradigma'] },
-
-  { slug: 'pop', name: 'POP. Kultur & Kritik', abbr: 'POP',
-    active: true, issn: '2192-9408', doiPrefixes: [], hasNoDoi: true },
-
-  { slug: 'satura', name: 'Satura', abbr: 'SAT',
-    active: true, issn: '2700-2640', doiPrefixes: ['satura'] },
-
-  { slug: 'sbi', name: 'Schule. Bildung. Inklusion', abbr: 'SBI',
-    active: true, issn: '', doiPrefixes: [], hasNoDoi: true },
-
-  { slug: 'sun', name: 'Soziologie und Nachhaltigkeit', abbr: 'SuN',
-    active: true, issn: '2364-1282', doiPrefixes: ['sun'] },
-
-  { slug: 'tjo', name: 'Teiresias Journal Online', abbr: 'TJO',
-    active: true, issn: '', doiPrefixes: ['tjo'] },
-
-  { slug: 'tso', name: 'Teiresias Supplements Online', abbr: 'TSO',
-    active: true, issn: '', doiPrefixes: ['tso'] },
-
-  { slug: 'thrv', name: 'Theologische Revue', abbr: 'TR',
-    active: true, issn: '0040-568X', doiPrefixes: ['thrv'] },
-
-  { slug: 'zkr', name: 'Zeitschrift für Kanonisches Recht', abbr: 'ZKR',
-    active: true, issn: '', doiPrefixes: ['zkr'] },
-
-  { slug: 'ZfK', name: 'Zeitschrift für Kulturwissenschaften', abbr: 'ZfK',
-    active: false, issn: '1862-8060', doiPrefixes: [], hasNoDoi: true },
-
-  { slug: 'zpth', name: 'Zeitschrift für Pastoraltheologie', abbr: 'ZPTh',
-    active: true, issn: '0555-9308', doiPrefixes: ['zpth'] },
-
-  { slug: 'zts', name: 'Zeitschrift für Theoretische Soziologie', abbr: 'ZTS',
-    active: true, issn: '2195-0695', doiPrefixes: ['zts'] }
+/* =========================================
+   JOURNAL REGISTRY — alphabetical by name
+========================================= */
+var J=[
+  {slug:'aods',         name:'Archive of Orofacial Data Science',                                    abbr:'AOD',  ac:1,issn:'2941-783X',dp:['aods']},
+  {slug:'byzrev',       name:'The Byzantine Review',                                                  abbr:'BR',   ac:1,issn:'2700-0524',dp:['byzrev']},
+  {slug:'fnp',          name:'Free Neuropathology',                                                   abbr:'FN',   ac:1,issn:'2699-4445',dp:['fnp','freeneuropathology']},
+  {slug:'ifgimpulse',   name:'IfG Impulse',                                                           abbr:'IFG',  ac:1,issn:'',         dp:['ifgimpulse']},
+  {slug:'jcsw',         name:'Jahrbuch für Christliche Sozialwissenschaften',                         abbr:'JCS',  ac:1,issn:'0075-2592',dp:['jcsw']},
+  {slug:'mittelalterdigi',name:'Mittelalter Digital',                                                 abbr:'MD',   ac:0,issn:'2702-9069',dp:['mittelalterdigi']},
+  {slug:'mfiphs',       name:'Münstersche Fachzeitschrift für islamische und philosophische Studien', abbr:'MFI',  ac:1,issn:'2749-4330',dp:['mjiphs','mfiphs']},
+  {slug:'mwsca',        name:'Münster Working Paper Series in Social and Cultural Anthropology',      abbr:'MWP',  ac:1,issn:'',         dp:['mwsca']},
+  {slug:'nn',           name:'nachbarsprache niederländisch',                                         abbr:'NN',   ac:1,issn:'',         dp:['nn']},
+  {slug:'ozean',        name:'Online Zeitschrift zur Antiken Numismatik',                            abbr:'OZeAN',ac:1,issn:'2698-3079',dp:['ozean']},
+  {slug:'paradigma',    name:'Paradigma',                                                             abbr:'PAR',  ac:1,issn:'',         dp:['paradigma']},
+  {slug:'pop',          name:'POP. Kultur & Kritik',                                                 abbr:'POP',  ac:1,issn:'2192-9408',dp:[],nd:1},
+  {slug:'replicationresearch',name:'Replication Research',                                           abbr:'RR',   ac:1,issn:'',         dp:['replicationresearch']},
+  {slug:'satura',       name:'Satura',                                                                abbr:'SAT',  ac:1,issn:'2700-2640',dp:['satura']},
+  {slug:'sbi',          name:'Schule. Bildung. Inklusion',                                           abbr:'SBI',  ac:1,issn:'',         dp:[],nd:1},
+  {slug:'sun',          name:'Soziologie und Nachhaltigkeit',                                        abbr:'SuN',  ac:1,issn:'2364-1282',dp:['sun']},
+  {slug:'tjo',          name:'Teiresias Journal Online',                                              abbr:'TJO',  ac:1,issn:'',         dp:['tjo']},
+  {slug:'tso',          name:'Teiresias Supplements Online',                                          abbr:'TSO',  ac:1,issn:'',         dp:['tso']},
+  {slug:'thrv',         name:'Theologische Revue',                                                    abbr:'TR',   ac:1,issn:'0040-568X',dp:['thrv']},
+  {slug:'ZfK',          name:'Zeitschrift für Kulturwissenschaften',                                 abbr:'ZfK',  ac:0,issn:'1862-8060',dp:[],nd:1},
+  {slug:'zkr',          name:'Zeitschrift für Kanonisches Recht',                                   abbr:'ZKR',  ac:1,issn:'',         dp:['zkr']},
+  {slug:'zpth',         name:'Zeitschrift für Pastoraltheologie',                                   abbr:'ZPTh', ac:1,issn:'0555-9308',dp:['zpth']},
+  {slug:'zts',          name:'Zeitschrift für Theoretische Soziologie',                             abbr:'ZTS',  ac:1,issn:'2195-0695',dp:['zts']}
 ];
 
-/* Configuration */
-var MAX_PUBS_PER_JOURNAL = 500;     // cap for large journals like ZPTh (1700+ articles)
-var DATACITE_PAGE_SIZE = 250;       // DataCite allows up to 1000 per page
+var MAXP=500,DCP=200;
+var PUBS=[],CJ=null,RID=0,CSORT='newest';
 
-/* ============================================
-   STATE
-============================================ */
-var ALL_PUBS = [];
-var currentSort = 'newest';
-var currentJournal = JOURNALS[0];
-var currentRequestId = 0;
+/* utils */
+function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function sp(){return'<span class="spn"></span>'}
+function fn(n){return(n===null||n===undefined)?'—':Number(n).toLocaleString('en')}
+function dk(doi){var m=doi.match(/(\d{4})[-/](\d+)/);if(m)return+m[1]*1e6+ +m[2];var m2=doi.match(/(\d+)$/);return m2?+m2[1]:0}
 
-/* ============================================
-   DROPDOWN
-============================================ */
-var dropdownOpen = false;
-
-function renderJournalList(filter) {
-  filter = (filter || '').toLowerCase().trim();
-  var list = document.getElementById('journal-list');
-  var html = '';
-  var active = [], inactive = [], nodoi = [];
-
-  JOURNALS.forEach(function(j) {
-    if (filter && j.name.toLowerCase().indexOf(filter) === -1
-              && j.slug.toLowerCase().indexOf(filter) === -1) return;
-    if (j.hasNoDoi) nodoi.push(j);
-    else if (j.active) active.push(j);
-    else inactive.push(j);
-  });
-
-  if (!active.length && !inactive.length && !nodoi.length) {
-    list.innerHTML = '<div class="no-results">No journals match your search.</div>';
-    return;
-  }
-
-  if (active.length) {
-    html += '<div class="journal-group-label">Active journals · with DOIs</div>';
-    active.forEach(function(j) { html += journalOptionHTML(j); });
-  }
-  if (inactive.length) {
-    html += '<div class="journal-group-label">Discontinued</div>';
-    inactive.forEach(function(j) { html += journalOptionHTML(j); });
-  }
-  if (nodoi.length) {
-    html += '<div class="journal-group-label">Journals without DOI registration</div>';
-    nodoi.forEach(function(j) { html += journalOptionHTML(j); });
-  }
-  list.innerHTML = html;
+/* fetch — no AbortController (causes DataCloneError in some iframe contexts) */
+function fj(url,ms){
+  ms=ms||15000;
+  return Promise.race([
+    fetch(url).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}),
+    new Promise(function(_,rej){setTimeout(function(){rej(new Error('timeout'))},ms)})
+  ]).catch(function(){return null});
 }
 
-function journalOptionHTML(j) {
-  var selected = j.slug === currentJournal.slug ? ' selected' : '';
-  var tag;
-  if (j.hasNoDoi)     tag = '<span class="jopt-tag jopt-tag-nodoi">No DOIs</span>';
-  else if (!j.active) tag = '<span class="jopt-tag jopt-tag-inactive">Discontinued</span>';
-  else                tag = '<span class="jopt-tag jopt-tag-active">Active</span>';
-  return '<div class="journal-option'+selected+'" onclick="selectJournal(\''+j.slug+'\')" role="option" aria-selected="'+(selected?'true':'false')+'">'
-    + '<div class="jopt-icon-placeholder">'+escH(j.abbr)+'</div>'
-    + '<div class="jopt-text"><div class="jopt-name">'+escH(j.name)+'</div><div class="jopt-slug">'+escH(j.slug)+(j.issn?' · '+escH(j.issn):'')+'</div></div>'
-    + tag
-    + '</div>';
+/* ── HOME ── */
+function buildGrid(){
+  document.getElementById('hgrid').innerHTML=J.map(function(j){
+    var st=j.nd?'nd':(j.ac?'ac':'in');
+    var stl=j.nd?'No DOIs':(j.ac?'Active':'Discontinued');
+    var click=j.nd?'':' onclick="pick(\''+j.slug+'\')"';
+    return'<button class="hcard'+(j.nd?' nd':'')+'"'+click+' type="button">'
+      +'<div class="hct"><span class="hab'+(j.nd?' nd':'')+'">'+ e(j.abbr)+'</span><span class="htag '+st+'">'+stl+'</span></div>'
+      +'<div class="hnm">'+e(j.name)+'</div>'
+      +'<div class="hsl">'+e(j.slug)+(j.issn?' · '+e(j.issn):'')+'</div>'
+      +'</button>';
+  }).join('');
 }
 
-function toggleDropdown() {
-  dropdownOpen = !dropdownOpen;
-  var btn = document.getElementById('journal-selector-btn');
-  var dd  = document.getElementById('journal-dropdown');
-  btn.classList.toggle('open', dropdownOpen);
-  dd.classList.toggle('open', dropdownOpen);
-  btn.setAttribute('aria-expanded', dropdownOpen ? 'true' : 'false');
-  if (dropdownOpen) {
-    document.getElementById('journal-search').focus();
-    renderJournalList('');
+function showHome(){
+  CJ=null;RID++;
+  document.getElementById('hs').style.display='block';
+  document.getElementById('js').style.display='none';
+  var ic=document.getElementById('jicon');ic.textContent='—';ic.className='jabbr none';
+  document.getElementById('jlbl').innerHTML='Choose a journal<small>'+J.length+' journals available</small>';
+}
+
+/* ── DROPDOWN ── */
+var ddO=false;
+function buildDD(f){
+  f=(f||'').toLowerCase();
+  var shown=J.filter(function(j){return!f||j.name.toLowerCase().includes(f)||j.slug.includes(f)});
+  if(!shown.length){document.getElementById('ddl').innerHTML='<div class="dd-em">No matches.</div>';return}
+  var ac=[],in_=[],nd=[];
+  shown.forEach(function(j){j.nd?nd.push(j):j.ac?ac.push(j):in_.push(j)});
+  function grp(lbl,arr){
+    if(!arr.length)return'';
+    return'<div class="dd-gl">'+lbl+'</div>'+arr.map(function(j){
+      var sel=CJ&&CJ.slug===j.slug?' sel':'';
+      var st=j.nd?'nd':(j.ac?'ac':'in');
+      var stl=j.nd?'No DOIs':(j.ac?'Active':'Discontinued');
+      return'<div class="dd-it'+sel+'" onclick="pick(\''+j.slug+'\')">'
+        +'<div class="dd-ab'+(j.nd?' nd':'')+'">'+ e(j.abbr)+'</div>'
+        +'<div class="dd-tx"><div class="dd-nm">'+e(j.name)+'</div><div class="dd-sl">'+e(j.slug)+'</div></div>'
+        +'<span class="dd-bg '+st+'">'+stl+'</span>'
+        +'</div>';
+    }).join('');
   }
+  document.getElementById('ddl').innerHTML=grp('Active',ac)+grp('Discontinued',in_)+grp('No DOI registration',nd);
 }
-
-function filterJournals(val) { renderJournalList(val); }
-
-function selectJournal(slug) {
-  var j = JOURNALS.find(function(x){ return x.slug === slug; });
-  if (!j) return;
-  currentJournal = j;
-
-  document.getElementById('selector-icon').textContent = j.abbr;
-  var nameEl = document.getElementById('selector-name');
-  nameEl.innerHTML = escH(j.name) + '<small>' + escH(j.slug) + '</small>';
-
-  dropdownOpen = false;
-  document.getElementById('journal-selector-btn').classList.remove('open');
-  document.getElementById('journal-dropdown').classList.remove('open');
-  document.getElementById('journal-selector-btn').setAttribute('aria-expanded','false');
-
-  document.getElementById('section-title').textContent = j.name;
-  document.getElementById('section-issn').textContent = j.issn ? ' · ISSN ' + j.issn : '';
-  document.getElementById('sidebar-sub').textContent =
-    'Bibliometrics & altmetrics for ' + j.name + '.';
-
-  loadAll();
+function toggleDD(){
+  ddO=!ddO;
+  document.getElementById('jbtn').classList.toggle('open',ddO);
+  document.getElementById('jdd').classList.toggle('open',ddO);
+  document.getElementById('jbtn').setAttribute('aria-expanded',''+ddO);
+  if(ddO){document.getElementById('dsi').focus();buildDD('')}
 }
-
-document.addEventListener('click', function(e) {
-  if (dropdownOpen && !document.getElementById('journal-selector-wrap').contains(e.target)) {
-    dropdownOpen = false;
-    document.getElementById('journal-selector-btn').classList.remove('open');
-    document.getElementById('journal-dropdown').classList.remove('open');
-    document.getElementById('journal-selector-btn').setAttribute('aria-expanded','false');
+function filterDD(v){buildDD(v)}
+document.addEventListener('click',function(ev){
+  if(ddO&&!document.getElementById('jsel').contains(ev.target)){
+    ddO=false;
+    document.getElementById('jbtn').classList.remove('open');
+    document.getElementById('jdd').classList.remove('open');
+    document.getElementById('jbtn').setAttribute('aria-expanded','false');
   }
 });
 
-/* ============================================
-   UTILITIES
-============================================ */
-function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function spin(){ return '<span class="spinner-sm"></span>'; }
-function fmtNum(n){ return (n===null||n===undefined) ? '—' : Number(n).toLocaleString('en'); }
-
-var LAST_FETCH_ERROR = null;
-async function fetchJSON(url, timeout){
-  timeout = timeout || 12000;
-  var ctrl = new AbortController();
-  var t = setTimeout(function(){ ctrl.abort(); }, timeout);
-  try {
-    // No custom headers — keeps it a "simple" CORS request (no preflight)
-    var r = await fetch(url, { signal: ctrl.signal });
-    clearTimeout(t);
-    if (!r.ok) {
-      LAST_FETCH_ERROR = 'HTTP ' + r.status + ' for ' + url.slice(0, 120);
-      return null;
-    }
-    return await r.json();
-  } catch(e){
-    LAST_FETCH_ERROR = (e && e.name || 'error') + ': ' + (e && e.message || String(e)) + ' for ' + url.slice(0, 120);
-    return null;
-  }
+/* ── SELECT ── */
+function pick(slug){
+  var j=J.find(function(x){return x.slug===slug});
+  if(!j)return;
+  CJ=j;
+  /* close DD */
+  ddO=false;
+  ['open'].forEach(function(c){document.getElementById('jbtn').classList.remove(c);document.getElementById('jdd').classList.remove(c)});
+  document.getElementById('jbtn').setAttribute('aria-expanded','false');
+  document.getElementById('dsi').value='';
+  /* update btn */
+  var ic=document.getElementById('jicon');ic.textContent=j.abbr;ic.className='jabbr';
+  document.getElementById('jlbl').innerHTML=e(j.name)+'<small>'+e(j.slug)+'</small>';
+  /* switch screens */
+  document.getElementById('hs').style.display='none';
+  document.getElementById('js').style.display='block';
+  /* fill header */
+  document.getElementById('jvn').textContent=j.name;
+  document.getElementById('jvi').textContent=j.issn?'ISSN '+j.issn:'';
+  document.getElementById('jvl').href='https://ejournals.uni-muenster.de/'+j.slug;
+  buildDD('');
+  load(j);
 }
 
-function doiSortKey(doi){
-  // Try to extract year + sequence to get a chronological order
-  var m = doi.match(/(\d{4})[-/](\d+)/);
-  if (m) return parseInt(m[1],10)*100000 + parseInt(m[2],10);
-  var m2 = doi.match(/(\d+)$/);
-  return m2 ? parseInt(m2[1],10) : 0;
-}
+/* ── LOAD ── */
+async function load(j){
+  var rid=++RID;
+  PUBS=[];
+  st('L','Loading…');
+  document.getElementById('plist').innerHTML='';
+  ['svp','svc','svs'].forEach(function(id){document.getElementById(id).textContent='—'});
+  clearCharts();
 
-/* ============================================
-   DATACITE — fetch all DOIs for a journal
-============================================ */
-async function fetchDataciteDOIs(journal, onStatus){
-  if (!journal.doiPrefixes || !journal.doiPrefixes.length) return [];
-
-  // Fetch each prefix separately (simpler query, no parentheses).
-  // Most journals have only one prefix; fnp and mfiphs have two.
-  var allRecords = [];
-  var seenDois = {};
-
-  for (var pi = 0; pi < journal.doiPrefixes.length; pi++) {
-    var prefix = journal.doiPrefixes[pi];
-    var query = 'prefix:10.17879 AND suffix:' + prefix + '*';
-
-    var page = 1;
-    var maxPages = Math.ceil(MAX_PUBS_PER_JOURNAL / DATACITE_PAGE_SIZE) + 1;
-
-    while (page <= maxPages) {
-      if (onStatus) onStatus('Fetching DataCite page ' + page + ' for "' + prefix + '" (' + allRecords.length + ' records so far)…');
-
-      var url = 'https://api.datacite.org/dois?query=' + encodeURIComponent(query)
-              + '&page%5Bsize%5D=' + DATACITE_PAGE_SIZE
-              + '&page%5Bnumber%5D=' + page;
-      var data = await fetchJSON(url, 25000);
-
-      if (!data) {
-        // Network or HTTP error - LAST_FETCH_ERROR is set
-        if (onStatus) onStatus('DataCite request failed: ' + (LAST_FETCH_ERROR || 'unknown error'));
-        break;
-      }
-      if (!data.data || !data.data.length) break;
-
-      data.data.forEach(function(rec){
-        var doi = rec.attributes && rec.attributes.doi;
-        if (doi && !seenDois[doi]) {
-          seenDois[doi] = true;
-          allRecords.push(rec);
-        }
-      });
-
-      if (data.data.length < DATACITE_PAGE_SIZE) break;
-      if (allRecords.length >= MAX_PUBS_PER_JOURNAL) break;
-      page++;
-    }
-  }
-
-  return allRecords.slice(0, MAX_PUBS_PER_JOURNAL);
-}
-
-/* Parse a DataCite record into a publication object */
-function pubFromDataciteRecord(rec){
-  var a = rec.attributes || {};
-  var doi = a.doi;
-  if (!doi) return null;
-
-  // Prefer English title, otherwise first
-  var title = '';
-  if (a.titles && a.titles.length) {
-    var enTitle = a.titles.find(function(t){ return t.lang && /^en/i.test(t.lang); });
-    title = (enTitle || a.titles[0]).title || '';
-  }
-
-  // Authors
-  var authorsList = [];
-  if (a.creators && a.creators.length) {
-    authorsList = a.creators.map(function(c){
-      var name = '';
-      if (c.familyName) {
-        name = c.familyName + (c.givenName ? ', ' + c.givenName : '');
-      } else if (c.name) {
-        name = c.name;
-      }
-      var orcid = null;
-      if (c.nameIdentifiers && c.nameIdentifiers.length) {
-        var idRec = c.nameIdentifiers.find(function(n){
-          return n.nameIdentifierScheme && n.nameIdentifierScheme.toUpperCase() === 'ORCID';
-        });
-        if (idRec && idRec.nameIdentifier) {
-          orcid = idRec.nameIdentifier.replace(/^https?:\/\/orcid\.org\//,'');
-        }
-      }
-      return { name: name, orcid: orcid };
-    }).filter(function(a){ return a.name; });
-  }
-
-  var year = a.publicationYear || null;
-  var datePublished = null;
-  if (a.dates && a.dates.length) {
-    var pubDate = a.dates.find(function(d){ return d.dateType === 'Issued' || d.dateType === 'Available'; });
-    if (pubDate && pubDate.date) datePublished = pubDate.date;
-  }
-  if (!datePublished && year) datePublished = year + '-01-01';
-
-  // Container / journal info
-  var containerType = a.container && a.container.type;
-
-  // URL: prefer the OJS landing page from identifiers
-  var url = a.url || 'https://doi.org/' + doi;
-
-  return {
-    doi: doi,
-    title: title,
-    authorsList: authorsList,
-    year: year,
-    datePublished: datePublished,
-    url: url,
-    containerType: containerType,
-    doiKey: doiSortKey(doi),
-
-    oaCites: null,
-    crCites: null,
-    dcCites: a.citationCount != null ? a.citationCount : null,
-    crNotAvailable: false,
-    countsByYear: null,
-    bskyCount: null
-  };
-}
-
-/* ============================================
-   SPARKLINES
-============================================ */
-function buildSparkline(countsByYear, color, label){
-  if (!countsByYear||!countsByYear.length) return '';
-  var sorted = countsByYear.slice().sort(function(a,b){ return a.year-b.year; });
-  var vals = sorted.map(function(d){ return d.cited_by_count||0; });
-  var maxV = Math.max.apply(null,vals);
-  if (maxV===0) return '';
-  var W=440,H=40,pad=5,n=vals.length;
-  var xStep = n>1?(W-pad*2)/(n-1):0;
-  var points = vals.map(function(v,i){
-    return (pad+i*xStep).toFixed(1)+','+(H-pad-((v/maxV)*(H-pad*2))).toFixed(1);
-  }).join(' ');
-  var areaPoints='M'+pad+','+H+' L'+points.split(' ').join(' L')+' L'+(pad+(n-1)*xStep).toFixed(1)+','+H+' Z';
-  var uid='g'+Math.random().toString(36).slice(2,7);
-  var clipId='c'+uid;
-  var svg='<svg class="sparkline-svg" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none">'
-    +'<defs><linearGradient id="'+uid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="'+color+'" stop-opacity="0.3"/><stop offset="100%" stop-color="'+color+'" stop-opacity="0.02"/></linearGradient>'
-    +'<clipPath id="'+clipId+'"><rect class="spark-area-mask" x="0" y="0" width="'+W+'" height="'+H+'"/></clipPath></defs>'
-    +'<g clip-path="url(#'+clipId+')"><path d="'+areaPoints+'" fill="url(#'+uid+')"/></g>'
-    +'<polyline class="spark-line" points="'+points+'" fill="none" stroke="'+color+'" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>';
-  vals.forEach(function(v,i){
-    var x=pad+i*xStep,y=H-pad-((v/maxV)*(H-pad*2));
-    var delay=(i/Math.max(n-1,1))*1.0;
-    svg+='<circle class="spark-dot" style="animation-delay:'+delay.toFixed(2)+'s" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="2.8" fill="'+color+'"/>';
-    svg+='<title>'+sorted[i].year+': '+v+' citation'+(v!==1?'s':'')+'</title>';
-  });
-  svg+='</svg>';
-  var axis='<div class="sparkline-axis">'+sorted.map(function(d){ return '<span>'+d.year+'</span>'; }).join('')+'</div>';
-  return '<div class="sparkline-wrap"><div class="sparkline-title">'+label+'</div>'+svg+axis+'</div>';
-}
-
-/* ============================================
-   RENDER
-============================================ */
-function buildCard(pub, idx){
-  var doiUrl = 'https://doi.org/' + pub.doi;
-  var gsUrl  = 'https://scholar.google.com/scholar?q=' + encodeURIComponent(pub.title||pub.doi);
-  var landingUrl = pub.url || doiUrl;
-
-  var topTags = '<div class="pub-top-meta">';
-  if (pub.containerType) topTags += '<span class="tag tag-section">'+escH(pub.containerType)+'</span>';
-  if (pub.year) topTags += '<span class="tag tag-date">'+escH(pub.year)+'</span>';
-  topTags += '</div>';
-
-  var titleBlock = '<a href="'+doiUrl+'" target="_blank" class="pub-title">'+escH(pub.title||pub.doi)+'</a>';
-
-  var authorsBlock;
-  if (pub.authorsList && pub.authorsList.length){
-    authorsBlock = '<div class="pub-authors">'+pub.authorsList.map(function(a){
-      if (a.orcid){
-        return '<a href="https://orcid.org/'+escH(a.orcid)+'" target="_blank" class="author-link">'
-          +escH(a.name)
-          +'<svg class="orcid-icon" viewBox="0 0 256 256" aria-label="ORCID"><circle cx="128" cy="128" r="128" fill="#A6CE39"/><path fill="#fff" d="M86.3 186.2H70.9V79.1h15.4v107.1zm22.6-107.1h41.6c39.6 0 57 28.3 57 53.6 0 27.5-21.5 53.6-56.8 53.6h-41.8V79.1zm15.4 93.3h24.5c34.9 0 42.9-26.5 42.9-39.7C191.7 111.2 178 93 148 93h-23.7v79.4zM88.7 56.8c0 5.5-4.5 10.1-10.1 10.1s-10.1-4.6-10.1-10.1c0-5.6 4.5-10.1 10.1-10.1s10.1 4.6 10.1 10.1z"/></svg>'
-          +'</a>';
-      }
-      return '<span class="author-link">'+escH(a.name)+'</span>';
-    }).join(', ')+'</div>';
-  } else {
-    authorsBlock = '';
-  }
-
-  var actions = '<div class="pub-actions">';
-  if (landingUrl && landingUrl !== doiUrl) {
-    actions += '<a href="'+landingUrl+'" target="_blank" class="action-btn action-btn-primary">'
-      +'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 1h6l4 4v10H4V1z"/><path d="M10 1v4h4"/></svg>'
-      +'Article page</a>';
-  }
-  actions += '</div>';
-
-  var crossrefVal;
-  if (pub.crCites !== null) crossrefVal = fmtNum(pub.crCites);
-  else if (pub.crNotAvailable) crossrefVal = '<span title="Not registered with Crossref" style="color:var(--text-muted);font-weight:400">n/a</span>';
-  else crossrefVal = spin();
-
-  var citeBadges = '<div class="metric-group">'
-    +'<span class="metric-group-label">Citations:</span>'
-    +'<span class="mbadge"><span class="src-dot" style="background:#2ecc71"></span>OpenAlex <span class="val">'+(pub.oaCites!==null?fmtNum(pub.oaCites):spin())+'</span></span>'
-    +'<span class="mbadge"><span class="src-dot" style="background:#e67e22"></span>DataCite <span class="val">'+(pub.dcCites!==null?fmtNum(pub.dcCites):spin())+'</span></span>'
-    +'<span class="mbadge"><span class="src-dot" style="background:#e74c3c"></span>Crossref <span class="val">'+crossrefVal+'</span></span>'
-    +'</div>';
-
-  var bskyLink = 'https://bsky.app/search?q=' + encodeURIComponent('https://doi.org/'+pub.doi);
-  var bskyBadge = '<div class="metric-group">'
-    +'<span class="metric-group-label">Social:</span>'
-    +'<a href="'+bskyLink+'" target="_blank" class="mbadge mbadge-link"><span class="src-dot" style="background:#1185fe"></span>Bluesky posts <span class="val">'+(pub.bskyCount!==null?fmtNum(pub.bskyCount):spin())+'</span></a>'
-    +'</div>';
-
-  var citeSpark = pub.countsByYear ? buildSparkline(pub.countsByYear,'#2ecc71','Citations by year (OpenAlex)') : '';
-
-  var footer = '<div class="pub-footer">'
-    +'<a href="'+doiUrl+'" target="_blank" class="doi-chip">↗ '+escH(pub.doi)+'</a>'
-    +'<span style="flex:1"></span>'
-    +'<a href="https://openalex.org/works?filter=doi:'+pub.doi+'" target="_blank" class="pub-link">OpenAlex</a>'
-    +'<span class="link-sep"></span>'
-    +'<a href="'+gsUrl+'" target="_blank" class="pub-link">Scholar</a>'
-    +'<span class="link-sep"></span>'
-    +'<a href="https://commons.datacite.org/doi.org/'+pub.doi+'" target="_blank" class="pub-link">DataCite</a>'
-    +'</div>';
-
-  return '<div class="pub-item" style="animation-delay:'+(Math.min(idx,12)*0.05)+'s">'
-    +'<div>'
-    +topTags+titleBlock+authorsBlock+actions
-    +'<div class="metrics-block">'+citeBadges+bskyBadge+citeSpark+'</div>'
-    +footer
-    +'</div>'
-    +'<div class="pub-donut">'
-    +'<div class="altmetric-embed" data-badge-type="donut" data-doi="'+pub.doi+'" data-hide-no-mentions="false" data-badge-popover="left"></div>'
-    +'<div class="donut-label">Altmetric</div>'
-    +'</div>'
-    +'</div>';
-}
-
-function setSort(mode){
-  currentSort = mode;
-  ['newest','oldest','cites'].forEach(function(m){
-    var el = document.getElementById('sort-'+m);
-    if (el) el.classList.toggle('active', m===mode);
-  });
-  renderPubs();
-}
-
-function sortedPubs(){
-  var copy = ALL_PUBS.slice();
-  if (currentSort==='newest') copy.sort(function(a,b){ return b.doiKey - a.doiKey; });
-  else if (currentSort==='oldest') copy.sort(function(a,b){ return a.doiKey - b.doiKey; });
-  else if (currentSort==='cites')  copy.sort(function(a,b){ return (b.oaCites||b.dcCites||0)-(a.oaCites||a.dcCites||0); });
-  return copy;
-}
-
-function renderPubs(){
-  var sorted = sortedPubs();
-  if (!sorted.length) return;
-  document.getElementById('pub-list').innerHTML = sorted.map(function(p,i){ return buildCard(p,i); }).join('');
-  if (typeof window._altmetric_embed_init==='function') window._altmetric_embed_init();
-}
-
-/* Animation: count-up */
-function countUp(el, target, duration){
-  if (!el) return;
-  duration = duration||1000;
-  if (target===null||target===undefined||target==='—'){el.textContent='—';return;}
-  if (typeof target==='string'&&target.indexOf('%')>-1){
-    var pct=parseFloat(target);
-    if(isNaN(pct)){el.textContent=target;return;}
-    animateNumber(el,0,pct,duration,function(v){return Math.round(v)+'%';});return;
-  }
-  if (typeof target!=='number') target=parseFloat(target);
-  if (isNaN(target)){el.textContent='—';return;}
-  animateNumber(el,0,target,duration,function(v){return fmtNum(Math.round(v));});
-}
-function animateNumber(el,from,to,duration,formatter){
-  var start=performance.now();
-  function tick(now){
-    var p=Math.min((now-start)/duration,1);
-    var eased=1-Math.pow(1-p,3);
-    el.textContent=formatter?formatter(from+(to-from)*eased):Math.round(from+(to-from)*eased);
-    if(p<1) requestAnimationFrame(tick);
-    else el.textContent=formatter?formatter(to):to;
-  }
-  requestAnimationFrame(tick);
-}
-function updateSummary(){
-  var dur=1000;
-  countUp(document.getElementById('sum-pubs'),ALL_PUBS.length,dur);
-  var c = ALL_PUBS.reduce(function(s,p){ return s + (p.oaCites!==null ? p.oaCites : (p.dcCites||0)); },0);
-  countUp(document.getElementById('sum-cites'),c,dur);
-
-  var years = ALL_PUBS.map(function(p){ return p.year; }).filter(function(y){ return y; }).map(Number);
-  if (years.length) {
-    document.getElementById('sum-firstyr').textContent = Math.min.apply(null, years);
-    document.getElementById('sum-lastyr').textContent  = Math.max.apply(null, years);
-  } else {
-    document.getElementById('sum-firstyr').textContent = '—';
-    document.getElementById('sum-lastyr').textContent  = '—';
-  }
-  if(ALL_PUBS.length) countUp(document.getElementById('sum-oa'),'100%',dur);
-  else                document.getElementById('sum-oa').textContent='—';
-}
-
-/* Loader helpers */
-function setLoaderStep(stepName, state){
-  var el=document.querySelector('.loader-step[data-step="'+stepName+'"]');
-  if(!el) return;
-  el.classList.remove('active','done');
-  if(state) el.classList.add(state);
-}
-function setLoaderProgress(pct){
-  var bar=document.getElementById('loader-progress-bar');
-  if(bar) bar.style.width=pct+'%';
-}
-function showLoader(show){
-  var l=document.getElementById('loader-wrap');
-  if(l) l.classList.toggle('hidden',!show);
-}
-
-/* ============================================
-   MAIN LOAD
-============================================ */
-async function loadAll(){
-  var reqId = ++currentRequestId;
-  var j = currentJournal;
-  var btn = document.getElementById('refresh-btn');
-  btn.disabled = true; btn.textContent = '… Loading';
-
-  document.getElementById('status-dot').className = 'status-dot loading';
-  document.getElementById('status-text').textContent = 'Loading publications for ' + j.name + '…';
-  document.getElementById('pub-list').innerHTML = '';
-  document.getElementById('ojs-note').textContent = 'Loading…';
-  ['sum-pubs','sum-cites','sum-firstyr','sum-lastyr','sum-oa'].forEach(function(id){
-    document.getElementById(id).textContent = '—';
-  });
-  ALL_PUBS = [];
-  LAST_FETCH_ERROR = null;
-
-  /* Handle no-DOI journals: show notice and stop */
-  if (j.hasNoDoi) {
-    showLoader(false);
-    document.getElementById('pub-list').innerHTML =
-      '<div class="notice-card info">'
-      +'<strong>No DOIs assigned</strong>'
-      +'<p>'+escH(j.name)+' does not currently register DOIs with DataCite, so bibliometrics from OpenAlex, Crossref, DataCite and Altmetric cannot be aggregated automatically.</p>'
-      +'<p>You can browse this journal directly at <a href="https://ejournals.uni-muenster.de/'+escH(j.slug)+'/index" target="_blank">ejournals.uni-muenster.de/'+escH(j.slug)+'</a>.</p>'
-      +'</div>';
-    document.getElementById('status-dot').className = 'status-dot done';
-    document.getElementById('status-text').textContent = 'No DOIs for this journal.';
-    document.getElementById('ojs-note').innerHTML = 'This journal does not register DOIs.<br><a href="https://ejournals.uni-muenster.de/'+escH(j.slug)+'" target="_blank">Visit journal ↗</a>';
-    document.getElementById('footer-update-date').textContent = new Date().toISOString().slice(0,10);
-    btn.disabled = false; btn.textContent = '↺ Refresh';
+  if(j.nd){
+    st('D','No DOI registration for this journal.');
+    document.getElementById('plist').innerHTML='<div class="note info"><strong>No DOIs registered</strong>'
+      +'<p>'+e(j.name)+' does not register DOIs with DataCite, so bibliometric tracking is not available.</p>'
+      +'<p>Browse at <a href="https://ejournals.uni-muenster.de/'+e(j.slug)+'" target="_blank">ejournals.uni-muenster.de/'+e(j.slug)+'</a>.</p></div>';
     return;
   }
 
-  showLoader(true);
-  ['dois','cites','social'].forEach(function(s){ setLoaderStep(s,''); });
-  setLoaderStep('dois','active');
-  setLoaderProgress(10);
+  /* DataCite */
+  var recs=await fetchDC(j,rid,function(msg){if(rid===RID)st('L',msg)});
+  if(rid!==RID)return;
 
-  /* 1 — DataCite: fetch DOIs + metadata in one go */
-  var records = await fetchDataciteDOIs(j, function(msg){
-    if (reqId === currentRequestId) {
-      document.getElementById('status-text').textContent = msg;
-    }
-  });
-
-  if (reqId !== currentRequestId) return; // user switched journals; abort
-
-  if (!records.length) {
-    showLoader(false);
-    var errorMsg = LAST_FETCH_ERROR
-      ? '<p style="font-family:var(--font-mono);font-size:11px;color:var(--red);background:var(--red-bg);padding:8px;border-radius:4px;margin-top:8px;">Last error: '+escH(LAST_FETCH_ERROR)+'</p>'
-      : '';
-    document.getElementById('pub-list').innerHTML =
-      '<div class="notice-card error">'
-      +'<strong>No publications found</strong>'
-      +'<p>DataCite returned no records for DOI prefix(es) <code>'+j.doiPrefixes.map(function(p){return '10.17879/'+p;}).join(', ')+'</code>.</p>'
-      +'<p>The journal may not have any registered DOIs yet, or the DOI prefix mapping in this dashboard may need updating.</p>'
-      +errorMsg
-      +'</div>';
-    document.getElementById('status-dot').className = 'status-dot error';
-    document.getElementById('status-text').textContent = LAST_FETCH_ERROR ? 'Error: ' + LAST_FETCH_ERROR.slice(0,80) : 'No DOIs found in DataCite.';
-    document.getElementById('ojs-note').textContent = 'No DataCite records found.';
-    btn.disabled = false; btn.textContent = '↺ Refresh';
+  if(!recs.length){
+    st('E','No records found in DataCite.');
+    document.getElementById('plist').innerHTML='<div class="note err"><strong>No publications found</strong>'
+      +'<p>DataCite returned no records for <code>'+j.dp.map(function(p){return'10.17879/'+p}).join(', ')+'</code>.</p>'
+      +'<p>Visit the journal at <a href="https://ejournals.uni-muenster.de/'+e(j.slug)+'" target="_blank">ejournals.uni-muenster.de/'+e(j.slug)+'</a>.</p></div>';
     return;
   }
 
-  ALL_PUBS = records.map(function(rec){
-    try { return pubFromDataciteRecord(rec); }
-    catch(e) { console.error('Parse error:', e, rec); return null; }
-  }).filter(Boolean);
-  document.getElementById('sum-pubs').textContent = ALL_PUBS.length;
+  PUBS=recs.map(parseDC).filter(Boolean);
+  document.getElementById('svp').textContent=fn(PUBS.length);
+  render();drawCharts();summ();
 
-  /* Initial render with metadata so user sees something fast */
-  renderPubs();
-  updateSummary();
-
-  setLoaderStep('dois','done');
-  setLoaderStep('cites','active');
-  setLoaderProgress(40);
-  showLoader(false); // hide loader; let badges fill in inline
-  document.getElementById('status-text').textContent =
-    'Loaded ' + ALL_PUBS.length + ' publication' + (ALL_PUBS.length!==1?'s':'') + '. Fetching citations…';
-
-  /* 2 — OpenAlex + Crossref + Bluesky in parallel
-        Process in batches to avoid hammering rate limits */
-  var BATCH = 8;
-  for (var i = 0; i < ALL_PUBS.length; i += BATCH) {
-    if (reqId !== currentRequestId) return;
-    var batch = ALL_PUBS.slice(i, i + BATCH);
-    await Promise.all(batch.map(function(pub){
-      return Promise.all([
-        // OpenAlex
-        fetchJSON('https://api.openalex.org/works/https://doi.org/'+pub.doi).then(function(oa){
-          if (!oa) return;
-          pub.oaCites = oa.cited_by_count != null ? oa.cited_by_count : 0;
-          pub.countsByYear = oa.counts_by_year || [];
-        }),
-        // Crossref
-        fetchJSON('https://api.crossref.org/works/'+pub.doi).then(function(cr){
-          if (cr && cr.message && cr.message['is-referenced-by-count'] != null) {
-            pub.crCites = cr.message['is-referenced-by-count'];
-          } else {
-            pub.crNotAvailable = true;
-          }
-        }),
-        // Bluesky
-        fetchBlueskyMentions(pub)
-      ]);
-    }));
-
-    var pct = 40 + Math.round((i + BATCH) / ALL_PUBS.length * 55);
-    setLoaderProgress(Math.min(pct, 95));
-    // Re-render every batch so values stream in
-    renderPubs();
-    updateSummary();
+  /* OpenAlex batches */
+  st('L','Fetching citations from OpenAlex…');
+  for(var i=0;i<PUBS.length;i+=25){
+    if(rid!==RID)return;
+    await oaBatch(PUBS.slice(i,i+25));
+    render();summ();drawCharts();
+    if(PUBS.length>25)st('L','OpenAlex: '+Math.min(i+25,PUBS.length)+' / '+PUBS.length+'…');
   }
-
-  if (reqId !== currentRequestId) return;
-
-  setLoaderStep('cites','done');
-  setLoaderStep('social','done');
-  setLoaderProgress(100);
-
-  renderPubs();
-  updateSummary();
-
-  document.getElementById('ojs-note').innerHTML =
-    'Data refreshed from DataCite, OpenAlex, Crossref &amp; Bluesky.<br>'
-    +'<a href="https://ejournals.uni-muenster.de/'+escH(j.slug)+'/index" target="_blank">Visit journal ↗</a>';
-
-  var now = new Date();
-  document.getElementById('footer-update-date').textContent = now.toISOString().slice(0,10);
-  document.getElementById('status-dot').className = 'status-dot done';
-  document.getElementById('status-text').textContent =
-    'Loaded ' + ALL_PUBS.length + ' publication' + (ALL_PUBS.length!==1?'s':'') + ' for ' + j.name
-    + ' · ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})
-    + ' · DataCite · OpenAlex · Crossref · Altmetric · Bluesky';
-
-  btn.disabled = false; btn.textContent = '↺ Refresh';
+  if(rid!==RID)return;
+  document.getElementById('ftu').textContent=new Date().toISOString().slice(0,10);
+  st('D','Loaded '+fn(PUBS.length)+' publications · DataCite + OpenAlex');
 }
 
-/* Bluesky helper */
-async function fetchBlueskyMentions(pub){
-  var doiSuffix = pub.doi.split('/').pop() || pub.doi;
-  var urlParam   = 'https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?url='+encodeURIComponent('https://doi.org/'+pub.doi)+'&limit=100';
-  var textSearch = 'https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?q='+encodeURIComponent(doiSuffix)+'&limit=100';
+async function fetchDC(j,rid,cb){
+  var all=[],seen={};
+  for(var pi=0;pi<j.dp.length;pi++){
+    var pfx=j.dp[pi];
+    var q='prefix:10.17879 AND suffix:'+pfx+'*';
+    for(var pg=1;all.length<MAXP;pg++){
+      if(rid!==RID)return[];
+      if(cb)cb('DataCite "'+pfx+'" page '+pg+' ('+all.length+' so far)…');
+      var url='https://api.datacite.org/dois?query='+encodeURIComponent(q)+'&page%5Bsize%5D='+DCP+'&page%5Bnumber%5D='+pg;
+      var d=await fj(url,20000);
+      if(!d||!d.data||!d.data.length)break;
+      d.data.forEach(function(r){var doi=r.attributes&&r.attributes.doi;if(doi&&!seen[doi]){seen[doi]=1;all.push(r)}});
+      if(d.data.length<DCP)break;
+    }
+  }
+  return all.slice(0,MAXP);
+}
 
-  try {
-    var results = await Promise.all([
-      fetchJSON(urlParam, 6000).catch(function(){return null;}),
-      fetchJSON(textSearch, 6000).catch(function(){return null;})
-    ]);
-    var seen = {}, matched = [];
-    results.forEach(function(res){
-      if (!res || !res.posts) return;
-      res.posts.forEach(function(post){
-        if (seen[post.uri]) return;
-        var facets = (post.record && post.record.facets) || [];
-        var facetMatch = facets.some(function(f){
-          return (f.features||[]).some(function(feat){
-            return feat.uri && feat.uri.indexOf(pub.doi) !== -1;
-          });
-        });
-        var embed = post.record && post.record.embed;
-        var embedMatch = false;
-        if (embed) {
-          var ext = embed.external || (embed.record && embed.record.external);
-          if (ext && ext.uri && ext.uri.indexOf(pub.doi) !== -1) embedMatch = true;
-        }
-        var textMatch = (post.record && post.record.text && post.record.text.indexOf(pub.doi) !== -1);
-        if (facetMatch || embedMatch || textMatch) {
-          seen[post.uri] = true;
-          matched.push(post);
-        }
-      });
+function parseDC(r){
+  try{
+    var a=r.attributes;if(!a||!a.doi)return null;
+    var title=(a.titles&&a.titles.length)?a.titles[0].title||'':'';
+    var auth=[];
+    (a.creators||[]).forEach(function(c){
+      var n=c.familyName?(c.familyName+(c.givenName?', '+c.givenName:'')):(c.name||'');
+      var orc=null;
+      (c.nameIdentifiers||[]).forEach(function(ni){if((ni.nameIdentifierScheme||'').toUpperCase()==='ORCID')orc=(ni.nameIdentifier||'').replace(/^https?:\/\/orcid\.org\//,'')});
+      if(n)auth.push({n:n,o:orc});
     });
-    pub.bskyCount = matched.length;
-  } catch(e) {
-    pub.bskyCount = 0;
-  }
+    var yr=a.publicationYear?+a.publicationYear:null;
+    return{doi:a.doi,title:title,auth:auth,yr:yr,url:a.url||('https://doi.org/'+a.doi),key:dk(a.doi),oa:null,cby:[]};
+  }catch(ex){return null}
 }
 
-/* Initialize */
-renderJournalList('');
-// Pre-render the section heading
-document.getElementById('section-title').textContent = currentJournal.name;
-document.getElementById('section-issn').textContent = currentJournal.issn ? ' · ISSN ' + currentJournal.issn : '';
+async function oaBatch(batch){
+  var filter=batch.map(function(p){return'https://doi.org/'+p.doi}).join('|');
+  var d=await fj('https://api.openalex.org/works?filter=doi:'+encodeURIComponent(filter)+'&per-page=50&select=doi,cited_by_count,counts_by_year',15000);
+  if(!d||!d.results)return;
+  var bd={};
+  d.results.forEach(function(w){if(w.doi)bd[w.doi.toLowerCase().replace(/^https?:\/\/doi\.org\//,'')]=w});
+  batch.forEach(function(p){var w=bd[p.doi.toLowerCase()];if(!w)return;p.oa=w.cited_by_count!=null?w.cited_by_count:0;p.cby=w.counts_by_year||[]});
+}
+
+/* ── SORT + RENDER ── */
+function setSort(m){
+  CSORT=m;
+  ['newest','oldest','cites'].forEach(function(x){document.getElementById('sort-'+x).classList.toggle('on',x===m)});
+  render();
+}
+function sorted(){
+  var c=PUBS.slice();
+  if(CSORT==='newest')c.sort(function(a,b){return b.key-a.key});
+  else if(CSORT==='oldest')c.sort(function(a,b){return a.key-b.key});
+  else c.sort(function(a,b){return(b.oa||0)-(a.oa||0)});
+  return c;
+}
+function render(){
+  var s=sorted();if(!s.length)return;
+  document.getElementById('plist').innerHTML=s.map(card).join('');
+  if(typeof window._altmetric_embed_init==='function')window._altmetric_embed_init();
+}
+
+function card(p,i){
+  var doiUrl='https://doi.org/'+p.doi;
+  var gsUrl='https://scholar.google.com/scholar?q='+encodeURIComponent(p.title||p.doi);
+  var auth='';
+  if(p.auth&&p.auth.length){
+    auth='<div class="pauth">'+p.auth.slice(0,6).map(function(a){
+      if(a.o)return'<a class="orc" href="https://orcid.org/'+e(a.o)+'" target="_blank">'+e(a.n)
+        +'<svg class="oid" viewBox="0 0 256 256"><circle cx="128" cy="128" r="128" fill="#A6CE39"/><path fill="#fff" d="M86.3 186.2H70.9V79.1h15.4v107.1zm22.6-107.1h41.6c39.6 0 57 28.3 57 53.6 0 27.5-21.5 53.6-56.8 53.6h-41.8V79.1zm15.4 93.3h24.5c34.9 0 42.9-26.5 42.9-39.7C191.7 111.2 178 93 148 93h-23.7v79.4zM88.7 56.8c0 5.5-4.5 10.1-10.1 10.1s-10.1-4.6-10.1-10.1c0-5.6 4.5-10.1 10.1-10.1s10.1 4.6 10.1 10.1z"/></svg></a>';
+      return'<span>'+e(a.n)+'</span>';
+    }).join(', ')+(p.auth.length>6?', <span style="color:var(--textm)">+'+(p.auth.length-6)+' more</span>':'')+'</div>';
+  }
+  var cite=p.oa!==null
+    ?'<span class="mb hi"><span class="ds" style="background:#22c55e"></span>Cited <span class="mv">'+fn(p.oa)+'</span></span>'
+    :'<span class="mb"><span class="ds" style="background:#22c55e"></span>Cited '+sp()+'</span>';
+  var spark='';
+  if(p.cby&&p.cby.length){
+    var sy=p.cby.slice().sort(function(a,b){return a.year-b.year});
+    var sv=sy.map(function(d){return d.cited_by_count||0});
+    var smx=Math.max.apply(null,sv)||1;
+    var W=180,H=28,pad=2,n=sv.length,xs=n>1?(W-pad*2)/(n-1):0;
+    var pts=sv.map(function(v,i){return(pad+i*xs).toFixed(1)+','+(H-pad-((v/smx)*(H-pad*2))).toFixed(1)}).join(' ');
+    spark='<div class="spark-wrap"><div class="spark-lbl">Citations by year</div>'
+      +'<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'">'
+      +'<polyline class="spl" points="'+pts+'" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>'
+      +'</svg></div>';
+  }
+  return'<div class="pit" style="animation-delay:'+(Math.min(i,15)*.04)+'s">'
+    +'<div><span class="pyr">'+(p.yr||'—')+'</span>'
+    +'<a class="ptitle" href="'+doiUrl+'" target="_blank">'+e(p.title||p.doi)+'</a>'
+    +auth
+    +'<div class="mrow">'+cite+'</div>'+spark
+    +'<div class="pfoot"><a class="doi-chip" href="'+doiUrl+'" target="_blank">↗ '+e(p.doi)+'</a>'
+    +'<span style="flex:1"></span>'
+    +'<a class="el" href="https://openalex.org/works?filter=doi:'+p.doi+'" target="_blank">OpenAlex</a>'
+    +'<span class="lsep"></span><a class="el" href="'+gsUrl+'" target="_blank">Scholar</a>'
+    +'</div></div>'
+    +'<div class="pdnt"><div class="altmetric-embed" data-badge-type="donut" data-doi="'+p.doi+'" data-hide-no-mentions="false" data-badge-popover="left"></div><div class="dlbl">Altmetric</div></div>'
+    +'</div>';
+}
+
+/* ── CHARTS ── */
+function clearCharts(){
+  document.getElementById('cpa').innerHTML='';
+  document.getElementById('cca').innerHTML='';
+  /* reset SVG elements to blank containers */
+  document.getElementById('cpw').innerHTML='<svg id="cps"></svg>';
+  document.getElementById('ccw').innerHTML='<svg id="ccs"></svg>';
+}
+function drawCharts(){
+  var pb={},cb={};
+  PUBS.forEach(function(p){
+    if(p.yr)pb[p.yr]=(pb[p.yr]||0)+1;
+    (p.cby||[]).forEach(function(cy){if(cy.year&&cy.cited_by_count)cb[cy.year]=(cb[cy.year]||0)+cy.cited_by_count});
+  });
+  barChart('cps','cpa',pb,'#2563eb');
+  barChart('ccs','cca',cb,'#16a34a');
+}
+function barChart(svgId,axId,obj,col){
+  var ax=document.getElementById(axId);
+  var svgWrap=document.getElementById(svgId).parentElement;
+  var keys=Object.keys(obj).map(Number).sort(function(a,b){return a-b});
+  if(!keys.length){svgWrap.innerHTML='<svg id="'+svgId+'"></svg>';ax.innerHTML='';return}
+  var vals=keys.map(function(k){return obj[k]});
+  var maxV=Math.max.apply(null,vals)||1,n=keys.length;
+  var W=400,H=90,pT=6,pB=2,pL=2,pR=2,svgH=H+pT+pB;
+  var slot=(W-pL-pR)/n,bw=Math.max(2,slot*.65);
+  var out='<svg id="'+svgId+'" viewBox="0 0 '+W+' '+svgH+'" preserveAspectRatio="none" width="100%" height="100%">';
+  [0,.25,.5,.75,1].forEach(function(t){var y=(pT+H*(1-t)).toFixed(1);out+='<line x1="'+pL+'" y1="'+y+'" x2="'+(W-pR)+'" y2="'+y+'" stroke="#e4e7ec" stroke-width="1"/>'});
+  vals.forEach(function(v,i){
+    var x=(pL+i*slot+(slot-bw)/2).toFixed(1),bh=Math.max(2,(v/maxV)*(H-2)).toFixed(1),y=(pT+H-bh).toFixed(1);
+    out+='<rect x="'+x+'" y="'+y+'" width="'+bw.toFixed(1)+'" height="'+bh+'" rx="2" fill="'+col+'" fill-opacity=".82"><title>'+keys[i]+': '+v+'</title></rect>';
+  });
+  out+='</svg>';
+  svgWrap.innerHTML=out;
+  var step=Math.max(1,Math.ceil(n/6));
+  ax.innerHTML=keys.map(function(k,i){return'<span>'+(i%step===0||i===n-1?k:'')+'</span>'}).join('');
+}
+
+/* ── SUMMARY ── */
+function summ(){
+  document.getElementById('svp').textContent=fn(PUBS.length);
+  document.getElementById('svc').textContent=fn(PUBS.reduce(function(s,p){return s+(p.oa||0)},0));
+  var yrs=PUBS.map(function(p){return p.yr}).filter(Boolean).map(Number);
+  if(yrs.length){var mn=Math.min.apply(null,yrs),mx=Math.max.apply(null,yrs);document.getElementById('svs').textContent=mn===mx?''+mn:mn+'–'+mx}
+}
+
+function st(cls,msg){document.getElementById('sdot').className='sdot '+cls;document.getElementById('stxt').textContent=msg}
+
+/* ── INIT ── */
+buildGrid();buildDD('');
 </script>
 <script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
 </body>
