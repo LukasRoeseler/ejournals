@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bibliometrics Dashboard for the e-Journals Münster</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230d2137'/%3E%3Crect x='3' y='20' width='6' height='9' rx='1' fill='%232e7dc4'/%3E%3Crect x='11' y='14' width='6' height='15' rx='1' fill='%232e7dc4'/%3E%3Crect x='19' y='8' width='6' height='21' rx='1' fill='%232e7dc4'/%3E%3Cpolyline points='6,17 14,11 22,5' fill='none' stroke='%23ffffff' stroke-width='1.5' stroke-linecap='round' stroke-opacity='0.45'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
@@ -29,28 +30,23 @@
 html{scroll-behavior:smooth}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
 
-/* ── ENTRANCE ANIMATION ── */
 @keyframes fadeSlideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes scaleIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
 @keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
 @keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(46,125,196,.35)}70%{box-shadow:0 0 0 8px rgba(46,125,196,0)}100%{box-shadow:0 0 0 0 rgba(46,125,196,0)}}
 @keyframes countUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-@keyframes barGrow{from{transform:scaleY(0);transform-origin:bottom}to{transform:scaleY(1);transform-origin:bottom}}
 @keyframes progressPulse{0%,100%{opacity:.7}50%{opacity:1}}
 
-/* ── HEADER ── */
 .hdr{background:var(--navy);padding:0 36px;display:flex;align-items:stretch;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.35);min-height:56px;animation:fadeIn .3s ease}
 .wordmark{display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer;padding:10px 0}
 .wm-title{font-family:var(--sans);font-size:15px;font-weight:700;color:#fff;letter-spacing:.01em;line-height:1}
 
-/* ── NAV TABS ── */
 .hdr-nav{display:flex;align-items:center;gap:2px;padding:8px 0}
 .hdr-tab{padding:6px 14px;border:none;background:transparent;color:rgba(255,255,255,.65);font-family:var(--sans);font-size:12.5px;font-weight:500;cursor:pointer;border-radius:5px;transition:all .2s;white-space:nowrap}
 .hdr-tab:hover{background:rgba(255,255,255,.1);color:#fff;transform:translateY(-1px)}
 .hdr-tab.on{background:var(--accent);color:#fff}
 
-/* ── JOURNAL PICKER ── */
 .jsel{position:relative;display:flex;align-items:center;margin-left:8px}
 .jsel-btn{display:flex;align-items:center;gap:8px;padding:6px 14px;height:auto;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:6px;cursor:pointer;font-family:var(--sans);font-size:12.5px;color:#fff;font-weight:500;transition:background .15s,transform .15s;min-width:200px;max-width:320px}
 .jsel-btn:hover{background:rgba(255,255,255,.18);transform:translateY(-1px)}
@@ -82,13 +78,11 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14
 .dd-bg.nd{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bdr)}
 .dd-em{padding:24px;text-align:center;font-size:13px;color:var(--textm)}
 
-/* ── PROGRESS BAR ── */
 .prog-bar-wrap{position:fixed;top:56px;left:0;right:0;z-index:199;height:3px;pointer-events:none;opacity:0;transition:opacity .2s}
 .prog-bar-wrap.visible{opacity:1}
 .prog-bar{height:100%;background:linear-gradient(90deg,var(--accent),#5ba8e8,var(--accent));background-size:200% 100%;width:0%;transition:width .4s ease;animation:progressPulse 1.5s ease infinite}
 .prog-bar-wrap.done .prog-bar{background:var(--green);animation:none}
 
-/* ── FETCH STATUS PANEL ── */
 .fetch-panel{position:fixed;bottom:20px;right:20px;z-index:300;min-width:280px;max-width:360px;background:var(--navy);border:1px solid var(--navy-bdr);border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.35);padding:14px 16px;opacity:0;transform:translateY(12px) scale(.97);pointer-events:none;transition:opacity .22s,transform .22s;font-family:var(--sans)}
 .fetch-panel.show{opacity:1;transform:none;pointer-events:all}
 .fp-title{font-size:10px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
@@ -104,13 +98,9 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14
 .fp-step.active .fp-dot{background:var(--accent);animation:pulseRing .9s ease infinite}
 .fp-step.done .fp-dot{background:var(--green);animation:none}
 
-/* ── LAYOUT ── */
 .wrap{max-width:1200px;margin:0 auto;padding:0 36px 80px}
-
-/* ── SCREENS ── */
 #hs,#js,#as{display:none}
 
-/* ── HOME ── */
 .hero{padding:52px 0 40px;border-bottom:1px solid var(--border);margin-bottom:36px;animation:fadeSlideIn .45s ease both}
 .hero h1{font-family:var(--serif);font-size:38px;font-weight:700;line-height:1.12;letter-spacing:-.02em;color:var(--navy);margin-bottom:14px}
 .hero h1 em{color:var(--accent);font-style:normal;border-bottom:3px solid var(--accent-bdr)}
@@ -124,8 +114,8 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14
 .hcard.nd{opacity:.55;cursor:default}
 .hcard.nd:hover{border-color:var(--border);box-shadow:none;transform:none}
 .hct{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.hclogo{width:28px;height:28px;object-fit:contain;border-radius:3px;flex-shrink:0}
-.hclogofb{width:28px;height:28px;border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;color:#fff}
+.hclogo{width:32px;height:32px;object-fit:contain;border-radius:3px;flex-shrink:0;background:var(--bg-card)}
+.hclogofb{width:32px;height:32px;border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;color:#fff}
 .htag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px}
 .htag.ac{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bdr)}
 .htag.in{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bdr)}
@@ -133,10 +123,10 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14
 .hnm{font-size:13px;font-weight:600;color:var(--text);line-height:1.35;padding-left:4px}
 .hsl{font-size:10px;color:var(--textm);font-family:var(--mono);padding-left:4px}
 
-/* ── JOURNAL VIEW ── */
 .jvh{padding:32px 0 22px;border-bottom:1px solid var(--border);margin-bottom:24px;display:flex;align-items:flex-start;gap:20px;animation:fadeSlideIn .35s ease both}
-.jvh-logo{width:56px;height:56px;object-fit:contain;border-radius:8px;border:1px solid var(--border);flex-shrink:0;background:var(--bg-card);padding:4px}
-.jvh-logofb{width:56px;height:56px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;font-weight:700;color:#fff;transition:transform .25s}
+.jvh-logo-wrap{width:60px;height:60px;flex-shrink:0;position:relative}
+.jvh-logo{width:60px;height:60px;object-fit:contain;border-radius:8px;border:1px solid var(--border);background:var(--bg-card);padding:4px;display:none;position:absolute;inset:0}
+.jvh-logofb{width:60px;height:60px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;font-weight:700;color:#fff;transition:transform .25s;position:absolute;inset:0}
 .jvh-logofb:hover{transform:scale(1.05)}
 .jvh-text{}
 .jvn{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--navy);letter-spacing:-.015em;line-height:1.15;margin-bottom:7px}
@@ -145,14 +135,12 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14
 .jvl{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-lt);border:1px solid var(--accent-bdr);border-radius:5px;padding:3px 9px;text-decoration:none;transition:background .15s,transform .15s}
 .jvl:hover{background:#d1e8f8;transform:translateY(-1px)}
 
-/* ── STATS STRIP ── */
 .sstrip{display:flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:24px;background:var(--bg-card);animation:scaleIn .35s .1s ease both}
 .scell{flex:1;padding:16px 18px;text-align:center;border-right:1px solid var(--border)}
 .scell:last-child{border-right:none}
 .snum{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--navy);line-height:1;margin-bottom:3px;font-variant-numeric:tabular-nums;animation:countUp .4s .2s both}
 .slbl{font-size:9.5px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.07em}
 
-/* ── CHARTS ── */
 .crow{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;animation:fadeSlideIn .4s .15s both}
 .ccard{border:1px solid var(--border);border-radius:10px;padding:16px 18px;background:var(--bg-card);transition:box-shadow .2s}
 .ccard:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
@@ -169,25 +157,14 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14
 .cbody{width:100%;height:110px;position:relative}
 .cbody svg{width:100%;height:100%;display:block}
 .cax{display:flex;justify-content:space-between;font-size:8.5px;color:var(--textm);font-family:var(--mono)}
-
-/* Tooltip */
 .chart-tt{position:fixed;background:var(--navy);color:#fff;font-size:11px;font-family:var(--sans);font-weight:600;padding:5px 9px;border-radius:5px;pointer-events:none;white-space:nowrap;z-index:9999;opacity:0;transition:opacity .1s;box-shadow:0 4px 12px rgba(0,0,0,.3)}
 .chart-tt.show{opacity:1}
 
-/* ── YEAR RANGE SLIDER ── */
-.yr-slider-wrap{display:flex;flex-direction:column;gap:6px;min-width:200px}
-.yr-slider-label{font-size:10.5px;font-weight:700;color:var(--textm);text-transform:uppercase;letter-spacing:.07em}
-.yr-slider-display{font-size:12px;font-weight:600;color:var(--text);font-family:var(--mono);background:var(--bg-soft);border:1px solid var(--border-mid);border-radius:5px;padding:3px 9px;white-space:nowrap;text-align:center}
-.yr-range-track{position:relative;height:20px;display:flex;align-items:center}
-.yr-range-bg{position:absolute;left:0;right:0;height:4px;background:var(--border);border-radius:2px;pointer-events:none}
-.yr-range-fill{position:absolute;height:4px;background:var(--accent);border-radius:2px;pointer-events:none;transition:left .05s,width .05s}
-.yr-range-input{position:absolute;width:100%;height:100%;opacity:0;cursor:pointer;margin:0;padding:0;pointer-events:all;-webkit-appearance:none}
-.yr-range-input::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2);cursor:pointer;pointer-events:all;position:relative;z-index:2}
-.yr-range-input::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2);cursor:pointer}
-.yr-range-input.yr-min{z-index:3}
-.yr-range-input.yr-max{z-index:3}
+/* ── YEAR FILTER SELECTS ── */
+.yr-filter-wrap{display:none;align-items:center;gap:6px;flex-wrap:nowrap}
+.yr-filter-label{font-size:10.5px;color:var(--textm);font-weight:600;white-space:nowrap}
+.yr-filter-sep{font-size:12px;color:var(--border-mid);font-weight:400;margin:0 1px}
 
-/* ── FILTERS BAR ── */
 .filters-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;padding:12px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:9px;animation:fadeIn .35s .2s both}
 .fb-label{font-size:10.5px;font-weight:700;color:var(--textm);text-transform:uppercase;letter-spacing:.07em;margin-right:4px;white-space:nowrap}
 .fb-sep{width:1px;height:20px;background:var(--border);flex-shrink:0}
@@ -197,13 +174,11 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 .fb-clear:hover{text-decoration:underline;color:var(--accent-dk)}
 .fb-count{font-size:11px;color:var(--textm);margin-left:auto;white-space:nowrap}
 
-/* ── EXPORT BUTTON ── */
 .export-btn{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--accent);background:var(--accent-lt);border:1px solid var(--accent-bdr);border-radius:6px;padding:5px 12px;cursor:pointer;font-family:var(--sans);transition:background .15s,transform .15s,box-shadow .15s;white-space:nowrap}
 .export-btn:hover{background:#d1e8f8;transform:translateY(-1px);box-shadow:0 3px 10px rgba(46,125,196,.2)}
 .export-btn:active{transform:translateY(0)}
 .export-btn svg{flex-shrink:0}
 
-/* ── PUB CARDS ── */
 .pit{display:grid;grid-template-columns:1fr 80px;gap:18px;align-items:start;padding:20px 0;border-bottom:1px solid var(--border);opacity:0;transform:translateY(6px);animation:fup .28s forwards}
 @keyframes fup{to{opacity:1;transform:none}}
 .pit-left{}
@@ -233,7 +208,6 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 .pdnt{display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:2px}
 .dlbl{font-size:8.5px;color:var(--textm);text-align:center;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
 
-/* ── STATUS BAR ── */
 .statbar{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--textm);padding:8px 0 12px}
 .sdot{width:6px;height:6px;border-radius:50%;background:var(--textm);flex-shrink:0}
 .sdot.L{background:var(--accent);animation:blink 1s ease-in-out infinite}
@@ -241,7 +215,6 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 .sdot.E{background:var(--red)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
-/* ── ALL JOURNALS VIEW ── */
 .av-hdr{padding:32px 0 22px;border-bottom:1px solid var(--border);margin-bottom:24px;animation:fadeSlideIn .35s ease both}
 .av-title{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--navy);margin-bottom:6px}
 .av-sub{font-size:14px;color:var(--text2)}
@@ -251,14 +224,12 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 .av-slbl{font-size:10px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
 .av-statbar{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--textm);padding:8px 0 12px}
 
-/* Legend */
 .jlegend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
 .jleg-it{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);cursor:pointer;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:var(--bg-card);transition:all .15s}
 .jleg-it:hover{border-color:var(--accent);transform:translateY(-1px)}
 .jleg-it.off{opacity:.35}
 .jleg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
 
-/* ── NOTICE ── */
 .note{padding:20px 24px;border-radius:10px;margin:18px 0;background:var(--bg-card);border:1px solid var(--border);animation:fadeSlideIn .3s ease both}
 .note.info{border-left:4px solid var(--accent)}
 .note.err{border-left:4px solid var(--red)}
@@ -267,7 +238,6 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 .note code{font-family:var(--mono);font-size:11px;background:var(--bg-chip);padding:1px 5px;border-radius:3px}
 .note a{color:var(--accent);font-weight:600}
 
-/* ── FOOTER ── */
 .ft{border-top:1px solid var(--border);padding:16px 36px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--textm);max-width:1200px;margin:0 auto}
 .ft a{color:var(--accent);text-decoration:none}
 .ft a:hover{text-decoration:underline}
@@ -277,8 +247,6 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 .spn{display:inline-block;width:8px;height:8px;border:1.5px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
 .pcount{font-size:11.5px;color:var(--textm);margin-left:2px;font-weight:400}
-
-/* ── SKELETON LOADING ── */
 .skel{background:linear-gradient(90deg,var(--bg-chip) 25%,var(--bg-soft) 50%,var(--bg-chip) 75%);background-size:400px 100%;animation:shimmer 1.4s infinite;border-radius:4px}
 
 @media(max-width:760px){
@@ -301,10 +269,8 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 <body>
 <div class="chart-tt" id="ctt"></div>
 
-<!-- ── PROGRESS BAR ── -->
 <div class="prog-bar-wrap" id="prog-wrap"><div class="prog-bar" id="prog-bar"></div></div>
 
-<!-- ── FETCH STATUS PANEL ── -->
 <div class="fetch-panel" id="fetch-panel">
   <div class="fp-title">Data Loading</div>
   <div class="fp-status" id="fp-status">Initialising…</div>
@@ -320,13 +286,11 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
   <div class="wordmark" onclick="showHome()">
     <span class="wm-title">Bibliometrics Dashboard for the e-Journals Münster</span>
   </div>
-
   <div style="display:flex;align-items:center;gap:4px">
     <nav class="hdr-nav">
       <button class="hdr-tab" id="tab-home" onclick="showHome()">Home</button>
       <button class="hdr-tab" id="tab-all"  onclick="showAll()">All Journals</button>
     </nav>
-
     <div class="jsel" id="jsel">
       <button class="jsel-btn" id="jbtn" onclick="toggleDD()" aria-haspopup="listbox" aria-expanded="false">
         <div class="jabbr none" id="jicon">—</div>
@@ -372,7 +336,10 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
   <!-- ══ JOURNAL VIEW ══ -->
   <div id="js">
     <div class="jvh">
-      <div class="jvh-logofb" id="jvh-logofb" style="background:var(--accent)">?</div>
+      <div class="jvh-logo-wrap">
+        <img class="jvh-logo" id="jvh-logo" src="" alt="">
+        <div class="jvh-logofb" id="jvh-logofb" style="background:var(--accent)">?</div>
+      </div>
       <div class="jvh-text">
         <div class="jvn" id="jvn">—</div>
         <div class="jvm">
@@ -405,18 +372,12 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 
     <div class="filters-bar">
       <span class="fb-label">Filter</span>
-      <!-- Year range slider replacing dropdown -->
-      <div class="yr-slider-wrap" id="yr-slider-wrap" style="display:none">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="yr-slider-label">Year</span>
-          <span class="yr-slider-display" id="yr-display">All</span>
-        </div>
-        <div class="yr-range-track" id="yr-track">
-          <div class="yr-range-bg"></div>
-          <div class="yr-range-fill" id="yr-fill"></div>
-          <input type="range" class="yr-range-input yr-min" id="yr-min" min="0" max="100" value="0" oninput="onYrSlider()">
-          <input type="range" class="yr-range-input yr-max" id="yr-max" min="0" max="100" value="100" oninput="onYrSlider()">
-        </div>
+      <div class="yr-filter-wrap" id="yr-filter-wrap">
+        <label class="yr-filter-label" for="yr-from">From</label>
+        <select class="fb-select" id="yr-from" onchange="onYrChange()"></select>
+        <span class="yr-filter-sep">–</span>
+        <label class="yr-filter-label" for="yr-to">To</label>
+        <select class="fb-select" id="yr-to" onchange="onYrChange()"></select>
       </div>
       <span class="fb-sep"></span>
       <span class="fb-label">Sort</span>
@@ -482,20 +443,13 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 
     <div class="filters-bar">
       <span class="fb-label">Filter</span>
-      <!-- Year range slider for All Journals view -->
-      <div class="yr-slider-wrap" id="av-yr-slider-wrap" style="display:none">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="yr-slider-label">Year</span>
-          <span class="yr-slider-display" id="av-yr-display">All</span>
-        </div>
-        <div class="yr-range-track" id="av-yr-track">
-          <div class="yr-range-bg"></div>
-          <div class="yr-range-fill" id="av-yr-fill"></div>
-          <input type="range" class="yr-range-input yr-min" id="av-yr-min" min="0" max="100" value="0" oninput="onAvYrSlider()">
-          <input type="range" class="yr-range-input yr-max" id="av-yr-max" min="0" max="100" value="100" oninput="onAvYrSlider()">
-        </div>
+      <div class="yr-filter-wrap" id="av-yr-filter-wrap">
+        <label class="yr-filter-label" for="av-yr-from">From</label>
+        <select class="fb-select" id="av-yr-from" onchange="onAvYrChange()"></select>
+        <span class="yr-filter-sep">–</span>
+        <label class="yr-filter-label" for="av-yr-to">To</label>
+        <select class="fb-select" id="av-yr-to" onchange="onAvYrChange()"></select>
       </div>
-      <select class="fb-select" id="av-journal" onchange="applyAllFilter()"><option value="">All journals</option></select>
       <span class="fb-sep"></span>
       <span class="fb-label">Sort</span>
       <select class="fb-select" id="av-sort" onchange="applyAllFilter()">
@@ -531,7 +485,7 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
   <span>Updated: <span id="ftu">—</span></span>
   <div class="ft-warning">
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M7 1L13 12H1L7 1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M7 5.5v3M7 10v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-    <span><strong>Important notice:</strong> Citation metrics (e.g. citation counts, cited-by statistics) must not be used as a proxy for research quality. They reflect usage patterns and are subject to field-specific biases, self-citation, and other confounds. Please interpret all metrics with appropriate caution.</span>
+    <span><strong>Important notice:</strong> Citation metrics must not be used as a proxy for research quality. They reflect usage patterns and are subject to field-specific biases, self-citation, and other confounds. Please interpret all metrics with appropriate caution.</span>
   </div>
 </footer>
 
@@ -540,50 +494,87 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
    JOURNAL REGISTRY
 ═══════════════════════════════ */
 var J=[
-  {slug:'aods',          name:'Archive of Orofacial Data Science',                                    abbr:'AOD',  ac:1,issn:'2941-783X',dp:['aods']},
-  {slug:'byzrev',        name:'The Byzantine Review',                                                  abbr:'BR',   ac:1,issn:'2700-0524',dp:['byzrev']},
-  {slug:'fnp',           name:'Free Neuropathology',                                                   abbr:'FN',   ac:1,issn:'2699-4445',dp:['fnp','freeneuropathology']},
-  {slug:'ifgimpulse',    name:'IfG Impulse',                                                           abbr:'IFG',  ac:1,issn:'',         dp:['ifgimpulse']},
-  {slug:'jcsw',          name:'Jahrbuch für Christliche Sozialwissenschaften',                         abbr:'JCS',  ac:1,issn:'0075-2592',dp:['jcsw']},
-  {slug:'mittelalterdigi',name:'Mittelalter Digital',                                                  abbr:'MD',   ac:0,issn:'2702-9069',dp:['mittelalterdigi']},
-  {slug:'mfiphs',        name:'Münstersche Fachzeitschrift für islamische und philosophische Studien', abbr:'MFI',  ac:1,issn:'2749-4330',dp:['mjiphs','mfiphs']},
-  {slug:'mwsca',         name:'Münster Working Paper Series in Social and Cultural Anthropology',      abbr:'MWP',  ac:1,issn:'',         dp:['mwsca']},
-  {slug:'nn',            name:'nachbarsprache niederländisch',                                         abbr:'NN',   ac:1,issn:'',         dp:['nn']},
-  {slug:'ozean',         name:'Online Zeitschrift zur Antiken Numismatik',                            abbr:'OZeAN',ac:1,issn:'2698-3079',dp:['ozean']},
-  {slug:'paradigma',     name:'Paradigma',                                                             abbr:'PAR',  ac:1,issn:'',         dp:['paradigma']},
-  {slug:'pop',           name:'POP. Kultur & Kritik',                                                 abbr:'POP',  ac:1,issn:'2192-9408',dp:[],nd:1},
-  {slug:'replicationresearch',name:'Replication Research',                                            abbr:'RR',   ac:1,issn:'',         dp:['replicationresearch']},
-  {slug:'satura',        name:'Satura',                                                                abbr:'SAT',  ac:1,issn:'2700-2640',dp:['satura']},
-  {slug:'sbi',           name:'Schule. Bildung. Inklusion',                                           abbr:'SBI',  ac:1,issn:'',         dp:[],nd:1},
-  {slug:'sun',           name:'Soziologie und Nachhaltigkeit',                                        abbr:'SuN',  ac:1,issn:'2364-1282',dp:['sun']},
-  {slug:'tjo',           name:'Teiresias Journal Online',                                              abbr:'TJO',  ac:1,issn:'',         dp:['tjo']},
-  {slug:'tso',           name:'Teiresias Supplements Online',                                          abbr:'TSO',  ac:1,issn:'',         dp:['tso']},
-  {slug:'thrv',          name:'Theologische Revue',                                                    abbr:'TR',   ac:1,issn:'0040-568X',dp:['thrv']},
-  {slug:'ZfK',           name:'Zeitschrift für Kulturwissenschaften',                                 abbr:'ZfK',  ac:0,issn:'1862-8060',dp:[],nd:1},
-  {slug:'zkr',           name:'Zeitschrift für Kanonisches Recht',                                   abbr:'ZKR',  ac:1,issn:'',         dp:['zkr']},
-  {slug:'zpth',          name:'Zeitschrift für Pastoraltheologie',                                   abbr:'ZPTh', ac:1,issn:'0555-9308',dp:['zpth']},
-  {slug:'zts',           name:'Zeitschrift für Theoretische Soziologie',                             abbr:'ZTS',  ac:1,issn:'2195-0695',dp:['zts']}
+  {slug:'aods',           name:'Archive of Orofacial Data Science',                                    abbr:'AOD',  ac:1,issn:'2941-783X',dp:['aods']},
+  {slug:'byzrev',         name:'The Byzantine Review',                                                  abbr:'BR',   ac:1,issn:'2700-0524',dp:['byzrev']},
+  {slug:'fnp',            name:'Free Neuropathology',                                                   abbr:'FN',   ac:1,issn:'2699-4445',dp:['fnp','freeneuropathology']},
+  {slug:'ifgimpulse',     name:'IfG Impulse',                                                           abbr:'IFG',  ac:1,issn:'',         dp:['ifgimpulse']},
+  {slug:'jcsw',           name:'Jahrbuch für Christliche Sozialwissenschaften',                         abbr:'JCS',  ac:1,issn:'0075-2592',dp:['jcsw']},
+  {slug:'mittelalterdigi',name:'Mittelalter Digital',                                                   abbr:'MD',   ac:0,issn:'2702-9069',dp:['mittelalterdigi']},
+  {slug:'mfiphs',         name:'Münstersche Fachzeitschrift für islamische und philosophische Studien', abbr:'MFI',  ac:1,issn:'2749-4330',dp:['mjiphs','mfiphs']},
+  {slug:'mwsca',          name:'Münster Working Paper Series in Social and Cultural Anthropology',      abbr:'MWP',  ac:1,issn:'',         dp:['mwsca']},
+  {slug:'nn',             name:'nachbarsprache niederländisch',                                         abbr:'NN',   ac:1,issn:'',         dp:['nn']},
+  {slug:'ozean',          name:'Online Zeitschrift zur Antiken Numismatik',                            abbr:'OZeAN',ac:1,issn:'2698-3079',dp:['ozean']},
+  {slug:'paradigma',      name:'Paradigma',                                                             abbr:'PAR',  ac:1,issn:'',         dp:['paradigma']},
+  {slug:'pop',            name:'POP. Kultur & Kritik',                                                 abbr:'POP',  ac:1,issn:'2192-9408',dp:[],nd:1},
+  {slug:'replicationresearch',name:'Replication Research',                                             abbr:'RR',   ac:1,issn:'',         dp:['replicationresearch']},
+  {slug:'satura',         name:'Satura',                                                               abbr:'SAT',  ac:1,issn:'2700-2640',dp:['satura']},
+  {slug:'sbi',            name:'Schule. Bildung. Inklusion',                                           abbr:'SBI',  ac:1,issn:'',         dp:[],nd:1},
+  {slug:'sun',            name:'Soziologie und Nachhaltigkeit',                                        abbr:'SuN',  ac:1,issn:'2364-1282',dp:['sun']},
+  {slug:'tjo',            name:'Teiresias Journal Online',                                              abbr:'TJO',  ac:1,issn:'',         dp:['tjo']},
+  {slug:'tso',            name:'Teiresias Supplements Online',                                          abbr:'TSO',  ac:1,issn:'',         dp:['tso']},
+  {slug:'thrv',           name:'Theologische Revue',                                                    abbr:'TR',   ac:1,issn:'0040-568X',dp:['thrv']},
+  {slug:'ZfK',            name:'Zeitschrift für Kulturwissenschaften',                                 abbr:'ZfK',  ac:0,issn:'1862-8060',dp:[],nd:1},
+  {slug:'zkr',            name:'Zeitschrift für Kanonisches Recht',                                   abbr:'ZKR',  ac:1,issn:'',         dp:['zkr']},
+  {slug:'zpth',           name:'Zeitschrift für Pastoraltheologie',                                   abbr:'ZPTh', ac:1,issn:'0555-9308',dp:['zpth']},
+  {slug:'zts',            name:'Zeitschrift für Theoretische Soziologie',                             abbr:'ZTS',  ac:1,issn:'2195-0695',dp:['zts']}
 ];
+
+/* ── JOURNAL LOGO IDs ──
+   OJS assigns sequential integer IDs. The one confirmed mapping is
+   replicationresearch → 36 (from the public logo URL provided).
+   All others are estimates based on journal creation chronology;
+   the onerror handler falls back to the coloured abbreviation tile. */
+var JOURNAL_IDS={
+  'thrv':3,
+  'zpth':4,
+  'jcsw':5,
+  'ZfK':7,
+  'pop':11,
+  'zts':12,
+  'sun':15,
+  'nn':17,
+  'mwsca':19,
+  'tjo':20,
+  'tso':21,
+  'paradigma':24,
+  'ozean':28,
+  'byzrev':29,
+  'fnp':31,
+  'satura':32,
+  'mittelalterdigi':33,
+  'mfiphs':34,
+  'sbi':35,
+  'replicationresearch':36,
+  'zkr':37,
+  'ifgimpulse':38,
+  'aods':40
+};
+
+function logoUrl(j){
+  var id=JOURNAL_IDS[j.slug];
+  if(id)return'https://ejournals.uni-muenster.de/public/journals/'+id+'/pageHeaderLogoImage_en_US.png';
+  return null;
+}
 
 var JCOLS=['#2e7dc4','#c0392b','#27ae60','#8e44ad','#d68910','#16a085','#e74c3c','#2980b9',
            '#8d6e63','#00838f','#6d4c41','#558b2f','#4527a0','#00695c','#ad1457','#37474f',
            '#f57f17','#283593','#00897b','#e65100','#1565c0','#33691e','#880e4f'];
 J.forEach(function(j,i){j.col=JCOLS[i%JCOLS.length];j.ci=i});
 
-function logoUrl(j){
-  return 'https://ejournals.uni-muenster.de/public/journals/'+j.slug+'/pageHeaderLogoImage_en_US.png';
-}
-
 var MAXP=500,DCP=200;
 var PUBS=[],CJ=null,RID=0,CSORT='newest';
-/* Year range for journal view */
-var YR_YEARS=[],YR_MIN_IDX=0,YR_MAX_IDX=0;
-/* Year range for all journals view */
-var AV_YR_YEARS=[],AV_YR_MIN_IDX=0,AV_YR_MAX_IDX=0;
+
+/* Year filter — journal view */
+var YR_FROM='',YR_TO='';
+/* Year filter — all journals view */
+var AV_YR_FROM='',AV_YR_TO='';
 
 var AV_CACHE={};
-var AV_LOADING=false;
 var AV_RID=0;
+var AV_PUBS=[];
+var AV_SORT='newest';
+var AV_HIDDEN={};
+var AV_CHART_MODE='stacked';
 
 function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function sp(){return'<span class="spn"></span>'}
@@ -607,29 +598,23 @@ function hideTT(){TT.className='chart-tt'}
 function progShow(pct,status,phase){
   var wrap=document.getElementById('prog-wrap');
   var bar=document.getElementById('prog-bar');
-  wrap.classList.add('visible');
-  wrap.classList.remove('done');
+  wrap.classList.add('visible');wrap.classList.remove('done');
   bar.style.width=Math.min(pct,100)+'%';
   var panel=document.getElementById('fetch-panel');
   panel.classList.add('show');
   if(status)document.getElementById('fp-status').textContent=status;
-  /* Steps */
   var steps=['fps-dc','fps-oa','fps-done'];
   steps.forEach(function(id,i){
-    var el=document.getElementById(id);
-    el.classList.remove('active','done');
-    if(phase===i)el.classList.add('active');
-    else if(phase>i)el.classList.add('done');
+    var el=document.getElementById(id);el.classList.remove('active','done');
+    if(phase===i)el.classList.add('active');else if(phase>i)el.classList.add('done');
   });
   var fill=document.getElementById('fp-fill');
   fill.style.width=Math.min(pct,100)+'%';
   fill.className='fp-fill'+(phase===1?' oa':'');
 }
 function progDone(status){
-  var wrap=document.getElementById('prog-wrap');
-  var bar=document.getElementById('prog-bar');
-  wrap.classList.add('visible','done');
-  bar.style.width='100%';
+  var wrap=document.getElementById('prog-wrap');var bar=document.getElementById('prog-bar');
+  wrap.classList.add('visible','done');bar.style.width='100%';
   var panel=document.getElementById('fetch-panel');
   document.getElementById('fp-status').textContent=status||'Done';
   document.getElementById('fp-fill').style.width='100%';
@@ -648,70 +633,73 @@ function progHide(){
   document.getElementById('prog-bar').style.width='0%';
 }
 
-/* ── YEAR RANGE SLIDER (journal view) ── */
-function buildYrSlider(pubs){
-  var counts={};pubs.forEach(function(p){if(p.yr)counts[p.yr]=(counts[p.yr]||0)+1});
-  YR_YEARS=Object.keys(counts).map(Number).sort(function(a,b){return a-b});
-  if(!YR_YEARS.length){document.getElementById('yr-slider-wrap').style.display='none';return}
-  YR_MIN_IDX=0;YR_MAX_IDX=YR_YEARS.length-1;
-  var wrap=document.getElementById('yr-slider-wrap');
+/* ── YEAR SELECTS — journal view ── */
+function buildYrSelects(pubs){
+  var seen={},years=[];
+  pubs.forEach(function(p){if(p.yr&&!seen[p.yr]){seen[p.yr]=1;years.push(+p.yr)}});
+  years.sort(function(a,b){return a-b});
+  var wrap=document.getElementById('yr-filter-wrap');
+  var from=document.getElementById('yr-from');
+  var to=document.getElementById('yr-to');
+  if(!years.length){wrap.style.display='none';return}
   wrap.style.display='flex';
-  var mn=document.getElementById('yr-min');var mx=document.getElementById('yr-max');
-  mn.min=0;mn.max=YR_YEARS.length-1;mn.value=0;
-  mx.min=0;mx.max=YR_YEARS.length-1;mx.value=YR_YEARS.length-1;
-  updateYrDisplay();
-}
-function onYrSlider(){
-  var mn=+document.getElementById('yr-min').value;
-  var mx=+document.getElementById('yr-max').value;
-  if(mn>mx){var t=mn;mn=mx;mx=t;document.getElementById('yr-min').value=mn;document.getElementById('yr-max').value=mx}
-  YR_MIN_IDX=mn;YR_MAX_IDX=mx;
-  updateYrDisplay();
-  render();
-}
-function updateYrDisplay(){
-  if(!YR_YEARS.length)return;
-  var mn=YR_YEARS[YR_MIN_IDX],mx=YR_YEARS[YR_MAX_IDX];
-  document.getElementById('yr-display').textContent=mn===mx?''+mn:mn+'–'+mx;
-  /* update fill bar */
-  var track=document.getElementById('yr-track');
-  var fill=document.getElementById('yr-fill');
-  var total=YR_YEARS.length-1||1;
-  var leftPct=(YR_MIN_IDX/total)*100;
-  var rightPct=(YR_MAX_IDX/total)*100;
-  fill.style.left=leftPct+'%';fill.style.width=(rightPct-leftPct)+'%';
+  var fOpts='<option value="">Earliest</option>';
+  var tOpts='<option value="">Latest</option>';
+  years.forEach(function(yr){
+    fOpts+='<option value="'+yr+'">'+yr+'</option>';
+    tOpts+='<option value="'+yr+'">'+yr+'</option>';
+  });
+  from.innerHTML=fOpts;to.innerHTML=tOpts;
+  if(YR_FROM)from.value=YR_FROM;
+  if(YR_TO)to.value=YR_TO;
 }
 
-/* ── YEAR RANGE SLIDER (all journals view) ── */
-function buildAvYrSlider(pubs){
-  var counts={};pubs.forEach(function(p){if(p.yr)counts[p.yr]=(counts[p.yr]||0)+1});
-  AV_YR_YEARS=Object.keys(counts).map(Number).sort(function(a,b){return a-b});
-  if(!AV_YR_YEARS.length){document.getElementById('av-yr-slider-wrap').style.display='none';return}
-  AV_YR_MIN_IDX=0;AV_YR_MAX_IDX=AV_YR_YEARS.length-1;
-  var wrap=document.getElementById('av-yr-slider-wrap');
+function onYrChange(){
+  var f=document.getElementById('yr-from').value;
+  var t=document.getElementById('yr-to').value;
+  if(f&&t&&+f>+t){
+    /* auto-swap if user picks an inverted range */
+    document.getElementById('yr-from').value=t;
+    document.getElementById('yr-to').value=f;
+    YR_FROM=t;YR_TO=f;
+  }else{
+    YR_FROM=f;YR_TO=t;
+  }
+  render();
+}
+
+/* ── YEAR SELECTS — all journals view ── */
+function buildAvYrSelects(pubs){
+  var seen={},years=[];
+  pubs.forEach(function(p){if(p.yr&&!seen[p.yr]){seen[p.yr]=1;years.push(+p.yr)}});
+  years.sort(function(a,b){return a-b});
+  var wrap=document.getElementById('av-yr-filter-wrap');
+  var from=document.getElementById('av-yr-from');
+  var to=document.getElementById('av-yr-to');
+  if(!years.length){wrap.style.display='none';return}
   wrap.style.display='flex';
-  var mn=document.getElementById('av-yr-min');var mx=document.getElementById('av-yr-max');
-  mn.min=0;mn.max=AV_YR_YEARS.length-1;mn.value=0;
-  mx.min=0;mx.max=AV_YR_YEARS.length-1;mx.value=AV_YR_YEARS.length-1;
-  updateAvYrDisplay();
+  var fOpts='<option value="">Earliest</option>';
+  var tOpts='<option value="">Latest</option>';
+  years.forEach(function(yr){
+    fOpts+='<option value="'+yr+'">'+yr+'</option>';
+    tOpts+='<option value="'+yr+'">'+yr+'</option>';
+  });
+  from.innerHTML=fOpts;to.innerHTML=tOpts;
+  if(AV_YR_FROM)from.value=AV_YR_FROM;
+  if(AV_YR_TO)to.value=AV_YR_TO;
 }
-function onAvYrSlider(){
-  var mn=+document.getElementById('av-yr-min').value;
-  var mx=+document.getElementById('av-yr-max').value;
-  if(mn>mx){var t=mn;mn=mx;mx=t;document.getElementById('av-yr-min').value=mn;document.getElementById('av-yr-max').value=mx}
-  AV_YR_MIN_IDX=mn;AV_YR_MAX_IDX=mx;
-  updateAvYrDisplay();
+
+function onAvYrChange(){
+  var f=document.getElementById('av-yr-from').value;
+  var t=document.getElementById('av-yr-to').value;
+  if(f&&t&&+f>+t){
+    document.getElementById('av-yr-from').value=t;
+    document.getElementById('av-yr-to').value=f;
+    AV_YR_FROM=t;AV_YR_TO=f;
+  }else{
+    AV_YR_FROM=f;AV_YR_TO=t;
+  }
   applyAllFilter();
-}
-function updateAvYrDisplay(){
-  if(!AV_YR_YEARS.length)return;
-  var mn=AV_YR_YEARS[AV_YR_MIN_IDX],mx=AV_YR_YEARS[AV_YR_MAX_IDX];
-  document.getElementById('av-yr-display').textContent=mn===mx?''+mn:mn+'–'+mx;
-  var total=AV_YR_YEARS.length-1||1;
-  var leftPct=(AV_YR_MIN_IDX/total)*100;
-  var rightPct=(AV_YR_MAX_IDX/total)*100;
-  document.getElementById('av-yr-fill').style.left=leftPct+'%';
-  document.getElementById('av-yr-fill').style.width=(rightPct-leftPct)+'%';
 }
 
 /* ── HOME GRID ── */
@@ -720,10 +708,16 @@ function buildGrid(){
     var st=j.nd?'nd':(j.ac?'ac':'in');
     var stl=j.nd?'No DOIs':(j.ac?'Active':'Discontinued');
     var click=j.nd?'':' onclick="pick(\''+j.slug+'\')"';
-    var logoImg='<img class="hclogo" src="'+logoUrl(j)+'" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
-      +'<div class="hclogofb" style="display:none;background:'+j.col+'">'+e(j.abbr)+'</div>';
+    var url=logoUrl(j);
+    var logoHtml;
+    if(url){
+      logoHtml='<img class="hclogo" src="'+url+'" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
+        +'<div class="hclogofb" style="display:none;background:'+j.col+'">'+e(j.abbr)+'</div>';
+    }else{
+      logoHtml='<div class="hclogofb" style="background:'+j.col+'">'+e(j.abbr)+'</div>';
+    }
     return'<button class="hcard'+(j.nd?' nd':'')+'"'+click+' type="button" style="--jc:'+j.col+';animation-delay:'+(idx*.03)+'s">'
-      +'<div class="hct">'+logoImg+'<span class="htag '+st+'">'+stl+'</span></div>'
+      +'<div class="hct">'+logoHtml+'<span class="htag '+st+'">'+stl+'</span></div>'
       +'<div class="hnm">'+e(j.name)+'</div>'
       +'<div class="hsl">'+e(j.slug)+(j.issn?' · '+e(j.issn):'')+'</div>'
       +'</button>';
@@ -731,8 +725,7 @@ function buildGrid(){
 }
 
 function showHome(){
-  CJ=null;RID++;AV_RID++;
-  progHide();
+  CJ=null;RID++;AV_RID++;progHide();
   ['hs','js','as'].forEach(function(id){document.getElementById(id).style.display='none'});
   document.getElementById('hs').style.display='block';
   setTab('home');
@@ -775,6 +768,14 @@ function toggleDD(){
   document.getElementById('jdd').classList.toggle('open',ddO);
   document.getElementById('jbtn').setAttribute('aria-expanded',''+ddO);
   if(ddO){document.getElementById('dsi').focus();buildDD('')}
+
+  }
+function toggleDD(){
+  ddO=!ddO;
+  document.getElementById('jbtn').classList.toggle('open',ddO);
+  document.getElementById('jdd').classList.toggle('open',ddO);
+  document.getElementById('jbtn').setAttribute('aria-expanded',''+ddO);
+  if(ddO){document.getElementById('dsi').focus();buildDD('')}
 }
 function filterDD(v){buildDD(v)}
 document.addEventListener('click',function(ev){
@@ -790,9 +791,13 @@ function pick(slug){
   var j=J.find(function(x){return x.slug===slug});
   if(!j)return;
   CJ=j;
-  ddO=false;document.getElementById('jbtn').classList.remove('open');document.getElementById('jdd').classList.remove('open');
-  document.getElementById('jbtn').setAttribute('aria-expanded','false');document.getElementById('dsi').value='';
-  var ic=document.getElementById('jicon');ic.textContent=j.abbr;ic.className='jabbr';ic.style.background=j.col;
+  ddO=false;
+  document.getElementById('jbtn').classList.remove('open');
+  document.getElementById('jdd').classList.remove('open');
+  document.getElementById('jbtn').setAttribute('aria-expanded','false');
+  document.getElementById('dsi').value='';
+  var ic=document.getElementById('jicon');
+  ic.textContent=j.abbr;ic.className='jabbr';ic.style.background=j.col;
   document.getElementById('jlbl').innerHTML=e(j.name)+'<small>'+e(j.slug)+'</small>';
   ['hs','js','as'].forEach(function(id){document.getElementById(id).style.display='none'});
   document.getElementById('js').style.display='block';
@@ -800,14 +805,25 @@ function pick(slug){
   document.getElementById('jvn').textContent=j.name;
   document.getElementById('jvi').textContent=j.issn?'ISSN '+j.issn:'';
   document.getElementById('jvl').href='https://ejournals.uni-muenster.de/'+j.slug;
-  var fb=document.getElementById('jvh-logofb');
-  fb.textContent=j.abbr;fb.style.background=j.col;
-  var img=new Image();
-  img.onload=function(){fb.style.backgroundImage='url('+logoUrl(j)+')';fb.style.backgroundSize='cover';fb.textContent=''};
-  img.src=logoUrl(j);
+
+  /* Header logo */
+  var logoImg=document.getElementById('jvh-logo');
+  var logoFb=document.getElementById('jvh-logofb');
+  logoFb.textContent=j.abbr;logoFb.style.background=j.col;
+  logoImg.style.display='none';logoFb.style.display='flex';
+  var url=logoUrl(j);
+  if(url){
+    var testImg=new Image();
+    testImg.onload=function(){
+      logoImg.src=url;logoImg.style.display='block';logoFb.style.display='none';
+    };
+    testImg.onerror=function(){logoImg.style.display='none';logoFb.style.display='flex'};
+    testImg.src=url;
+  }
+
   buildDD('');
-  YR_YEARS=[];YR_MIN_IDX=0;YR_MAX_IDX=0;
-  document.getElementById('yr-slider-wrap').style.display='none';
+  YR_FROM='';YR_TO='';
+  document.getElementById('yr-filter-wrap').style.display='none';
   CSORT='newest';
   var ss=document.getElementById('fb-sort');if(ss)ss.value='newest';
   load(j);
@@ -844,7 +860,7 @@ async function load(j){
   }
 
   PUBS=recs.map(parseDC).filter(Boolean);
-  buildYrSlider(PUBS);
+  buildYrSelects(PUBS);
   render();drawCharts();summ();
   progShow(50,'DOI records loaded. Fetching citations from OpenAlex…',1);
   st('L','Fetching citations from OpenAlex…');
@@ -884,6 +900,7 @@ async function fetchDC(j,rid,cb){
   }
   return all.slice(0,MAXP);
 }
+
 function parseDC(r){
   try{
     var a=r.attributes;if(!a||!a.doi)return null;
@@ -892,39 +909,50 @@ function parseDC(r){
     (a.creators||[]).forEach(function(c){
       var n=c.familyName?(c.familyName+(c.givenName?', '+c.givenName:'')):(c.name||'');
       var orc=null;
-      (c.nameIdentifiers||[]).forEach(function(ni){if((ni.nameIdentifierScheme||'').toUpperCase()==='ORCID')orc=(ni.nameIdentifier||'').replace(/^https?:\/\/orcid\.org\//,'')});
+      (c.nameIdentifiers||[]).forEach(function(ni){
+        if((ni.nameIdentifierScheme||'').toUpperCase()==='ORCID')
+          orc=(ni.nameIdentifier||'').replace(/^https?:\/\/orcid\.org\//,'');
+      });
       if(n)auth.push({n:n,o:orc});
     });
     var yr=a.publicationYear?+a.publicationYear:null;
     return{doi:a.doi,title:title,auth:auth,yr:yr,url:a.url||('https://doi.org/'+a.doi),key:dk(a.doi),oa:null,cby:[]};
   }catch(ex){return null}
 }
+
 async function oaBatch(batch){
   var filter=batch.map(function(p){return'https://doi.org/'+p.doi}).join('|');
   var d=await fj('https://api.openalex.org/works?filter=doi:'+encodeURIComponent(filter)+'&per-page=50&select=doi,cited_by_count,counts_by_year',15000);
   if(!d||!d.results)return;
   var bd={};
   d.results.forEach(function(w){if(w.doi)bd[w.doi.toLowerCase().replace(/^https?:\/\/doi\.org\//,'')]=w});
-  batch.forEach(function(p){var w=bd[p.doi.toLowerCase()];if(!w)return;p.oa=w.cited_by_count!=null?w.cited_by_count:0;p.cby=w.counts_by_year||[]});
+  batch.forEach(function(p){
+    var w=bd[p.doi.toLowerCase()];
+    if(!w)return;
+    p.oa=w.cited_by_count!=null?w.cited_by_count:0;
+    p.cby=w.counts_by_year||[];
+  });
 }
 
 /* ── FILTER + SORT (journal view) ── */
 function applySort(){CSORT=document.getElementById('fb-sort').value;render()}
+
 function clearFilter(){
-  YR_MIN_IDX=0;YR_MAX_IDX=YR_YEARS.length?YR_YEARS.length-1:0;
-  var mn=document.getElementById('yr-min');var mx=document.getElementById('yr-max');
-  if(mn){mn.value=0}if(mx&&YR_YEARS.length){mx.value=YR_YEARS.length-1}
-  updateYrDisplay();
+  YR_FROM='';YR_TO='';
+  document.getElementById('yr-from').value='';
+  document.getElementById('yr-to').value='';
   render();
 }
 
 function filteredSorted(pubs,sort){
   var out=pubs.slice();
-  /* Year range filter */
-  if(YR_YEARS.length){
-    var yMin=YR_YEARS[YR_MIN_IDX],yMax=YR_YEARS[YR_MAX_IDX];
-    var allYears=(YR_MIN_IDX===0&&YR_MAX_IDX===YR_YEARS.length-1);
-    if(!allYears)out=out.filter(function(p){return p.yr&&p.yr>=yMin&&p.yr<=yMax});
+  if(YR_FROM||YR_TO){
+    out=out.filter(function(p){
+      if(!p.yr)return false;
+      if(YR_FROM&&p.yr<+YR_FROM)return false;
+      if(YR_TO&&p.yr>+YR_TO)return false;
+      return true;
+    });
   }
   if(sort==='newest')out.sort(function(a,b){return b.key-a.key});
   else if(sort==='oldest')out.sort(function(a,b){return a.key-b.key});
@@ -936,10 +964,13 @@ function render(){
   var s=filteredSorted(PUBS,CSORT);
   var fc=document.getElementById('fb-count');
   if(fc){
-    var isFiltered=YR_YEARS.length&&!(YR_MIN_IDX===0&&YR_MAX_IDX===YR_YEARS.length-1);
+    var isFiltered=!!(YR_FROM||YR_TO);
     fc.textContent=isFiltered?s.length+' of '+PUBS.length+' shown':'';
   }
-  if(!s.length&&PUBS.length){document.getElementById('plist').innerHTML='<div class="note info"><strong>No publications match the filter.</strong><p>Try a different year range or clear the filter.</p></div>';return}
+  if(!s.length&&PUBS.length){
+    document.getElementById('plist').innerHTML='<div class="note info"><strong>No publications match the filter.</strong><p>Try a different year range or clear the filter.</p></div>';
+    return;
+  }
   if(!s.length)return;
   document.getElementById('plist').innerHTML=s.map(function(p,i){return card(p,i,CJ)}).join('');
   if(typeof window._altmetric_embed_init==='function')window._altmetric_embed_init();
@@ -989,7 +1020,8 @@ function card(p,i,j,showJBadge){
     +'<span class="lsep"></span>'
     +'<a class="el" href="'+gsUrl+'" target="_blank">Google Scholar</a>'
     +'</div></div>'
-    +'<div class="pdnt"><div class="altmetric-embed" data-badge-type="donut" data-doi="'+p.doi+'" data-hide-no-mentions="false" data-badge-popover="left"></div><div class="dlbl">Altmetric</div></div>'
+    +'<div class="pdnt"><div class="altmetric-embed" data-badge-type="donut" data-doi="'+p.doi
+    +'" data-hide-no-mentions="false" data-badge-popover="left"></div><div class="dlbl">Altmetric</div></div>'
     +'</div>';
 }
 
@@ -1004,16 +1036,11 @@ function exportCSV(mode){
   if(mode==='journal'){
     if(!PUBS||!PUBS.length){alert('No publications loaded yet.');return}
     rows=filteredSorted(PUBS,CSORT).map(function(p){
-      return[
-        csvEscape(p.doi),
-        csvEscape(p.title),
+      return[csvEscape(p.doi),csvEscape(p.title),
         csvEscape(p.auth?p.auth.map(function(a){return a.n}).join('; '):''),
-        csvEscape(p.yr||''),
-        csvEscape(p.oa!==null?p.oa:''),
+        csvEscape(p.yr||''),csvEscape(p.oa!==null?p.oa:''),
         csvEscape('https://doi.org/'+p.doi),
-        csvEscape(CJ?CJ.name:''),
-        csvEscape(CJ?CJ.slug:'')
-      ].join(',');
+        csvEscape(CJ?CJ.name:''),csvEscape(CJ?CJ.slug:'')].join(',');
     });
     filename=(CJ?CJ.slug:'journal')+'-publications.csv';
   }else{
@@ -1024,21 +1051,16 @@ function exportCSV(mode){
     else if(AV_SORT==='cites')pubs.sort(function(a,b){return(b.oa||0)-(a.oa||0)});
     else if(AV_SORT==='journal')pubs.sort(function(a,b){return(a.j?a.j.name:'').localeCompare(b.j?b.j.name:'')});
     rows=pubs.map(function(p){
-      return[
-        csvEscape(p.doi),
-        csvEscape(p.title),
+      return[csvEscape(p.doi),csvEscape(p.title),
         csvEscape(p.auth?p.auth.map(function(a){return a.n}).join('; '):''),
-        csvEscape(p.yr||''),
-        csvEscape(p.oa!==null?p.oa:''),
+        csvEscape(p.yr||''),csvEscape(p.oa!==null?p.oa:''),
         csvEscape('https://doi.org/'+p.doi),
-        csvEscape(p.j?p.j.name:''),
-        csvEscape(p.j?p.j.slug:'')
-      ].join(',');
+        csvEscape(p.j?p.j.name:''),csvEscape(p.j?p.j.slug:'')].join(',');
     });
     filename='all-journals-publications.csv';
   }
   var header='DOI,Title,Authors,Year,Citations (OpenAlex),URL,Journal Name,Journal Slug';
-  var csv='\uFEFF'+header+'\n'+rows.join('\n'); /* BOM for Excel UTF-8 */
+  var csv='\uFEFF'+header+'\n'+rows.join('\n');
   var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');a.href=url;a.download=filename;
@@ -1051,32 +1073,28 @@ function clearCharts(){
   ['cpw','ccw'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=''});
   ['cpa','cca','yap','yac'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=''});
 }
-
 function drawCharts(){
   var pb={},cb={};
   PUBS.forEach(function(p){
     if(p.yr)pb[p.yr]=(pb[p.yr]||0)+1;
-    (p.cby||[]).forEach(function(cy){if(cy.year&&cy.cited_by_count)cb[cy.year]=(cb[cy.year]||0)+cy.cited_by_count});
+    (p.cby||[]).forEach(function(cy){
+      if(cy.year&&cy.cited_by_count)cb[cy.year]=(cb[cy.year]||0)+cy.cited_by_count;
+    });
   });
   barChart('cpw','cpa','yap',pb,'var(--accent)','pub');
   barChart('ccw','cca','yac',cb,'#27ae60','cite');
 }
-
 function barChart(wrapId,axId,yaxId,obj,col,kind){
-  var wrap=document.getElementById(wrapId);
-  var ax=document.getElementById(axId);
-  var yax=document.getElementById(yaxId);
+  var wrap=document.getElementById(wrapId),ax=document.getElementById(axId),yax=document.getElementById(yaxId);
   var keys=Object.keys(obj).map(Number).sort(function(a,b){return a-b});
   if(!keys.length){if(wrap)wrap.innerHTML='';if(ax)ax.innerHTML='';if(yax)yax.innerHTML='';return}
   var vals=keys.map(function(k){return obj[k]});
   var maxV=Math.max.apply(null,vals)||1;
   var W=400,H=110,pT=4,pB=2,pL=2,pR=2;
   var n=keys.length,slot=(W-pL-pR)/n,bw=Math.max(2,slot*.7);
-  var yticks=[0,.25,.5,.75,1].reverse();
   if(yax){
-    yax.innerHTML=yticks.map(function(t){
-      var v=Math.round(maxV*t);
-      return'<span class="y-tick">'+fn(v)+'</span>';
+    yax.innerHTML=[1,.75,.5,.25,0].map(function(t){
+      return'<span class="y-tick">'+fn(Math.round(maxV*t))+'</span>';
     }).join('');
   }
   var out='<svg viewBox="0 0 '+W+' '+(H+pT+pB)+'" preserveAspectRatio="none" width="100%" height="100%" style="display:block">';
@@ -1105,43 +1123,40 @@ function summ(){
   document.getElementById('svp').textContent=fn(PUBS.length);
   document.getElementById('svc').textContent=fn(PUBS.reduce(function(s,p){return s+(p.oa||0)},0));
   var yrs=PUBS.map(function(p){return p.yr}).filter(Boolean).map(Number);
-  if(yrs.length){var mn=Math.min.apply(null,yrs),mx=Math.max.apply(null,yrs);document.getElementById('svs').textContent=mn===mx?''+mn:mn+'–'+mx}
+  if(yrs.length){
+    var mn=Math.min.apply(null,yrs),mx=Math.max.apply(null,yrs);
+    document.getElementById('svs').textContent=mn===mx?''+mn:mn+'–'+mx;
+  }
 }
-function st(cls,msg){document.getElementById('sdot').className='sdot '+cls;document.getElementById('stxt').textContent=msg}
+function st(cls,msg){
+  document.getElementById('sdot').className='sdot '+cls;
+  document.getElementById('stxt').textContent=msg;
+}
 
 /* ═══════════════════════════════
    ALL JOURNALS VIEW
 ═══════════════════════════════ */
-var AV_PUBS=[];
-var AV_FILT_J='',AV_SORT='newest';
-var AV_HIDDEN={};
-var AV_CHART_MODE='stacked';
-
 function setChartMode(mode){
   AV_CHART_MODE=mode;
   ['ct-pub','ct-cite'].forEach(function(id){
-    var el=document.getElementById(id);
-    if(!el)return;
+    var el=document.getElementById(id);if(!el)return;
     el.querySelectorAll('.ct-btn').forEach(function(b){
       b.classList.toggle('on',b.textContent.toLowerCase()===mode);
     });
   });
   drawAllCharts();
 }
-
 function selectAllJournals(){
   J.filter(function(j){return!j.nd&&j.dp.length}).forEach(function(j){
     AV_HIDDEN[j.slug]=false;
-    var el=document.getElementById('leg-'+j.slug);
-    if(el)el.classList.remove('off');
+    var el=document.getElementById('leg-'+j.slug);if(el)el.classList.remove('off');
   });
   applyAllFilter();
 }
 function selectNoneJournals(){
   J.filter(function(j){return!j.nd&&j.dp.length}).forEach(function(j){
     AV_HIDDEN[j.slug]=true;
-    var el=document.getElementById('leg-'+j.slug);
-    if(el)el.classList.add('off');
+    var el=document.getElementById('leg-'+j.slug);if(el)el.classList.add('off');
   });
   applyAllFilter();
 }
@@ -1154,11 +1169,6 @@ async function showAll(){
   var ic=document.getElementById('jicon');ic.textContent='—';ic.className='jabbr none';ic.style.background='';
   document.getElementById('jlbl').innerHTML='Choose a journal<small>'+J.length+' journals</small>';
 
-  var jsel=document.getElementById('av-journal');
-  jsel.innerHTML='<option value="">All journals</option>'+J.filter(function(j){return!j.nd}).map(function(j){
-    return'<option value="'+j.slug+'">'+e(j.abbr)+' – '+e(j.name)+'</option>';
-  }).join('');
-
   var leg=document.getElementById('jlegend');
   leg.innerHTML=J.filter(function(j){return!j.nd&&j.dp.length}).map(function(j){
     return'<div class="jleg-it" id="leg-'+j.slug+'" onclick="toggleLegend(\''+j.slug+'\')">'
@@ -1166,13 +1176,11 @@ async function showAll(){
   }).join('');
 
   avSt('L','Loading all journals…');
-  AV_PUBS=[];
-  AV_YR_YEARS=[];AV_YR_MIN_IDX=0;AV_YR_MAX_IDX=0;
-  document.getElementById('av-yr-slider-wrap').style.display='none';
+  AV_PUBS=[];AV_YR_FROM='';AV_YR_TO='';
+  document.getElementById('av-yr-filter-wrap').style.display='none';
 
   var trackableJ=J.filter(function(j){return!j.nd&&j.dp.length});
   var loaded=0;
-
   progShow(2,'Loading all journals…',0);
 
   for(var ji=0;ji<trackableJ.length;ji++){
@@ -1199,8 +1207,7 @@ async function showAll(){
     jPubs.forEach(function(p){p.j=j});
     AV_PUBS=AV_PUBS.concat(jPubs);
     loaded++;
-
-    buildAvYrSlider(AV_PUBS);
+    buildAvYrSelects(AV_PUBS);
     applyAllFilter();
   }
 
@@ -1218,17 +1225,13 @@ function toggleLegend(slug){
 }
 
 function applyAllFilter(){
-  AV_FILT_J=document.getElementById('av-journal').value||'';
   AV_SORT=document.getElementById('av-sort').value||'newest';
   _updateAll();
 }
 function clearAllFilter(){
-  AV_FILT_J='';AV_SORT='newest';
-  AV_YR_MIN_IDX=0;AV_YR_MAX_IDX=AV_YR_YEARS.length?AV_YR_YEARS.length-1:0;
-  var mn=document.getElementById('av-yr-min');var mx=document.getElementById('av-yr-max');
-  if(mn){mn.value=0}if(mx&&AV_YR_YEARS.length){mx.value=AV_YR_YEARS.length-1}
-  updateAvYrDisplay();
-  document.getElementById('av-journal').value='';
+  AV_SORT='newest';AV_YR_FROM='';AV_YR_TO='';
+  document.getElementById('av-yr-from').value='';
+  document.getElementById('av-yr-to').value='';
   document.getElementById('av-sort').value='newest';
   _updateAll();
 }
@@ -1236,15 +1239,8 @@ function clearAllFilter(){
 function _filteredAVPubs(){
   return AV_PUBS.filter(function(p){
     if(AV_HIDDEN[p.j&&p.j.slug])return false;
-    if(AV_FILT_J&&p.j&&p.j.slug!==AV_FILT_J)return false;
-    /* Year range */
-    if(AV_YR_YEARS.length){
-      var allYrs=(AV_YR_MIN_IDX===0&&AV_YR_MAX_IDX===AV_YR_YEARS.length-1);
-      if(!allYrs){
-        var yMin=AV_YR_YEARS[AV_YR_MIN_IDX],yMax=AV_YR_YEARS[AV_YR_MAX_IDX];
-        if(!p.yr||p.yr<yMin||p.yr>yMax)return false;
-      }
-    }
+    if(AV_YR_FROM&&p.yr&&p.yr<+AV_YR_FROM)return false;
+    if(AV_YR_TO&&p.yr&&p.yr>+AV_YR_TO)return false;
     return true;
   });
 }
@@ -1255,18 +1251,15 @@ function _updateAll(){
   else if(AV_SORT==='oldest')pubs.sort(function(a,b){return a.key-b.key});
   else if(AV_SORT==='cites')pubs.sort(function(a,b){return(b.oa||0)-(a.oa||0)});
   else if(AV_SORT==='journal')pubs.sort(function(a,b){return(a.j?a.j.name:'').localeCompare(b.j?b.j.name:'')});
-
-  avSumm(pubs);
-  drawAllCharts(pubs);
+  avSumm(pubs);drawAllCharts(pubs);
   var cnt=document.getElementById('av-count');
-  var isFiltered=AV_FILT_J||(AV_YR_YEARS.length&&!(AV_YR_MIN_IDX===0&&AV_YR_MAX_IDX===AV_YR_YEARS.length-1));
+  var isFiltered=!!(AV_YR_FROM||AV_YR_TO);
   if(cnt)cnt.textContent=isFiltered?pubs.length+' of '+AV_PUBS.length+' shown':'';
   var display=pubs.slice(0,300);
-  var more=pubs.length>300?'<div class="note info" style="margin-top:12px"><strong>Showing 300 of '+pubs.length+' publications</strong><p>Use the year or journal filter to narrow the view.</p></div>':'';
+  var more=pubs.length>300?'<div class="note info" style="margin-top:12px"><strong>Showing 300 of '+pubs.length+' publications</strong><p>Use the year filter to narrow the view.</p></div>':'';
   document.getElementById('avlist').innerHTML=display.map(function(p,i){return card(p,i,p.j,true)}).join('')+more;
   if(typeof window._altmetric_embed_init==='function')window._altmetric_embed_init();
 }
-function renderAll(){_updateAll()}
 
 function drawAllCharts(pubs){
   if(!pubs)pubs=_filteredAVPubs();
@@ -1275,11 +1268,7 @@ function drawAllCharts(pubs){
   pubs.forEach(function(p){
     if(!p.j)return;
     var slug=p.j.slug;
-    if(p.yr){
-      allYears[p.yr]=1;
-      if(!pb[p.yr])pb[p.yr]={};
-      pb[p.yr][slug]=(pb[p.yr][slug]||0)+1;
-    }
+    if(p.yr){allYears[p.yr]=1;if(!pb[p.yr])pb[p.yr]={};pb[p.yr][slug]=(pb[p.yr][slug]||0)+1}
     (p.cby||[]).forEach(function(cy){
       if(cy.year&&cy.cited_by_count){
         allYears[cy.year]=1;
@@ -1301,12 +1290,9 @@ function drawAllCharts(pubs){
 function stackedBarChart(wrapId,axId,yaxId,data,years,journals,kind){
   var wrap=document.getElementById(wrapId),ax=document.getElementById(axId),yax=document.getElementById(yaxId);
   if(!years.length){if(wrap)wrap.innerHTML='';if(ax)ax.innerHTML='';if(yax)yax.innerHTML='';return}
-  var totals=years.map(function(yr){
-    var t=0;journals.forEach(function(j){t+=(data[yr]&&data[yr][j.slug])||0});return t;
-  });
+  var totals=years.map(function(yr){var t=0;journals.forEach(function(j){t+=(data[yr]&&data[yr][j.slug])||0});return t});
   var maxV=Math.max.apply(null,totals)||1;
-  var W=400,H=110,pT=4,pB=2,pL=2,pR=2,n=years.length;
-  var slot=(W-pL-pR)/n,bw=Math.max(2,slot*.75);
+  var W=400,H=110,pT=4,pB=2,pL=2,pR=2,n=years.length,slot=(W-pL-pR)/n,bw=Math.max(2,slot*.75);
   if(yax){
     yax.innerHTML=[1,.75,.5,.25,0].map(function(t){
       return'<span class="y-tick">'+fn(Math.round(maxV*t))+'</span>';
@@ -1318,15 +1304,11 @@ function stackedBarChart(wrapId,axId,yaxId,data,years,journals,kind){
     out+='<line x1="'+pL+'" y1="'+y+'" x2="'+(W-pR)+'" y2="'+y+'" stroke="#e2e7f0" stroke-width="1"/>';
   });
   out+='<line x1="'+pL+'" y1="'+(pT+H)+'" x2="'+(W-pR)+'" y2="'+(pT+H)+'" stroke="var(--border-mid)" stroke-width="1"/>';
-
   years.forEach(function(yr,i){
-    var x=(pL+i*slot+(slot-bw)/2);
-    var curY=pT+H;
+    var x=pL+i*slot+(slot-bw)/2,curY=pT+H;
     journals.forEach(function(j){
-      var v=(data[yr]&&data[yr][j.slug])||0;
-      if(!v)return;
-      var bh=Math.max(1,(v/maxV)*(H-2));
-      curY-=bh;
+      var v=(data[yr]&&data[yr][j.slug])||0;if(!v)return;
+      var bh=Math.max(1,(v/maxV)*(H-2));curY-=bh;
       var lbl=kind==='pub'?v+' pub'+(v!==1?'s':''):v+' citation'+(v!==1?'s':'');
       out+='<rect x="'+x.toFixed(1)+'" y="'+curY.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+bh.toFixed(1)+'"'
         +' fill="'+j.col+'" fill-opacity=".88"'
@@ -1345,12 +1327,7 @@ function groupedBarChart(wrapId,axId,yaxId,data,years,journals,kind){
   var wrap=document.getElementById(wrapId),ax=document.getElementById(axId),yax=document.getElementById(yaxId);
   if(!years.length){if(wrap)wrap.innerHTML='';if(ax)ax.innerHTML='';if(yax)yax.innerHTML='';return}
   var maxV=1;
-  years.forEach(function(yr){
-    journals.forEach(function(j){
-      var v=(data[yr]&&data[yr][j.slug])||0;
-      if(v>maxV)maxV=v;
-    });
-  });
+  years.forEach(function(yr){journals.forEach(function(j){var v=(data[yr]&&data[yr][j.slug])||0;if(v>maxV)maxV=v})});
   var W=400,H=110,pT=4,pB=2,pL=2,pR=2,n=years.length,nJ=journals.length;
   var slot=(W-pL-pR)/n,bw=Math.max(1,(slot*.85)/nJ),gap=slot*.15/2;
   if(yax){
@@ -1366,11 +1343,8 @@ function groupedBarChart(wrapId,axId,yaxId,data,years,journals,kind){
   out+='<line x1="'+pL+'" y1="'+(pT+H)+'" x2="'+(W-pR)+'" y2="'+(pT+H)+'" stroke="var(--border-mid)" stroke-width="1"/>';
   years.forEach(function(yr,i){
     journals.forEach(function(j,ji){
-      var v=(data[yr]&&data[yr][j.slug])||0;
-      if(!v)return;
-      var x=pL+i*slot+gap+ji*bw;
-      var bh=Math.max(1,(v/maxV)*(H-2));
-      var y=pT+H-bh;
+      var v=(data[yr]&&data[yr][j.slug])||0;if(!v)return;
+      var x=pL+i*slot+gap+ji*bw,bh=Math.max(1,(v/maxV)*(H-2)),y=pT+H-bh;
       var lbl=kind==='pub'?v+' pub'+(v!==1?'s':''):v+' citation'+(v!==1?'s':'');
       out+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+bh.toFixed(1)+'"'
         +' fill="'+j.col+'" fill-opacity=".88"'
