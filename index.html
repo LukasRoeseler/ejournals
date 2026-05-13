@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>e-Journals Münster</title>
+<title>Bibliometrics Dashboard for the e-Journals Münster</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
@@ -226,7 +226,66 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .pcount{font-size:11.5px;color:var(--textm);margin-left:2px;font-weight:400}
 
-@media(max-width:760px){
+/* ── YEAR RANGE SLIDER ── */
+.yr-slider-wrap{display:flex;flex-direction:column;gap:4px;min-width:180px}
+.yr-range-labels{display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--navy);font-family:var(--mono)}
+.yr-track{position:relative;height:20px;display:flex;align-items:center}
+.yr-fill{position:absolute;height:4px;background:var(--accent);border-radius:2px;pointer-events:none;z-index:1}
+.yr-thumb{position:absolute;width:100%;appearance:none;-webkit-appearance:none;background:transparent;pointer-events:none;height:4px;outline:none;z-index:2}
+.yr-thumb::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2);cursor:pointer;pointer-events:all;transition:transform .12s,box-shadow .12s}
+.yr-thumb::-webkit-slider-thumb:hover{transform:scale(1.18);box-shadow:0 2px 8px rgba(46,125,196,.4)}
+.yr-thumb::-webkit-slider-runnable-track{height:4px;background:var(--bg-chip);border-radius:2px}
+.yr-thumb::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2);cursor:pointer;pointer-events:all}
+
+/* ── EXPORT BUTTON ── */
+.export-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;background:var(--navy);color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:background .12s,transform .1s;white-space:nowrap}
+.export-btn:hover{background:var(--accent);transform:translateY(-1px)}
+.export-btn:active{transform:none}
+
+/* ── PROGRESS STEPS ── */
+.prog-step{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--textm);padding:2px 7px;background:var(--bg-chip);border-radius:12px;border:1px solid var(--border);transition:all .2s}
+.prog-step.done{color:var(--green);background:var(--green-bg);border-color:var(--green-bdr)}
+.prog-step.active{color:var(--accent-dk);background:var(--accent-lt);border-color:var(--accent-bdr)}
+.prog-step svg{flex-shrink:0}
+
+/* ── ENTRANCE ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@keyframes countUp{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+
+/* Home screen entrance */
+.hero{animation:fadeUp .5s cubic-bezier(.2,0,.2,1) both}
+.hgl{animation:fadeUp .5s .08s cubic-bezier(.2,0,.2,1) both}
+.hgrid{animation:fadeUp .5s .14s cubic-bezier(.2,0,.2,1) both}
+
+/* Journal cards stagger */
+.hcard{animation:fadeUp .35s both;opacity:0}
+
+/* Journal view entrance */
+.jvh{animation:fadeUp .4s cubic-bezier(.2,0,.2,1) both}
+.sstrip{animation:fadeUp .4s .06s cubic-bezier(.2,0,.2,1) both}
+.crow{animation:fadeUp .4s .12s cubic-bezier(.2,0,.2,1) both}
+.filters-bar{animation:fadeUp .4s .16s cubic-bezier(.2,0,.2,1) both}
+
+/* Stat numbers pop in */
+.snum{transition:color .3s}
+.snum.updated{animation:countUp .4s cubic-bezier(.2,0,.8,1)}
+
+/* Pub card stagger (already had fup, keep it but improve) */
+.pit{animation:fadeUp .28s both;opacity:0}
+
+/* Chart bars grow from bottom — done via CSS on SVG rects */
+.bar-enter{animation:barGrow .5s cubic-bezier(.2,0,.2,1) both;transform-origin:bottom center}
+@keyframes barGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+
+/* Dropdown slide */
+.jdd.open{animation:slideDown .15s cubic-bezier(.2,0,.2,1)}
+
+/* Status dot pulse */
+.sdot.L{animation:blink 1.2s ease-in-out infinite,fadein .3s}
+
+
   .hdr,.ft{padding:0 14px}
   .wrap{padding:0 14px 60px}
   .jsel-btn{min-width:140px}
@@ -247,7 +306,7 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 
 <header class="hdr">
   <div class="wordmark" onclick="showHome()">
-    <span class="wm-title">e-Journals Münster</span>
+    <span class="wm-title">Bibliometrics Dashboard · e-Journals Münster</span>
   </div>
 
   <div style="display:flex;align-items:center;gap:4px">
@@ -332,9 +391,28 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
       </div>
     </div>
 
+    <!-- Progress bar -->
+    <div id="prog-wrap" style="display:none;margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-size:10.5px;font-weight:600;color:var(--textm)" id="prog-label">Loading…</span>
+        <span style="font-size:10.5px;font-family:var(--mono);color:var(--textm)" id="prog-pct">0%</span>
+      </div>
+      <div style="height:5px;background:var(--bg-chip);border-radius:3px;overflow:hidden">
+        <div id="prog-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#27ae60);border-radius:3px;transition:width .3s ease"></div>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:5px;flex-wrap:wrap" id="prog-steps"></div>
+    </div>
+
     <div class="filters-bar">
-      <span class="fb-label">Filter</span>
-      <select class="fb-select" id="fb-year" onchange="applyFilter()"><option value="">All years</option></select>
+      <span class="fb-label">Year range</span>
+      <div class="yr-slider-wrap" id="yr-slider-wrap">
+        <div class="yr-range-labels"><span id="yr-lo-lbl">—</span><span id="yr-hi-lbl">—</span></div>
+        <div class="yr-track" id="yr-track">
+          <div class="yr-fill" id="yr-fill"></div>
+          <input class="yr-thumb" type="range" id="yr-lo" min="0" max="100" value="0" oninput="onYrSlider()">
+          <input class="yr-thumb" type="range" id="yr-hi" min="0" max="100" value="100" oninput="onYrSlider()">
+        </div>
+      </div>
       <span class="fb-sep"></span>
       <span class="fb-label">Sort</span>
       <select class="fb-select" id="fb-sort" onchange="applySort()">
@@ -342,7 +420,12 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
         <option value="oldest">Oldest first</option>
         <option value="cites">Most cited</option>
       </select>
-      <button class="fb-clear" onclick="clearFilter()">✕ Clear filter</button>
+      <span class="fb-sep"></span>
+      <button class="export-btn" onclick="exportCSV()" title="Export visible publications as CSV">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v7M3 5l3 3 3-3M1 10h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Export CSV
+      </button>
+      <button class="fb-clear" onclick="clearFilter()">✕ Reset</button>
       <span class="fb-count" id="fb-count"></span>
     </div>
 
@@ -393,9 +476,28 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
     </div>
     <div class="jlegend" id="jlegend"></div>
 
+    <!-- All-journals progress bar -->
+    <div id="av-prog-wrap" style="display:none;margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-size:10.5px;font-weight:600;color:var(--textm)" id="av-prog-label">Loading…</span>
+        <span style="font-size:10.5px;font-family:var(--mono);color:var(--textm)" id="av-prog-pct">0%</span>
+      </div>
+      <div style="height:5px;background:var(--bg-chip);border-radius:3px;overflow:hidden">
+        <div id="av-prog-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#27ae60);border-radius:3px;transition:width .3s ease"></div>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:5px;flex-wrap:wrap" id="av-prog-steps"></div>
+    </div>
+
     <div class="filters-bar">
-      <span class="fb-label">Filter</span>
-      <select class="fb-select" id="av-year" onchange="applyAllFilter()"><option value="">All years</option></select>
+      <span class="fb-label">Year range</span>
+      <div class="yr-slider-wrap" id="av-yr-slider-wrap">
+        <div class="yr-range-labels"><span id="av-yr-lo-lbl">—</span><span id="av-yr-hi-lbl">—</span></div>
+        <div class="yr-track" id="av-yr-track">
+          <div class="yr-fill" id="av-yr-fill"></div>
+          <input class="yr-thumb" type="range" id="av-yr-lo" min="0" max="100" value="0" oninput="onAvYrSlider()">
+          <input class="yr-thumb" type="range" id="av-yr-hi" min="0" max="100" value="100" oninput="onAvYrSlider()">
+        </div>
+      </div>
       <select class="fb-select" id="av-journal" onchange="applyAllFilter()"><option value="">All journals</option></select>
       <span class="fb-sep"></span>
       <span class="fb-label">Sort</span>
@@ -405,6 +507,11 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
         <option value="cites">Most cited</option>
         <option value="journal">By journal</option>
       </select>
+      <span class="fb-sep"></span>
+      <button class="export-btn" onclick="exportAllCSV()" title="Export visible publications as CSV">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v7M3 5l3 3 3-3M1 10h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Export CSV
+      </button>
       <button class="fb-clear" onclick="clearAllFilter()">✕ Clear</button>
       <span class="fb-count" id="av-count"></span>
     </div>
@@ -415,7 +522,9 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 </div>
 
 <footer class="ft">
-  <span>e-Journals Münster Dashboard</span>
+  <span style="font-weight:600;color:var(--text2)">Bibliometrics Dashboard · e-Journals Münster</span>
+  <span class="fts">·</span>
+  <span style="background:var(--bg-soft);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-size:10px;font-weight:700;color:var(--textm);letter-spacing:.06em">v0.1</span>
   <span class="fts">·</span>
   <span>An independent project by <a href="https://lukasroeseler.github.io" target="_blank">Lukas Röseler</a></span>
   <span class="fts">·</span>
@@ -424,6 +533,10 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
   <span><a href="https://ejournals.uni-muenster.de" target="_blank">ULB Münster ↗</a></span>
   <span class="fts">·</span>
   <span>Updated: <span id="ftu">—</span></span>
+  <div style="width:100%;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:10.5px;color:var(--textm);line-height:1.5;display:flex;align-items:flex-start;gap:6px">
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M6.5 4v3.5M6.5 9v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+    <span><strong style="color:var(--text2)">⚠ Citation metrics must not be used as a proxy for research quality.</strong> Citation counts reflect usage patterns and are influenced by field size, publication age, language, and many other factors unrelated to scientific merit. This dashboard is intended for informational and transparency purposes only.</span>
+  </div>
 </footer>
 
 <script>
@@ -468,12 +581,16 @@ function logoUrl(j){
 }
 
 var MAXP=500,DCP=200;
-var PUBS=[],CJ=null,RID=0,CSORT='newest',FYEAR='';
+var PUBS=[],CJ=null,RID=0,CSORT='newest';
 
 /* All-journals state */
-var AV_CACHE={};  /* slug -> PUBS array */
+var AV_CACHE={};
 var AV_LOADING=false;
 var AV_RID=0;
+var AV_PUBS=[];
+var AV_FILT_J='',AV_SORT='newest';
+var AV_HIDDEN={};
+var AV_CHART_MODE='stacked';
 
 /* utils */
 function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
@@ -496,13 +613,13 @@ function hideTT(){TT.className='chart-tt'}
 
 /* ── HOME GRID ── */
 function buildGrid(){
-  document.getElementById('hgrid').innerHTML=J.map(function(j){
+  document.getElementById('hgrid').innerHTML=J.map(function(j,idx){
     var st=j.nd?'nd':(j.ac?'ac':'in');
     var stl=j.nd?'No DOIs':(j.ac?'Active':'Discontinued');
     var click=j.nd?'':' onclick="pick(\''+j.slug+'\')"';
     var logoImg='<img class="hclogo" src="'+logoUrl(j)+'" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
       +'<div class="hclogofb" style="display:none;background:'+j.col+'">'+e(j.abbr)+'</div>';
-    return'<button class="hcard'+(j.nd?' nd':'')+'"'+click+' type="button" style="--jc:'+j.col+'">'
+    return'<button class="hcard'+(j.nd?' nd':'')+'"'+click+' type="button" style="--jc:'+j.col+';animation-delay:'+(idx*0.03).toFixed(2)+'s">'
       +'<div class="hct">'+logoImg+'<span class="htag '+st+'">'+stl+'</span></div>'
       +'<div class="hnm">'+e(j.name)+'</div>'
       +'<div class="hsl">'+e(j.slug)+(j.issn?' · '+e(j.issn):'')+'</div>'
@@ -587,20 +704,30 @@ function pick(slug){
   img.onload=function(){fb.style.backgroundImage='url('+logoUrl(j)+')';fb.style.backgroundSize='cover';fb.textContent=''};
   img.src=logoUrl(j);
   buildDD('');
-  FYEAR='';CSORT='newest';
+  YR_YEARS=[];YR_LO=0;YR_HI=9999;CSORT='newest';
   var ss=document.getElementById('fb-sort');if(ss)ss.value='newest';
+  var stepsEl=document.getElementById('prog-steps');if(stepsEl)stepsEl.innerHTML='';
   load(j);
 }
 
 /* ── LOAD JOURNAL ── */
 async function load(j){
   var rid=++RID;PUBS=[];
+  YR_YEARS=[];YR_LO=0;YR_HI=9999;
   st('L','Loading…');
   document.getElementById('plist').innerHTML='';
   ['svp','svc','svs'].forEach(function(id){document.getElementById(id).textContent='—'});
   clearCharts();
 
+  /* Reset progress UI */
+  var stepsEl=document.getElementById('prog-steps');
+  if(stepsEl)stepsEl.innerHTML='';
+  showProgress('',1,'Connecting to DataCite…');
+  addProgressStep('','dc','DataCite metadata','active');
+  addProgressStep('','oa','OpenAlex citations','pending');
+
   if(j.nd){
+    hideProgress('');
     st('D','No DOI registration for this journal.');
     document.getElementById('plist').innerHTML='<div class="note info"><strong>No DOIs registered</strong>'
       +'<p>'+e(j.name)+' does not register DOIs with DataCite.</p>'
@@ -608,27 +735,38 @@ async function load(j){
     return;
   }
 
-  var recs=await fetchDC(j,rid,function(msg){if(rid===RID)st('L',msg)});
+  var recs=await fetchDC(j,rid,function(msg){if(rid===RID){st('L',msg);setProgress('',1,2,msg)}});
   if(rid!==RID)return;
+
   if(!recs.length){
+    hideProgress('');
     st('E','No records found in DataCite.');
     document.getElementById('plist').innerHTML='<div class="note err"><strong>No publications found</strong>'
       +'<p>DataCite returned no records for <code>'+j.dp.map(function(p){return'10.17879/'+p}).join(', ')+'</code>.</p></div>';
     return;
   }
 
+  addProgressStep('','dc','DataCite metadata','done');
+  addProgressStep('','oa','OpenAlex citations','active');
+
   PUBS=recs.map(parseDC).filter(Boolean);
   buildYearFilter(PUBS,'fb-year');
+  setProgress('',1,2,'Metadata loaded · fetching citations…');
   render();drawCharts();summ();
 
-  st('L','Fetching citations from OpenAlex…');
+  var total=Math.ceil(PUBS.length/25);
   for(var i=0;i<PUBS.length;i+=25){
     if(rid!==RID)return;
     await oaBatch(PUBS.slice(i,i+25));
+    var done=Math.floor(i/25)+1;
+    setProgress('',done,total,'OpenAlex: '+Math.min(i+25,PUBS.length)+' / '+PUBS.length+' publications');
+    st('L','OpenAlex: '+Math.min(i+25,PUBS.length)+' / '+PUBS.length+'…');
     render();summ();drawCharts();
-    if(PUBS.length>25)st('L','OpenAlex: '+Math.min(i+25,PUBS.length)+' / '+PUBS.length+'…');
   }
+
   if(rid!==RID)return;
+  addProgressStep('','oa','OpenAlex citations','done');
+  hideProgress('');
   document.getElementById('ftu').textContent=new Date().toISOString().slice(0,10);
   st('D','Loaded '+fn(PUBS.length)+' publications · DataCite + OpenAlex');
   AV_CACHE[j.slug]=PUBS.slice();
@@ -676,22 +814,175 @@ async function oaBatch(batch){
   batch.forEach(function(p){var w=bd[p.doi.toLowerCase()];if(!w)return;p.oa=w.cited_by_count!=null?w.cited_by_count:0;p.cby=w.counts_by_year||[]});
 }
 
-/* ── YEAR FILTER ── */
-function buildYearFilter(pubs,selId){
-  var counts={};pubs.forEach(function(p){if(p.yr)counts[p.yr]=(counts[p.yr]||0)+1});
-  var yrs=Object.keys(counts).map(Number).sort(function(a,b){return b-a});
-  var sel=document.getElementById(selId);
-  sel.innerHTML='<option value="">All years</option>'+yrs.map(function(y){return'<option value="'+y+'">'+y+' ('+counts[y]+')</option>'}).join('');
+/* ── YEAR RANGE SLIDER STATE ── */
+var YR_YEARS=[]; /* sorted array of available years for journal view */
+var YR_LO=0,YR_HI=0;
+var AV_YR_YEARS=[]; /* for all-journals view */
+var AV_YR_LO=0,AV_YR_HI=0;
+
+function buildYearSlider(pubs,prefix){
+  var counts={};
+  pubs.forEach(function(p){if(p.yr)counts[p.yr]=(counts[p.yr]||0)+1});
+  var yrs=Object.keys(counts).map(Number).sort(function(a,b){return a-b});
+  if(!yrs.length)return;
+  var isAv=prefix==='av-';
+  if(isAv){AV_YR_YEARS=yrs;AV_YR_LO=yrs[0];AV_YR_HI=yrs[yrs.length-1]}
+  else{YR_YEARS=yrs;YR_LO=yrs[0];YR_HI=yrs[yrs.length-1]}
+  var lo=document.getElementById(prefix+'yr-lo'),hi=document.getElementById(prefix+'yr-hi');
+  if(!lo||!hi)return;
+  lo.min=0;lo.max=yrs.length-1;lo.value=0;
+  hi.min=0;hi.max=yrs.length-1;hi.value=yrs.length-1;
+  updateSliderUI(prefix,yrs,0,yrs.length-1);
 }
 
-/* ── FILTER + SORT (journal view) ── */
-function applyFilter(){FYEAR=document.getElementById('fb-year').value;render()}
-function applySort(){CSORT=document.getElementById('fb-sort').value;render()}
-function clearFilter(){FYEAR='';document.getElementById('fb-year').value='';render()}
+function updateSliderUI(prefix,yrs,loIdx,hiIdx){
+  var loLbl=document.getElementById(prefix+'yr-lo-lbl'),hiLbl=document.getElementById(prefix+'yr-hi-lbl');
+  var fill=document.getElementById(prefix+'yr-fill');
+  if(loLbl)loLbl.textContent=yrs[loIdx]||'—';
+  if(hiLbl)hiLbl.textContent=yrs[hiIdx]||'—';
+  if(fill){
+    var pct1=yrs.length>1?loIdx/(yrs.length-1)*100:0;
+    var pct2=yrs.length>1?hiIdx/(yrs.length-1)*100:100;
+    fill.style.left=pct1+'%';fill.style.width=(pct2-pct1)+'%';
+  }
+}
 
-function filteredSorted(pubs,sort,year){
+function onYrSlider(){
+  var lo=document.getElementById('yr-lo'),hi=document.getElementById('yr-hi');
+  if(!lo||!hi||!YR_YEARS.length)return;
+  var li=+lo.value,hi_=+hi.value;
+  if(li>hi_){var t=li;li=hi_;hi_=t;lo.value=li;hi.value=hi_}
+  YR_LO=YR_YEARS[li];YR_HI=YR_YEARS[hi_];
+  updateSliderUI('',YR_YEARS,li,hi_);
+  render();
+}
+
+function onAvYrSlider(){
+  var lo=document.getElementById('av-yr-lo'),hi=document.getElementById('av-yr-hi');
+  if(!lo||!hi||!AV_YR_YEARS.length)return;
+  var li=+lo.value,hi_=+hi.value;
+  if(li>hi_){var t=li;li=hi_;hi_=t;lo.value=li;hi.value=hi_}
+  AV_YR_LO=AV_YR_YEARS[li];AV_YR_HI=AV_YR_YEARS[hi_];
+  updateSliderUI('av-',AV_YR_YEARS,li,hi_);
+  applyAllFilter();
+}
+
+/* ── PROGRESS BAR ── */
+function showProgress(prefix,total){
+  var wrap=document.getElementById((prefix||'')+'prog-wrap');
+  if(wrap)wrap.style.display='block';
+  setProgress(prefix,0,total,'Loading…');
+}
+function setProgress(prefix,done,total,label){
+  var p=prefix||'';
+  var bar=document.getElementById(p+'prog-bar');
+  var pct_el=document.getElementById(p+'prog-pct');
+  var lbl_el=document.getElementById(p+'prog-label');
+  var pct=total>0?Math.round(done/total*100):0;
+  if(bar)bar.style.width=pct+'%';
+  if(pct_el)pct_el.textContent=pct+'%';
+  if(lbl_el)lbl_el.textContent=label;
+}
+function hideProgress(prefix){
+  var wrap=document.getElementById((prefix||'')+'prog-wrap');
+  if(wrap){wrap.style.opacity='0';wrap.style.transition='opacity .5s';setTimeout(function(){wrap.style.display='none';wrap.style.opacity='1';wrap.style.transition=''},600)}
+}
+function addProgressStep(prefix,id,label,state){
+  /* state: 'active'|'done'|'pending' */
+  var steps=document.getElementById((prefix||'')+'prog-steps');
+  if(!steps)return;
+  var icon=state==='done'?'<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    :state==='active'?'<svg width="10" height="10" viewBox="0 0 10 10" style="animation:spin .7s linear infinite"><circle cx="5" cy="5" r="3.5" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="8" stroke-dashoffset="4"/></svg>'
+    :'<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="var(--border-mid)" stroke-width="1.5"/></svg>';
+  var existing=document.getElementById('pstep-'+id);
+  var html='<span class="prog-step '+(state==='done'?'done':state==='active'?'active':'')+'" id="pstep-'+id+'">'+icon+label+'</span>';
+  if(existing)existing.outerHTML=html;
+  else steps.insertAdjacentHTML('beforeend',html);
+}
+
+/* ── ANIMATED STAT UPDATE ── */
+function animStat(elId,val){
+  var el=document.getElementById(elId);
+  if(!el)return;
+  el.textContent=fn(val);
+  el.classList.remove('updated');
+  void el.offsetWidth; /* reflow to retrigger */
+  el.classList.add('updated');
+}
+
+/* ── YEAR FILTER (legacy buildYearFilter kept for backward compat) ── */
+function buildYearFilter(pubs,selId){
+  /* For journal view: build slider instead */
+  if(selId==='fb-year'){buildYearSlider(pubs,'');return}
+  /* For all-journals: build slider */
+  if(selId==='av-year'){buildYearSlider(pubs,'av-');return}
+}
+
+/* ── CSV EXPORT ── */
+function pubsToCSV(pubs,includeJournal){
+  var rows=[['DOI','Title','Authors','Year','URL',includeJournal?'Journal':'',includeJournal?'Journal Abbr':'','Citations (OpenAlex)'].filter(Boolean)];
+  pubs.forEach(function(p){
+    var auth=(p.auth||[]).map(function(a){return a.n}).join('; ');
+    var row=[
+      'https://doi.org/'+p.doi,
+      (p.title||'').replace(/"/g,'""'),
+      auth.replace(/"/g,'""'),
+      p.yr||'',
+      p.url||('https://doi.org/'+p.doi),
+    ];
+    if(includeJournal){
+      row.push((p.j?p.j.name:'').replace(/"/g,'""'));
+      row.push(p.j?p.j.abbr:'');
+    }
+    row.push(p.oa!=null?p.oa:'');
+    rows.push(row);
+  });
+  return rows.map(function(r){return r.map(function(c){return '"'+String(c)+'"'}).join(',')}).join('\r\n');
+}
+
+function downloadCSV(csv,filename){
+  var blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download=filename;a.style.display='none';
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url)},200);
+}
+
+function exportCSV(){
+  var s=filteredSorted(PUBS,CSORT,null); /* uses year range below */
+  /* apply year range */
+  if(YR_YEARS.length){s=s.filter(function(p){return p.yr>=YR_LO&&p.yr<=YR_HI})}
+  if(!s.length){alert('No publications to export.');return}
+  var name=(CJ?CJ.slug:'journal')+'_publications_'+new Date().toISOString().slice(0,10)+'.csv';
+  downloadCSV(pubsToCSV(s,false),name);
+}
+
+function exportAllCSV(){
+  var s=_filteredAVPubs();
+  if(!s.length){alert('No publications to export.');return}
+  var name='all_journals_publications_'+new Date().toISOString().slice(0,10)+'.csv';
+  downloadCSV(pubsToCSV(s,true),name);
+}
+
+
+/* ── FILTER + SORT (journal view) ── */
+function applyFilter(){render()}
+function applySort(){CSORT=document.getElementById('fb-sort').value;render()}
+function clearFilter(){
+  YR_LO=YR_YEARS[0]||0;YR_HI=YR_YEARS[YR_YEARS.length-1]||9999;
+  if(YR_YEARS.length){
+    var lo=document.getElementById('yr-lo'),hi=document.getElementById('yr-hi');
+    if(lo)lo.value=0;if(hi)hi.value=YR_YEARS.length-1;
+    updateSliderUI('',YR_YEARS,0,YR_YEARS.length-1);
+  }
+  render();
+}
+
+function filteredSorted(pubs,sort,_unused){
   var out=pubs.slice();
-  if(year)out=out.filter(function(p){return String(p.yr)===String(year)});
+  /* Apply year range from slider */
+  if(YR_YEARS.length){out=out.filter(function(p){return p.yr!=null&&p.yr>=YR_LO&&p.yr<=YR_HI})}
   if(sort==='newest')out.sort(function(a,b){return b.key-a.key});
   else if(sort==='oldest')out.sort(function(a,b){return a.key-b.key});
   else if(sort==='cites')out.sort(function(a,b){return(b.oa||0)-(a.oa||0)});
@@ -817,8 +1108,8 @@ function barChart(wrapId,axId,yaxId,obj,col,kind){
 
 /* ── SUMMARY ── */
 function summ(){
-  document.getElementById('svp').textContent=fn(PUBS.length);
-  document.getElementById('svc').textContent=fn(PUBS.reduce(function(s,p){return s+(p.oa||0)},0));
+  animStat('svp',PUBS.length);
+  animStat('svc',PUBS.reduce(function(s,p){return s+(p.oa||0)},0));
   var yrs=PUBS.map(function(p){return p.yr}).filter(Boolean).map(Number);
   if(yrs.length){var mn=Math.min.apply(null,yrs),mx=Math.max.apply(null,yrs);document.getElementById('svs').textContent=mn===mx?''+mn:mn+'–'+mx}
 }
@@ -827,10 +1118,6 @@ function st(cls,msg){document.getElementById('sdot').className='sdot '+cls;docum
 /* ═══════════════════════════════
    ALL JOURNALS VIEW
 ═══════════════════════════════ */
-var AV_PUBS=[];   /* flat array with .j = journal ref */
-var AV_FILT_J='',AV_FILT_Y='',AV_SORT='newest';
-var AV_HIDDEN={};  /* slug -> bool (legend toggle) */
-var AV_CHART_MODE='stacked'; /* 'stacked' | 'grouped' */
 
 function setChartMode(mode){
   AV_CHART_MODE=mode;
@@ -885,13 +1172,19 @@ async function showAll(){
 
   avSt('L','Loading all journals…');
   AV_PUBS=[];
+  AV_YR_YEARS=[];AV_YR_LO=0;AV_YR_HI=9999;
 
   var trackableJ=J.filter(function(j){return!j.nd&&j.dp.length});
   var loaded=0;
+  var stepsEl=document.getElementById('av-prog-steps');
+  if(stepsEl)stepsEl.innerHTML='';
+  showProgress('av-',trackableJ.length,'Loading journals…');
 
   for(var ji=0;ji<trackableJ.length;ji++){
     if(rid!==AV_RID)return;
     var j=trackableJ[ji];
+    setProgress('av-',ji,trackableJ.length,'Loading: '+j.abbr);
+    addProgressStep('av-','j-'+j.slug,j.abbr,AV_CACHE[j.slug]?'done':'active');
     avSt('L','Loading '+e(j.name)+' ('+loaded+' / '+trackableJ.length+')…');
 
     var jPubs;
@@ -911,12 +1204,15 @@ async function showAll(){
     jPubs.forEach(function(p){p.j=j});
     AV_PUBS=AV_PUBS.concat(jPubs);
     loaded++;
+    addProgressStep('av-','j-'+j.slug,j.abbr,'done');
+    setProgress('av-',loaded,trackableJ.length,loaded+' / '+trackableJ.length+' journals loaded');
 
     buildYearFilter(AV_PUBS,'av-year');
     applyAllFilter();
   }
 
   if(rid!==AV_RID)return;
+  hideProgress('av-');
   avSt('D','Loaded '+fn(AV_PUBS.length)+' publications from '+loaded+' journals');
   document.getElementById('ftu').textContent=new Date().toISOString().slice(0,10);
 }
@@ -930,23 +1226,28 @@ function toggleLegend(slug){
 
 /* Single function that filters, updates charts, stats AND list */
 function applyAllFilter(){
-  AV_FILT_Y=document.getElementById('av-year').value||'';
   AV_FILT_J=document.getElementById('av-journal').value||'';
   AV_SORT=document.getElementById('av-sort').value||'newest';
   _updateAll();
 }
 function clearAllFilter(){
-  AV_FILT_Y='';AV_FILT_J='';AV_SORT='newest';
-  document.getElementById('av-year').value='';
+  AV_FILT_J='';AV_SORT='newest';
   document.getElementById('av-journal').value='';
   document.getElementById('av-sort').value='newest';
+  /* reset year slider */
+  if(AV_YR_YEARS.length){
+    AV_YR_LO=AV_YR_YEARS[0];AV_YR_HI=AV_YR_YEARS[AV_YR_YEARS.length-1];
+    var lo=document.getElementById('av-yr-lo'),hi=document.getElementById('av-yr-hi');
+    if(lo)lo.value=0;if(hi)hi.value=AV_YR_YEARS.length-1;
+    updateSliderUI('av-',AV_YR_YEARS,0,AV_YR_YEARS.length-1);
+  }
   _updateAll();
 }
 
 function _filteredAVPubs(){
   return AV_PUBS.filter(function(p){
     if(AV_HIDDEN[p.j&&p.j.slug])return false;
-    if(AV_FILT_Y&&String(p.yr)!==AV_FILT_Y)return false;
+    if(AV_YR_YEARS.length&&p.yr!=null&&(p.yr<AV_YR_LO||p.yr>AV_YR_HI))return false;
     if(AV_FILT_J&&p.j&&p.j.slug!==AV_FILT_J)return false;
     return true;
   });
@@ -1105,9 +1406,10 @@ function groupedBarChart(wrapId,axId,yaxId,data,years,journals,kind){
 function avSumm(pubs){
   if(!pubs)pubs=_filteredAVPubs();
   var js=new Set(pubs.map(function(p){return p.j&&p.j.slug}).filter(Boolean)).size;
-  document.getElementById('av-j').textContent=js||J.filter(function(j){return!j.nd&&AV_CACHE[j.slug]}).length;
-  document.getElementById('av-p').textContent=fn(pubs.length);
-  document.getElementById('av-c').textContent=fn(pubs.reduce(function(s,p){return s+(p.oa||0)},0));
+  var jCount=js||J.filter(function(j){return!j.nd&&AV_CACHE[j.slug]}).length;
+  animStat('av-j',jCount);
+  animStat('av-p',pubs.length);
+  animStat('av-c',pubs.reduce(function(s,p){return s+(p.oa||0)},0));
   var yrs=pubs.map(function(p){return p.yr}).filter(Boolean).map(Number);
   if(yrs.length){var mn=Math.min.apply(null,yrs),mx=Math.max.apply(null,yrs);document.getElementById('av-y').textContent=mn+'–'+mx}
   else document.getElementById('av-y').textContent='—';
