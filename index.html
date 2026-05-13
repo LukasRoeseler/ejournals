@@ -3,14 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>e-Journals Münster</title>
+<title>Bibliometrics Dashboard for the e-Journals Münster</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  /* Dark navy from Intertextor screenshot */
   --navy:#0d2137;--navy2:#152d4a;--navy3:#1e3a5a;--navy-bdr:#2a4d70;
   --accent:#2e7dc4;--accent-lt:#e8f2fb;--accent-bdr:#a8cde8;--accent-dk:#1a5490;
   --bg:#f5f7fa;--bg-card:#fff;--bg-soft:#eef1f6;--bg-chip:#e2e7f0;
@@ -22,7 +21,6 @@
   --serif:'Source Serif 4',Georgia,serif;
   --sans:'Source Sans 3',system-ui,sans-serif;
   --mono:'Source Code Pro',monospace;
-  /* Journal color palette - 20 distinct colors for the all-journals view */
   --jc0:#2e7dc4;--jc1:#c0392b;--jc2:#27ae60;--jc3:#8e44ad;--jc4:#d68910;
   --jc5:#16a085;--jc6:#e74c3c;--jc7:#2980b9;--jc8:#8d6e63;--jc9:#00838f;
   --jc10:#6d4c41;--jc11:#558b2f;--jc12:#4527a0;--jc13:#00695c;--jc14:#ad1457;
@@ -31,28 +29,38 @@
 html{scroll-behavior:smooth}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
 
+/* ── ENTRANCE ANIMATION ── */
+@keyframes fadeSlideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+@keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(46,125,196,.35)}70%{box-shadow:0 0 0 8px rgba(46,125,196,0)}100%{box-shadow:0 0 0 0 rgba(46,125,196,0)}}
+@keyframes countUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes barGrow{from{transform:scaleY(0);transform-origin:bottom}to{transform:scaleY(1);transform-origin:bottom}}
+@keyframes progressPulse{0%,100%{opacity:.7}50%{opacity:1}}
+
 /* ── HEADER ── */
-.hdr{background:var(--navy);padding:0 36px;display:flex;align-items:stretch;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.35);min-height:56px}
+.hdr{background:var(--navy);padding:0 36px;display:flex;align-items:stretch;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.35);min-height:56px;animation:fadeIn .3s ease}
 .wordmark{display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer;padding:10px 0}
 .wm-title{font-family:var(--sans);font-size:15px;font-weight:700;color:#fff;letter-spacing:.01em;line-height:1}
 
-/* ── NAV TABS (header right) ── */
+/* ── NAV TABS ── */
 .hdr-nav{display:flex;align-items:center;gap:2px;padding:8px 0}
-.hdr-tab{padding:6px 14px;border:none;background:transparent;color:rgba(255,255,255,.65);font-family:var(--sans);font-size:12.5px;font-weight:500;cursor:pointer;border-radius:5px;transition:all .15s;white-space:nowrap}
-.hdr-tab:hover{background:rgba(255,255,255,.1);color:#fff}
+.hdr-tab{padding:6px 14px;border:none;background:transparent;color:rgba(255,255,255,.65);font-family:var(--sans);font-size:12.5px;font-weight:500;cursor:pointer;border-radius:5px;transition:all .2s;white-space:nowrap}
+.hdr-tab:hover{background:rgba(255,255,255,.1);color:#fff;transform:translateY(-1px)}
 .hdr-tab.on{background:var(--accent);color:#fff}
 
 /* ── JOURNAL PICKER ── */
 .jsel{position:relative;display:flex;align-items:center;margin-left:8px}
-.jsel-btn{display:flex;align-items:center;gap:8px;padding:6px 14px;height:auto;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:6px;cursor:pointer;font-family:var(--sans);font-size:12.5px;color:#fff;font-weight:500;transition:background .12s;min-width:200px;max-width:320px}
-.jsel-btn:hover{background:rgba(255,255,255,.18)}
-.jabbr{width:24px;height:24px;border-radius:4px;flex-shrink:0;background:var(--accent);border:none;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;font-family:var(--mono)}
+.jsel-btn{display:flex;align-items:center;gap:8px;padding:6px 14px;height:auto;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:6px;cursor:pointer;font-family:var(--sans);font-size:12.5px;color:#fff;font-weight:500;transition:background .15s,transform .15s;min-width:200px;max-width:320px}
+.jsel-btn:hover{background:rgba(255,255,255,.18);transform:translateY(-1px)}
+.jabbr{width:24px;height:24px;border-radius:4px;flex-shrink:0;background:var(--accent);border:none;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;font-family:var(--mono);transition:transform .2s}
 .jabbr.none{background:rgba(255,255,255,.15);color:rgba(255,255,255,.6)}
 .jlbl{flex:1;text-align:left;line-height:1.2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .jlbl small{display:block;font-size:9.5px;color:rgba(255,255,255,.5);font-weight:400}
-.chev{color:rgba(255,255,255,.6);flex-shrink:0;transition:transform .18s}
+.chev{color:rgba(255,255,255,.6);flex-shrink:0;transition:transform .22s cubic-bezier(.4,0,.2,1)}
 .jsel-btn.open .chev{transform:rotate(180deg)}
-.jdd{position:absolute;top:calc(100% + 6px);right:0;width:380px;max-height:440px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.18);z-index:500;overflow:hidden;opacity:0;transform:translateY(-6px) scaleY(.96);pointer-events:none;transition:opacity .15s,transform .15s;transform-origin:top right}
+.jdd{position:absolute;top:calc(100% + 6px);right:0;width:380px;max-height:440px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.18);z-index:500;overflow:hidden;opacity:0;transform:translateY(-8px) scaleY(.95);pointer-events:none;transition:opacity .18s cubic-bezier(.4,0,.2,1),transform .18s cubic-bezier(.4,0,.2,1);transform-origin:top right}
 .jdd.open{opacity:1;transform:none;pointer-events:all}
 .dd-sw{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:var(--bg-soft)}
 .dd-sw svg{color:var(--textm);flex-shrink:0}
@@ -61,8 +69,8 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14
 .dd-list::-webkit-scrollbar{width:4px}
 .dd-list::-webkit-scrollbar-thumb{background:var(--border-mid);border-radius:2px}
 .dd-gl{padding:8px 14px 3px;font-size:9px;font-weight:700;color:var(--textm);text-transform:uppercase;letter-spacing:.12em}
-.dd-it{display:flex;align-items:center;gap:9px;padding:7px 12px;cursor:pointer;border-left:3px solid transparent;transition:background .1s}
-.dd-it:hover{background:var(--bg-soft)}
+.dd-it{display:flex;align-items:center;gap:9px;padding:7px 12px;cursor:pointer;border-left:3px solid transparent;transition:background .12s,transform .1s}
+.dd-it:hover{background:var(--bg-soft);transform:translateX(2px)}
 .dd-it.sel{background:var(--accent-lt);border-left-color:var(--accent)}
 .dd-ab{width:26px;height:26px;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;font-family:var(--mono)}
 .dd-tx{flex:1;min-width:0}
@@ -74,6 +82,28 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14
 .dd-bg.nd{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bdr)}
 .dd-em{padding:24px;text-align:center;font-size:13px;color:var(--textm)}
 
+/* ── PROGRESS BAR ── */
+.prog-bar-wrap{position:fixed;top:56px;left:0;right:0;z-index:199;height:3px;pointer-events:none;opacity:0;transition:opacity .2s}
+.prog-bar-wrap.visible{opacity:1}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--accent),#5ba8e8,var(--accent));background-size:200% 100%;width:0%;transition:width .4s ease;animation:progressPulse 1.5s ease infinite}
+.prog-bar-wrap.done .prog-bar{background:var(--green);animation:none}
+
+/* ── FETCH STATUS PANEL ── */
+.fetch-panel{position:fixed;bottom:20px;right:20px;z-index:300;min-width:280px;max-width:360px;background:var(--navy);border:1px solid var(--navy-bdr);border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.35);padding:14px 16px;opacity:0;transform:translateY(12px) scale(.97);pointer-events:none;transition:opacity .22s,transform .22s;font-family:var(--sans)}
+.fetch-panel.show{opacity:1;transform:none;pointer-events:all}
+.fp-title{font-size:10px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.fp-status{font-size:12px;color:#fff;margin-bottom:10px;line-height:1.5;min-height:18px}
+.fp-track{height:4px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden;margin-bottom:8px}
+.fp-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .35s ease;width:0%}
+.fp-fill.oa{background:#27ae60}
+.fp-steps{display:flex;flex-direction:column;gap:4px}
+.fp-step{display:flex;align-items:center;gap:7px;font-size:11px;color:rgba(255,255,255,.55);transition:color .2s}
+.fp-step.active{color:#fff}
+.fp-step.done{color:rgba(255,255,255,.7)}
+.fp-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.2);flex-shrink:0;transition:background .2s}
+.fp-step.active .fp-dot{background:var(--accent);animation:pulseRing .9s ease infinite}
+.fp-step.done .fp-dot{background:var(--green);animation:none}
+
 /* ── LAYOUT ── */
 .wrap{max-width:1200px;margin:0 auto;padding:0 36px 80px}
 
@@ -81,16 +111,16 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14
 #hs,#js,#as{display:none}
 
 /* ── HOME ── */
-.hero{padding:52px 0 40px;border-bottom:1px solid var(--border);margin-bottom:36px}
+.hero{padding:52px 0 40px;border-bottom:1px solid var(--border);margin-bottom:36px;animation:fadeSlideIn .45s ease both}
 .hero h1{font-family:var(--serif);font-size:38px;font-weight:700;line-height:1.12;letter-spacing:-.02em;color:var(--navy);margin-bottom:14px}
 .hero h1 em{color:var(--accent);font-style:normal;border-bottom:3px solid var(--accent-bdr)}
 .hero p{font-size:15px;color:var(--text2);max-width:540px;line-height:1.72;margin-bottom:22px}
-.hint{display:inline-flex;align-items:center;gap:8px;background:var(--accent-lt);border:1px solid var(--accent-bdr);border-radius:7px;padding:9px 14px;font-size:12.5px;color:var(--accent-dk);font-weight:500}
-.hgl{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--navy);margin-bottom:18px;letter-spacing:-.01em}
+.hint{display:inline-flex;align-items:center;gap:8px;background:var(--accent-lt);border:1px solid var(--accent-bdr);border-radius:7px;padding:9px 14px;font-size:12.5px;color:var(--accent-dk);font-weight:500;animation:fadeIn .6s .3s both}
+.hgl{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--navy);margin-bottom:18px;letter-spacing:-.01em;animation:fadeSlideIn .4s .15s both}
 .hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
-.hcard{border:1px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s;background:var(--bg-card);display:flex;flex-direction:column;gap:6px;text-align:left;font-family:var(--sans);position:relative;overflow:hidden}
+.hcard{border:1px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;transition:border-color .18s,box-shadow .18s,transform .18s;background:var(--bg-card);display:flex;flex-direction:column;gap:6px;text-align:left;font-family:var(--sans);position:relative;overflow:hidden;animation:fadeSlideIn .4s both}
 .hcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--jc)}
-.hcard:hover{border-color:var(--accent);box-shadow:0 4px 16px rgba(46,125,196,.12);transform:translateY(-2px)}
+.hcard:hover{border-color:var(--accent);box-shadow:0 4px 20px rgba(46,125,196,.15);transform:translateY(-3px)}
 .hcard.nd{opacity:.55;cursor:default}
 .hcard.nd:hover{border-color:var(--border);box-shadow:none;transform:none}
 .hct{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -104,30 +134,32 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14
 .hsl{font-size:10px;color:var(--textm);font-family:var(--mono);padding-left:4px}
 
 /* ── JOURNAL VIEW ── */
-.jvh{padding:32px 0 22px;border-bottom:1px solid var(--border);margin-bottom:24px;display:flex;align-items:flex-start;gap:20px}
+.jvh{padding:32px 0 22px;border-bottom:1px solid var(--border);margin-bottom:24px;display:flex;align-items:flex-start;gap:20px;animation:fadeSlideIn .35s ease both}
 .jvh-logo{width:56px;height:56px;object-fit:contain;border-radius:8px;border:1px solid var(--border);flex-shrink:0;background:var(--bg-card);padding:4px}
-.jvh-logofb{width:56px;height:56px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;font-weight:700;color:#fff}
+.jvh-logofb{width:56px;height:56px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;font-weight:700;color:#fff;transition:transform .25s}
+.jvh-logofb:hover{transform:scale(1.05)}
 .jvh-text{}
 .jvn{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--navy);letter-spacing:-.015em;line-height:1.15;margin-bottom:7px}
 .jvm{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .jvi{font-family:var(--mono);font-size:10.5px;color:var(--textm)}
-.jvl{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-lt);border:1px solid var(--accent-bdr);border-radius:5px;padding:3px 9px;text-decoration:none;transition:background .12s}
-.jvl:hover{background:#d1e8f8}
+.jvl{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-lt);border:1px solid var(--accent-bdr);border-radius:5px;padding:3px 9px;text-decoration:none;transition:background .15s,transform .15s}
+.jvl:hover{background:#d1e8f8;transform:translateY(-1px)}
 
 /* ── STATS STRIP ── */
-.sstrip{display:flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:24px;background:var(--bg-card)}
+.sstrip{display:flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:24px;background:var(--bg-card);animation:scaleIn .35s .1s ease both}
 .scell{flex:1;padding:16px 18px;text-align:center;border-right:1px solid var(--border)}
 .scell:last-child{border-right:none}
-.snum{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--navy);line-height:1;margin-bottom:3px;font-variant-numeric:tabular-nums}
+.snum{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--navy);line-height:1;margin-bottom:3px;font-variant-numeric:tabular-nums;animation:countUp .4s .2s both}
 .slbl{font-size:9.5px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.07em}
 
 /* ── CHARTS ── */
-.crow{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
-.ccard{border:1px solid var(--border);border-radius:10px;padding:16px 18px;background:var(--bg-card)}
+.crow{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;animation:fadeSlideIn .4s .15s both}
+.ccard{border:1px solid var(--border);border-radius:10px;padding:16px 18px;background:var(--bg-card);transition:box-shadow .2s}
+.ccard:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
 .ctitle-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .ctitle{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--textm)}
 .chart-toggle{display:flex;gap:2px;background:var(--bg-chip);border-radius:5px;padding:2px}
-.ct-btn{font-size:10px;font-weight:600;padding:3px 9px;border:none;background:transparent;color:var(--textm);cursor:pointer;border-radius:4px;font-family:var(--sans);transition:all .12s}
+.ct-btn{font-size:10px;font-weight:600;padding:3px 9px;border:none;background:transparent;color:var(--textm);cursor:pointer;border-radius:4px;font-family:var(--sans);transition:all .15s}
 .ct-btn:hover{color:var(--text)}
 .ct-btn.on{background:var(--bg-card);color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .chart-area{display:flex;gap:0;align-items:flex-end}
@@ -142,27 +174,45 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14
 .chart-tt{position:fixed;background:var(--navy);color:#fff;font-size:11px;font-family:var(--sans);font-weight:600;padding:5px 9px;border-radius:5px;pointer-events:none;white-space:nowrap;z-index:9999;opacity:0;transition:opacity .1s;box-shadow:0 4px 12px rgba(0,0,0,.3)}
 .chart-tt.show{opacity:1}
 
+/* ── YEAR RANGE SLIDER ── */
+.yr-slider-wrap{display:flex;flex-direction:column;gap:6px;min-width:200px}
+.yr-slider-label{font-size:10.5px;font-weight:700;color:var(--textm);text-transform:uppercase;letter-spacing:.07em}
+.yr-slider-display{font-size:12px;font-weight:600;color:var(--text);font-family:var(--mono);background:var(--bg-soft);border:1px solid var(--border-mid);border-radius:5px;padding:3px 9px;white-space:nowrap;text-align:center}
+.yr-range-track{position:relative;height:20px;display:flex;align-items:center}
+.yr-range-bg{position:absolute;left:0;right:0;height:4px;background:var(--border);border-radius:2px;pointer-events:none}
+.yr-range-fill{position:absolute;height:4px;background:var(--accent);border-radius:2px;pointer-events:none;transition:left .05s,width .05s}
+.yr-range-input{position:absolute;width:100%;height:100%;opacity:0;cursor:pointer;margin:0;padding:0;pointer-events:all;-webkit-appearance:none}
+.yr-range-input::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2);cursor:pointer;pointer-events:all;position:relative;z-index:2}
+.yr-range-input::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2);cursor:pointer}
+.yr-range-input.yr-min{z-index:3}
+.yr-range-input.yr-max{z-index:3}
+
 /* ── FILTERS BAR ── */
-.filters-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;padding:12px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:9px}
+.filters-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;padding:12px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:9px;animation:fadeIn .35s .2s both}
 .fb-label{font-size:10.5px;font-weight:700;color:var(--textm);text-transform:uppercase;letter-spacing:.07em;margin-right:4px;white-space:nowrap}
 .fb-sep{width:1px;height:20px;background:var(--border);flex-shrink:0}
 select.fb-select{font-size:12px;font-family:var(--sans);color:var(--text);background:var(--bg-soft);border:1px solid var(--border-mid);border-radius:5px;padding:4px 28px 4px 9px;cursor:pointer;outline:none;transition:border-color .12s;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7a8d' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
 select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
-.fb-clear{font-size:11px;color:var(--accent);background:none;border:none;cursor:pointer;font-family:var(--sans);font-weight:600;padding:2px 4px;margin-left:2px}
-.fb-clear:hover{text-decoration:underline}
+.fb-clear{font-size:11px;color:var(--accent);background:none;border:none;cursor:pointer;font-family:var(--sans);font-weight:600;padding:2px 4px;margin-left:2px;transition:color .12s}
+.fb-clear:hover{text-decoration:underline;color:var(--accent-dk)}
 .fb-count{font-size:11px;color:var(--textm);margin-left:auto;white-space:nowrap}
 
+/* ── EXPORT BUTTON ── */
+.export-btn{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--accent);background:var(--accent-lt);border:1px solid var(--accent-bdr);border-radius:6px;padding:5px 12px;cursor:pointer;font-family:var(--sans);transition:background .15s,transform .15s,box-shadow .15s;white-space:nowrap}
+.export-btn:hover{background:#d1e8f8;transform:translateY(-1px);box-shadow:0 3px 10px rgba(46,125,196,.2)}
+.export-btn:active{transform:translateY(0)}
+.export-btn svg{flex-shrink:0}
+
 /* ── PUB CARDS ── */
-.pit{display:grid;grid-template-columns:1fr 80px;gap:18px;align-items:start;padding:20px 0;border-bottom:1px solid var(--border);opacity:0;transform:translateY(5px);animation:fup .25s forwards}
+.pit{display:grid;grid-template-columns:1fr 80px;gap:18px;align-items:start;padding:20px 0;border-bottom:1px solid var(--border);opacity:0;transform:translateY(6px);animation:fup .28s forwards}
 @keyframes fup{to{opacity:1;transform:none}}
 .pit-left{}
 .pyr{display:inline-block;font-family:var(--mono);font-size:10px;color:var(--textm);background:var(--bg-chip);border:1px solid var(--border);border-radius:3px;padding:2px 7px;margin-bottom:7px}
-/* journal badge on pub card (for all-journals view) */
 .pj-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:#fff;border-radius:3px;padding:2px 8px;margin-left:6px;vertical-align:middle}
-.ptitle{font-family:var(--serif);font-size:16.5px;font-weight:600;line-height:1.35;color:var(--text);text-decoration:none;display:block;margin-bottom:4px;transition:color .12s}
+.ptitle{font-family:var(--serif);font-size:16.5px;font-weight:600;line-height:1.35;color:var(--text);text-decoration:none;display:block;margin-bottom:4px;transition:color .15s}
 .ptitle:hover{color:var(--accent)}
 .pauth{font-size:12px;color:var(--text2);margin-bottom:11px;line-height:1.55}
-.orc{color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:3px}
+.orc{color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:3px;transition:color .12s}
 .orc:hover{color:var(--accent)}
 .oid{width:11px;height:11px;vertical-align:-1px}
 .mrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
@@ -175,10 +225,10 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 .spl{stroke-dasharray:800;stroke-dashoffset:800;animation:draw .8s cubic-bezier(.4,0,.2,1) forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
 .pfoot{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px;padding-top:9px;border-top:1px solid var(--border)}
-.doi-chip{font-size:10px;font-family:var(--mono);color:var(--accent);font-weight:500;background:var(--accent-lt);border:1px solid var(--accent-bdr);padding:2px 7px;border-radius:4px;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:340px;transition:background .1s}
+.doi-chip{font-size:10px;font-family:var(--mono);color:var(--accent);font-weight:500;background:var(--accent-lt);border:1px solid var(--accent-bdr);padding:2px 7px;border-radius:4px;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:340px;transition:background .12s}
 .doi-chip:hover{background:#d1e8f8}
-.el{font-size:11px;color:var(--accent);text-decoration:none;font-weight:600;border-bottom:1px solid transparent;transition:border-color .12s}
-.el:hover{border-bottom-color:var(--accent)}
+.el{font-size:11px;color:var(--accent);text-decoration:none;font-weight:600;border-bottom:1px solid transparent;transition:border-color .12s,color .12s}
+.el:hover{border-bottom-color:var(--accent);color:var(--accent-dk)}
 .lsep{width:1px;height:10px;background:var(--border-mid);display:inline-block}
 .pdnt{display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:2px}
 .dlbl{font-size:8.5px;color:var(--textm);text-align:center;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
@@ -192,24 +242,24 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
 /* ── ALL JOURNALS VIEW ── */
-.av-hdr{padding:32px 0 22px;border-bottom:1px solid var(--border);margin-bottom:24px}
+.av-hdr{padding:32px 0 22px;border-bottom:1px solid var(--border);margin-bottom:24px;animation:fadeSlideIn .35s ease both}
 .av-title{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--navy);margin-bottom:6px}
 .av-sub{font-size:14px;color:var(--text2)}
 .av-stats{display:flex;gap:28px;margin-top:14px;flex-wrap:wrap}
 .av-stat{text-align:center}
-.av-snum{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
+.av-snum{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;animation:countUp .4s both}
 .av-slbl{font-size:10px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
 .av-statbar{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--textm);padding:8px 0 12px}
 
-/* Legend for all-journals */
+/* Legend */
 .jlegend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
-.jleg-it{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);cursor:pointer;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:var(--bg-card);transition:all .12s}
-.jleg-it:hover{border-color:var(--accent)}
+.jleg-it{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);cursor:pointer;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:var(--bg-card);transition:all .15s}
+.jleg-it:hover{border-color:var(--accent);transform:translateY(-1px)}
 .jleg-it.off{opacity:.35}
 .jleg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
 
 /* ── NOTICE ── */
-.note{padding:20px 24px;border-radius:10px;margin:18px 0;background:var(--bg-card);border:1px solid var(--border)}
+.note{padding:20px 24px;border-radius:10px;margin:18px 0;background:var(--bg-card);border:1px solid var(--border);animation:fadeSlideIn .3s ease both}
 .note.info{border-left:4px solid var(--accent)}
 .note.err{border-left:4px solid var(--red)}
 .note strong{font-weight:700;font-size:14px;display:block;margin-bottom:5px}
@@ -222,9 +272,14 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 .ft a{color:var(--accent);text-decoration:none}
 .ft a:hover{text-decoration:underline}
 .fts{color:var(--border-mid)}
+.ft-warning{width:100%;margin-top:8px;padding:8px 12px;background:var(--amber-bg);border:1px solid var(--amber-bdr);border-radius:6px;font-size:11px;color:var(--amber);display:flex;align-items:flex-start;gap:7px;line-height:1.55}
+.ft-warning svg{flex-shrink:0;margin-top:1px}
 .spn{display:inline-block;width:8px;height:8px;border:1.5px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
 .pcount{font-size:11.5px;color:var(--textm);margin-left:2px;font-weight:400}
+
+/* ── SKELETON LOADING ── */
+.skel{background:linear-gradient(90deg,var(--bg-chip) 25%,var(--bg-soft) 50%,var(--bg-chip) 75%);background-size:400px 100%;animation:shimmer 1.4s infinite;border-radius:4px}
 
 @media(max-width:760px){
   .hdr,.ft{padding:0 14px}
@@ -239,15 +294,31 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
   .hgrid{grid-template-columns:1fr}
   .hero-inner{flex-direction:column;gap:24px}
   .hdr-nav{display:none}
+  .fetch-panel{left:10px;right:10px;min-width:unset}
 }
 </style>
 </head>
 <body>
 <div class="chart-tt" id="ctt"></div>
 
+<!-- ── PROGRESS BAR ── -->
+<div class="prog-bar-wrap" id="prog-wrap"><div class="prog-bar" id="prog-bar"></div></div>
+
+<!-- ── FETCH STATUS PANEL ── -->
+<div class="fetch-panel" id="fetch-panel">
+  <div class="fp-title">Data Loading</div>
+  <div class="fp-status" id="fp-status">Initialising…</div>
+  <div class="fp-track"><div class="fp-fill" id="fp-fill"></div></div>
+  <div class="fp-steps">
+    <div class="fp-step" id="fps-dc"><div class="fp-dot"></div><span>DataCite — DOI records</span></div>
+    <div class="fp-step" id="fps-oa"><div class="fp-dot"></div><span>OpenAlex — citation data</span></div>
+    <div class="fp-step" id="fps-done"><div class="fp-dot"></div><span>Complete</span></div>
+  </div>
+</div>
+
 <header class="hdr">
   <div class="wordmark" onclick="showHome()">
-    <span class="wm-title">e-Journals Münster</span>
+    <span class="wm-title">Bibliometrics Dashboard for the e-Journals Münster</span>
   </div>
 
   <div style="display:flex;align-items:center;gap:4px">
@@ -334,7 +405,19 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 
     <div class="filters-bar">
       <span class="fb-label">Filter</span>
-      <select class="fb-select" id="fb-year" onchange="applyFilter()"><option value="">All years</option></select>
+      <!-- Year range slider replacing dropdown -->
+      <div class="yr-slider-wrap" id="yr-slider-wrap" style="display:none">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="yr-slider-label">Year</span>
+          <span class="yr-slider-display" id="yr-display">All</span>
+        </div>
+        <div class="yr-range-track" id="yr-track">
+          <div class="yr-range-bg"></div>
+          <div class="yr-range-fill" id="yr-fill"></div>
+          <input type="range" class="yr-range-input yr-min" id="yr-min" min="0" max="100" value="0" oninput="onYrSlider()">
+          <input type="range" class="yr-range-input yr-max" id="yr-max" min="0" max="100" value="100" oninput="onYrSlider()">
+        </div>
+      </div>
       <span class="fb-sep"></span>
       <span class="fb-label">Sort</span>
       <select class="fb-select" id="fb-sort" onchange="applySort()">
@@ -344,6 +427,10 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
       </select>
       <button class="fb-clear" onclick="clearFilter()">✕ Clear filter</button>
       <span class="fb-count" id="fb-count"></span>
+      <button class="export-btn" id="export-btn-j" onclick="exportCSV('journal')" style="margin-left:auto">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v8M3.5 6l3 3 3-3M1 10.5h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Export CSV
+      </button>
     </div>
 
     <div class="statbar"><span class="sdot L" id="sdot"></span><span id="stxt">Loading…</span></div>
@@ -395,7 +482,19 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 
     <div class="filters-bar">
       <span class="fb-label">Filter</span>
-      <select class="fb-select" id="av-year" onchange="applyAllFilter()"><option value="">All years</option></select>
+      <!-- Year range slider for All Journals view -->
+      <div class="yr-slider-wrap" id="av-yr-slider-wrap" style="display:none">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="yr-slider-label">Year</span>
+          <span class="yr-slider-display" id="av-yr-display">All</span>
+        </div>
+        <div class="yr-range-track" id="av-yr-track">
+          <div class="yr-range-bg"></div>
+          <div class="yr-range-fill" id="av-yr-fill"></div>
+          <input type="range" class="yr-range-input yr-min" id="av-yr-min" min="0" max="100" value="0" oninput="onAvYrSlider()">
+          <input type="range" class="yr-range-input yr-max" id="av-yr-max" min="0" max="100" value="100" oninput="onAvYrSlider()">
+        </div>
+      </div>
       <select class="fb-select" id="av-journal" onchange="applyAllFilter()"><option value="">All journals</option></select>
       <span class="fb-sep"></span>
       <span class="fb-label">Sort</span>
@@ -407,6 +506,10 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
       </select>
       <button class="fb-clear" onclick="clearAllFilter()">✕ Clear</button>
       <span class="fb-count" id="av-count"></span>
+      <button class="export-btn" id="export-btn-all" onclick="exportCSV('all')" style="margin-left:auto">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v8M3.5 6l3 3 3-3M1 10.5h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Export CSV
+      </button>
     </div>
 
     <div class="av-statbar"><span class="sdot" id="av-sdot" style="background:var(--textm)"></span><span id="av-stxt">Loading journals…</span></div>
@@ -415,7 +518,9 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 </div>
 
 <footer class="ft">
-  <span>e-Journals Münster Dashboard</span>
+  <span>Bibliometrics Dashboard for the e-Journals Münster</span>
+  <span class="fts">·</span>
+  <span>v0.1</span>
   <span class="fts">·</span>
   <span>An independent project by <a href="https://lukasroeseler.github.io" target="_blank">Lukas Röseler</a></span>
   <span class="fts">·</span>
@@ -424,6 +529,10 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
   <span><a href="https://ejournals.uni-muenster.de" target="_blank">ULB Münster ↗</a></span>
   <span class="fts">·</span>
   <span>Updated: <span id="ftu">—</span></span>
+  <div class="ft-warning">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M7 1L13 12H1L7 1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M7 5.5v3M7 10v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    <span><strong>Important notice:</strong> Citation metrics (e.g. citation counts, cited-by statistics) must not be used as a proxy for research quality. They reflect usage patterns and are subject to field-specific biases, self-citation, and other confounds. Please interpret all metrics with appropriate caution.</span>
+  </div>
 </footer>
 
 <script>
@@ -456,26 +565,26 @@ var J=[
   {slug:'zts',           name:'Zeitschrift für Theoretische Soziologie',                             abbr:'ZTS',  ac:1,issn:'2195-0695',dp:['zts']}
 ];
 
-/* Assign a color index and build color map */
 var JCOLS=['#2e7dc4','#c0392b','#27ae60','#8e44ad','#d68910','#16a085','#e74c3c','#2980b9',
            '#8d6e63','#00838f','#6d4c41','#558b2f','#4527a0','#00695c','#ad1457','#37474f',
            '#f57f17','#283593','#00897b','#e65100','#1565c0','#33691e','#880e4f'];
 J.forEach(function(j,i){j.col=JCOLS[i%JCOLS.length];j.ci=i});
 
-/* OJS logo URL pattern */
 function logoUrl(j){
   return 'https://ejournals.uni-muenster.de/public/journals/'+j.slug+'/pageHeaderLogoImage_en_US.png';
 }
 
 var MAXP=500,DCP=200;
-var PUBS=[],CJ=null,RID=0,CSORT='newest',FYEAR='';
+var PUBS=[],CJ=null,RID=0,CSORT='newest';
+/* Year range for journal view */
+var YR_YEARS=[],YR_MIN_IDX=0,YR_MAX_IDX=0;
+/* Year range for all journals view */
+var AV_YR_YEARS=[],AV_YR_MIN_IDX=0,AV_YR_MAX_IDX=0;
 
-/* All-journals state */
-var AV_CACHE={};  /* slug -> PUBS array */
+var AV_CACHE={};
 var AV_LOADING=false;
 var AV_RID=0;
 
-/* utils */
 function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function sp(){return'<span class="spn"></span>'}
 function fn(n){return(n===null||n===undefined)?'—':Number(n).toLocaleString('en')}
@@ -494,15 +603,126 @@ function showTT(ev,txt){TT.textContent=txt;TT.className='chart-tt show';moveTT(e
 function moveTT(ev){TT.style.left=(ev.clientX+14)+'px';TT.style.top=(ev.clientY-28)+'px'}
 function hideTT(){TT.className='chart-tt'}
 
+/* ── PROGRESS / FETCH PANEL ── */
+function progShow(pct,status,phase){
+  var wrap=document.getElementById('prog-wrap');
+  var bar=document.getElementById('prog-bar');
+  wrap.classList.add('visible');
+  wrap.classList.remove('done');
+  bar.style.width=Math.min(pct,100)+'%';
+  var panel=document.getElementById('fetch-panel');
+  panel.classList.add('show');
+  if(status)document.getElementById('fp-status').textContent=status;
+  /* Steps */
+  var steps=['fps-dc','fps-oa','fps-done'];
+  steps.forEach(function(id,i){
+    var el=document.getElementById(id);
+    el.classList.remove('active','done');
+    if(phase===i)el.classList.add('active');
+    else if(phase>i)el.classList.add('done');
+  });
+  var fill=document.getElementById('fp-fill');
+  fill.style.width=Math.min(pct,100)+'%';
+  fill.className='fp-fill'+(phase===1?' oa':'');
+}
+function progDone(status){
+  var wrap=document.getElementById('prog-wrap');
+  var bar=document.getElementById('prog-bar');
+  wrap.classList.add('visible','done');
+  bar.style.width='100%';
+  var panel=document.getElementById('fetch-panel');
+  document.getElementById('fp-status').textContent=status||'Done';
+  document.getElementById('fp-fill').style.width='100%';
+  ['fps-dc','fps-oa'].forEach(function(id){
+    var el=document.getElementById(id);el.classList.remove('active');el.classList.add('done');
+  });
+  document.getElementById('fps-done').classList.remove('active');document.getElementById('fps-done').classList.add('done');
+  setTimeout(function(){
+    panel.classList.remove('show');
+    setTimeout(function(){wrap.classList.remove('visible','done');bar.style.width='0%'},400);
+  },2000);
+}
+function progHide(){
+  document.getElementById('fetch-panel').classList.remove('show');
+  document.getElementById('prog-wrap').classList.remove('visible','done');
+  document.getElementById('prog-bar').style.width='0%';
+}
+
+/* ── YEAR RANGE SLIDER (journal view) ── */
+function buildYrSlider(pubs){
+  var counts={};pubs.forEach(function(p){if(p.yr)counts[p.yr]=(counts[p.yr]||0)+1});
+  YR_YEARS=Object.keys(counts).map(Number).sort(function(a,b){return a-b});
+  if(!YR_YEARS.length){document.getElementById('yr-slider-wrap').style.display='none';return}
+  YR_MIN_IDX=0;YR_MAX_IDX=YR_YEARS.length-1;
+  var wrap=document.getElementById('yr-slider-wrap');
+  wrap.style.display='flex';
+  var mn=document.getElementById('yr-min');var mx=document.getElementById('yr-max');
+  mn.min=0;mn.max=YR_YEARS.length-1;mn.value=0;
+  mx.min=0;mx.max=YR_YEARS.length-1;mx.value=YR_YEARS.length-1;
+  updateYrDisplay();
+}
+function onYrSlider(){
+  var mn=+document.getElementById('yr-min').value;
+  var mx=+document.getElementById('yr-max').value;
+  if(mn>mx){var t=mn;mn=mx;mx=t;document.getElementById('yr-min').value=mn;document.getElementById('yr-max').value=mx}
+  YR_MIN_IDX=mn;YR_MAX_IDX=mx;
+  updateYrDisplay();
+  render();
+}
+function updateYrDisplay(){
+  if(!YR_YEARS.length)return;
+  var mn=YR_YEARS[YR_MIN_IDX],mx=YR_YEARS[YR_MAX_IDX];
+  document.getElementById('yr-display').textContent=mn===mx?''+mn:mn+'–'+mx;
+  /* update fill bar */
+  var track=document.getElementById('yr-track');
+  var fill=document.getElementById('yr-fill');
+  var total=YR_YEARS.length-1||1;
+  var leftPct=(YR_MIN_IDX/total)*100;
+  var rightPct=(YR_MAX_IDX/total)*100;
+  fill.style.left=leftPct+'%';fill.style.width=(rightPct-leftPct)+'%';
+}
+
+/* ── YEAR RANGE SLIDER (all journals view) ── */
+function buildAvYrSlider(pubs){
+  var counts={};pubs.forEach(function(p){if(p.yr)counts[p.yr]=(counts[p.yr]||0)+1});
+  AV_YR_YEARS=Object.keys(counts).map(Number).sort(function(a,b){return a-b});
+  if(!AV_YR_YEARS.length){document.getElementById('av-yr-slider-wrap').style.display='none';return}
+  AV_YR_MIN_IDX=0;AV_YR_MAX_IDX=AV_YR_YEARS.length-1;
+  var wrap=document.getElementById('av-yr-slider-wrap');
+  wrap.style.display='flex';
+  var mn=document.getElementById('av-yr-min');var mx=document.getElementById('av-yr-max');
+  mn.min=0;mn.max=AV_YR_YEARS.length-1;mn.value=0;
+  mx.min=0;mx.max=AV_YR_YEARS.length-1;mx.value=AV_YR_YEARS.length-1;
+  updateAvYrDisplay();
+}
+function onAvYrSlider(){
+  var mn=+document.getElementById('av-yr-min').value;
+  var mx=+document.getElementById('av-yr-max').value;
+  if(mn>mx){var t=mn;mn=mx;mx=t;document.getElementById('av-yr-min').value=mn;document.getElementById('av-yr-max').value=mx}
+  AV_YR_MIN_IDX=mn;AV_YR_MAX_IDX=mx;
+  updateAvYrDisplay();
+  applyAllFilter();
+}
+function updateAvYrDisplay(){
+  if(!AV_YR_YEARS.length)return;
+  var mn=AV_YR_YEARS[AV_YR_MIN_IDX],mx=AV_YR_YEARS[AV_YR_MAX_IDX];
+  document.getElementById('av-yr-display').textContent=mn===mx?''+mn:mn+'–'+mx;
+  var total=AV_YR_YEARS.length-1||1;
+  var leftPct=(AV_YR_MIN_IDX/total)*100;
+  var rightPct=(AV_YR_MAX_IDX/total)*100;
+  document.getElementById('av-yr-fill').style.left=leftPct+'%';
+  document.getElementById('av-yr-fill').style.width=(rightPct-leftPct)+'%';
+}
+
 /* ── HOME GRID ── */
 function buildGrid(){
-  document.getElementById('hgrid').innerHTML=J.map(function(j){
+  document.getElementById('hgrid').innerHTML=J.map(function(j,idx){
     var st=j.nd?'nd':(j.ac?'ac':'in');
     var stl=j.nd?'No DOIs':(j.ac?'Active':'Discontinued');
     var click=j.nd?'':' onclick="pick(\''+j.slug+'\')"';
     var logoImg='<img class="hclogo" src="'+logoUrl(j)+'" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
       +'<div class="hclogofb" style="display:none;background:'+j.col+'">'+e(j.abbr)+'</div>';
-    return'<button class="hcard'+(j.nd?' nd':'')+'"'+click+' type="button" style="--jc:'+j.col+'">'
+    return'<button class="hcard'+(j.nd?' nd':'')+'"'+click+' type="button" style="--jc:'+j.col+';animation-delay:'+(idx*.03)+'s">'
       +'<div class="hct">'+logoImg+'<span class="htag '+st+'">'+stl+'</span></div>'
       +'<div class="hnm">'+e(j.name)+'</div>'
       +'<div class="hsl">'+e(j.slug)+(j.issn?' · '+e(j.issn):'')+'</div>'
@@ -512,6 +732,7 @@ function buildGrid(){
 
 function showHome(){
   CJ=null;RID++;AV_RID++;
+  progHide();
   ['hs','js','as'].forEach(function(id){document.getElementById(id).style.display='none'});
   document.getElementById('hs').style.display='block';
   setTab('home');
@@ -579,15 +800,15 @@ function pick(slug){
   document.getElementById('jvn').textContent=j.name;
   document.getElementById('jvi').textContent=j.issn?'ISSN '+j.issn:'';
   document.getElementById('jvl').href='https://ejournals.uni-muenster.de/'+j.slug;
-  /* logo in journal header */
   var fb=document.getElementById('jvh-logofb');
   fb.textContent=j.abbr;fb.style.background=j.col;
-  /* try to load actual logo */
   var img=new Image();
   img.onload=function(){fb.style.backgroundImage='url('+logoUrl(j)+')';fb.style.backgroundSize='cover';fb.textContent=''};
   img.src=logoUrl(j);
   buildDD('');
-  FYEAR='';CSORT='newest';
+  YR_YEARS=[];YR_MIN_IDX=0;YR_MAX_IDX=0;
+  document.getElementById('yr-slider-wrap').style.display='none';
+  CSORT='newest';
   var ss=document.getElementById('fb-sort');if(ss)ss.value='newest';
   load(j);
 }
@@ -601,6 +822,7 @@ async function load(j){
   clearCharts();
 
   if(j.nd){
+    progHide();
     st('D','No DOI registration for this journal.');
     document.getElementById('plist').innerHTML='<div class="note info"><strong>No DOIs registered</strong>'
       +'<p>'+e(j.name)+' does not register DOIs with DataCite.</p>'
@@ -608,9 +830,13 @@ async function load(j){
     return;
   }
 
-  var recs=await fetchDC(j,rid,function(msg){if(rid===RID)st('L',msg)});
+  progShow(5,'Fetching DOI records from DataCite…',0);
+  var recs=await fetchDC(j,rid,function(msg,pct){
+    if(rid===RID){st('L',msg);progShow(pct||10,'Fetching DOI records… '+msg,0)}
+  });
   if(rid!==RID)return;
   if(!recs.length){
+    progHide();
     st('E','No records found in DataCite.');
     document.getElementById('plist').innerHTML='<div class="note err"><strong>No publications found</strong>'
       +'<p>DataCite returned no records for <code>'+j.dp.map(function(p){return'10.17879/'+p}).join(', ')+'</code>.</p></div>';
@@ -618,31 +844,37 @@ async function load(j){
   }
 
   PUBS=recs.map(parseDC).filter(Boolean);
-  buildYearFilter(PUBS,'fb-year');
+  buildYrSlider(PUBS);
   render();drawCharts();summ();
-
+  progShow(50,'DOI records loaded. Fetching citations from OpenAlex…',1);
   st('L','Fetching citations from OpenAlex…');
+
   for(var i=0;i<PUBS.length;i+=25){
     if(rid!==RID)return;
     await oaBatch(PUBS.slice(i,i+25));
+    var pct=50+Math.round(((i+25)/PUBS.length)*45);
+    progShow(Math.min(pct,94),'OpenAlex: '+Math.min(i+25,PUBS.length)+' / '+PUBS.length+' processed',1);
     render();summ();drawCharts();
     if(PUBS.length>25)st('L','OpenAlex: '+Math.min(i+25,PUBS.length)+' / '+PUBS.length+'…');
   }
   if(rid!==RID)return;
   document.getElementById('ftu').textContent=new Date().toISOString().slice(0,10);
   st('D','Loaded '+fn(PUBS.length)+' publications · DataCite + OpenAlex');
+  progDone('Loaded '+fn(PUBS.length)+' publications');
   AV_CACHE[j.slug]=PUBS.slice();
 }
 
 /* ── DATACITE ── */
 async function fetchDC(j,rid,cb){
   var all=[],seen={};
+  var totalPfx=j.dp.length;
   for(var pi=0;pi<j.dp.length;pi++){
     var pfx=j.dp[pi];
     var q='prefix:10.17879 AND suffix:'+pfx+'*';
     for(var pg=1;all.length<MAXP;pg++){
       if(rid!==RID)return[];
-      if(cb)cb('DataCite "'+pfx+'" page '+pg+' ('+all.length+' so far)…');
+      var pct=5+Math.round(((pi/totalPfx)+(1/(totalPfx*(pg+1))))*40);
+      if(cb)cb('DataCite "'+pfx+'" page '+pg+' ('+all.length+' so far)…',pct);
       var url='https://api.datacite.org/dois?query='+encodeURIComponent(q)+'&page%5Bsize%5D='+DCP+'&page%5Bnumber%5D='+pg;
       var d=await fj(url,20000);
       if(!d||!d.data||!d.data.length)break;
@@ -676,22 +908,24 @@ async function oaBatch(batch){
   batch.forEach(function(p){var w=bd[p.doi.toLowerCase()];if(!w)return;p.oa=w.cited_by_count!=null?w.cited_by_count:0;p.cby=w.counts_by_year||[]});
 }
 
-/* ── YEAR FILTER ── */
-function buildYearFilter(pubs,selId){
-  var counts={};pubs.forEach(function(p){if(p.yr)counts[p.yr]=(counts[p.yr]||0)+1});
-  var yrs=Object.keys(counts).map(Number).sort(function(a,b){return b-a});
-  var sel=document.getElementById(selId);
-  sel.innerHTML='<option value="">All years</option>'+yrs.map(function(y){return'<option value="'+y+'">'+y+' ('+counts[y]+')</option>'}).join('');
+/* ── FILTER + SORT (journal view) ── */
+function applySort(){CSORT=document.getElementById('fb-sort').value;render()}
+function clearFilter(){
+  YR_MIN_IDX=0;YR_MAX_IDX=YR_YEARS.length?YR_YEARS.length-1:0;
+  var mn=document.getElementById('yr-min');var mx=document.getElementById('yr-max');
+  if(mn){mn.value=0}if(mx&&YR_YEARS.length){mx.value=YR_YEARS.length-1}
+  updateYrDisplay();
+  render();
 }
 
-/* ── FILTER + SORT (journal view) ── */
-function applyFilter(){FYEAR=document.getElementById('fb-year').value;render()}
-function applySort(){CSORT=document.getElementById('fb-sort').value;render()}
-function clearFilter(){FYEAR='';document.getElementById('fb-year').value='';render()}
-
-function filteredSorted(pubs,sort,year){
+function filteredSorted(pubs,sort){
   var out=pubs.slice();
-  if(year)out=out.filter(function(p){return String(p.yr)===String(year)});
+  /* Year range filter */
+  if(YR_YEARS.length){
+    var yMin=YR_YEARS[YR_MIN_IDX],yMax=YR_YEARS[YR_MAX_IDX];
+    var allYears=(YR_MIN_IDX===0&&YR_MAX_IDX===YR_YEARS.length-1);
+    if(!allYears)out=out.filter(function(p){return p.yr&&p.yr>=yMin&&p.yr<=yMax});
+  }
   if(sort==='newest')out.sort(function(a,b){return b.key-a.key});
   else if(sort==='oldest')out.sort(function(a,b){return a.key-b.key});
   else if(sort==='cites')out.sort(function(a,b){return(b.oa||0)-(a.oa||0)});
@@ -699,10 +933,13 @@ function filteredSorted(pubs,sort,year){
 }
 
 function render(){
-  var s=filteredSorted(PUBS,CSORT,FYEAR);
+  var s=filteredSorted(PUBS,CSORT);
   var fc=document.getElementById('fb-count');
-  if(fc)fc.textContent=FYEAR?s.length+' of '+PUBS.length+' shown':'';
-  if(!s.length&&PUBS.length){document.getElementById('plist').innerHTML='<div class="note info"><strong>No publications match the filter.</strong><p>Try a different year or clear the filter.</p></div>';return}
+  if(fc){
+    var isFiltered=YR_YEARS.length&&!(YR_MIN_IDX===0&&YR_MAX_IDX===YR_YEARS.length-1);
+    fc.textContent=isFiltered?s.length+' of '+PUBS.length+' shown':'';
+  }
+  if(!s.length&&PUBS.length){document.getElementById('plist').innerHTML='<div class="note info"><strong>No publications match the filter.</strong><p>Try a different year range or clear the filter.</p></div>';return}
   if(!s.length)return;
   document.getElementById('plist').innerHTML=s.map(function(p,i){return card(p,i,CJ)}).join('');
   if(typeof window._altmetric_embed_init==='function')window._altmetric_embed_init();
@@ -730,7 +967,6 @@ function card(p,i,j,showJBadge){
     var smx=Math.max.apply(null,sv)||1;
     var W=180,H=26,pad=2,n=sv.length,xs=n>1?(W-pad*2)/(n-1):0;
     var pts=sv.map(function(v,i){return(pad+i*xs).toFixed(1)+','+(H-pad-((v/smx)*(H-pad*2))).toFixed(1)}).join(' ');
-    /* Add circles with tooltips */
     var circles=sy.map(function(d,i){
       var x=(pad+i*xs).toFixed(1),yy=(H-pad-((sv[i]/smx)*(H-pad*2))).toFixed(1);
       return'<circle cx="'+x+'" cy="'+yy+'" r="3" fill="var(--accent)" fill-opacity=".85"'
@@ -755,6 +991,59 @@ function card(p,i,j,showJBadge){
     +'</div></div>'
     +'<div class="pdnt"><div class="altmetric-embed" data-badge-type="donut" data-doi="'+p.doi+'" data-hide-no-mentions="false" data-badge-popover="left"></div><div class="dlbl">Altmetric</div></div>'
     +'</div>';
+}
+
+/* ── CSV EXPORT ── */
+function csvEscape(v){
+  var s=String(v===null||v===undefined?'':v);
+  if(s.includes(',')||s.includes('"')||s.includes('\n'))return'"'+s.replace(/"/g,'""')+'"';
+  return s;
+}
+function exportCSV(mode){
+  var rows,filename;
+  if(mode==='journal'){
+    if(!PUBS||!PUBS.length){alert('No publications loaded yet.');return}
+    rows=filteredSorted(PUBS,CSORT).map(function(p){
+      return[
+        csvEscape(p.doi),
+        csvEscape(p.title),
+        csvEscape(p.auth?p.auth.map(function(a){return a.n}).join('; '):''),
+        csvEscape(p.yr||''),
+        csvEscape(p.oa!==null?p.oa:''),
+        csvEscape('https://doi.org/'+p.doi),
+        csvEscape(CJ?CJ.name:''),
+        csvEscape(CJ?CJ.slug:'')
+      ].join(',');
+    });
+    filename=(CJ?CJ.slug:'journal')+'-publications.csv';
+  }else{
+    if(!AV_PUBS||!AV_PUBS.length){alert('No publications loaded yet.');return}
+    var pubs=_filteredAVPubs();
+    if(AV_SORT==='newest')pubs.sort(function(a,b){return b.key-a.key});
+    else if(AV_SORT==='oldest')pubs.sort(function(a,b){return a.key-b.key});
+    else if(AV_SORT==='cites')pubs.sort(function(a,b){return(b.oa||0)-(a.oa||0)});
+    else if(AV_SORT==='journal')pubs.sort(function(a,b){return(a.j?a.j.name:'').localeCompare(b.j?b.j.name:'')});
+    rows=pubs.map(function(p){
+      return[
+        csvEscape(p.doi),
+        csvEscape(p.title),
+        csvEscape(p.auth?p.auth.map(function(a){return a.n}).join('; '):''),
+        csvEscape(p.yr||''),
+        csvEscape(p.oa!==null?p.oa:''),
+        csvEscape('https://doi.org/'+p.doi),
+        csvEscape(p.j?p.j.name:''),
+        csvEscape(p.j?p.j.slug:'')
+      ].join(',');
+    });
+    filename='all-journals-publications.csv';
+  }
+  var header='DOI,Title,Authors,Year,Citations (OpenAlex),URL,Journal Name,Journal Slug';
+  var csv='\uFEFF'+header+'\n'+rows.join('\n'); /* BOM for Excel UTF-8 */
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=filename;
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url)},200);
 }
 
 /* ── CHARTS ── */
@@ -783,7 +1072,6 @@ function barChart(wrapId,axId,yaxId,obj,col,kind){
   var maxV=Math.max.apply(null,vals)||1;
   var W=400,H=110,pT=4,pB=2,pL=2,pR=2;
   var n=keys.length,slot=(W-pL-pR)/n,bw=Math.max(2,slot*.7);
-  /* Y axis ticks */
   var yticks=[0,.25,.5,.75,1].reverse();
   if(yax){
     yax.innerHTML=yticks.map(function(t){
@@ -791,13 +1079,11 @@ function barChart(wrapId,axId,yaxId,obj,col,kind){
       return'<span class="y-tick">'+fn(v)+'</span>';
     }).join('');
   }
-  /* SVG */
   var out='<svg viewBox="0 0 '+W+' '+(H+pT+pB)+'" preserveAspectRatio="none" width="100%" height="100%" style="display:block">';
   [0,.25,.5,.75,1].forEach(function(t){
     var y=(pT+H*(1-t)).toFixed(1);
     out+='<line x1="'+pL+'" y1="'+y+'" x2="'+(W-pR)+'" y2="'+y+'" stroke="#e2e7f0" stroke-width="1"/>';
   });
-  /* bottom axis line */
   out+='<line x1="'+pL+'" y1="'+(pT+H)+'" x2="'+(W-pR)+'" y2="'+(pT+H)+'" stroke="var(--border-mid)" stroke-width="1"/>';
   vals.forEach(function(v,i){
     var x=(pL+i*slot+(slot-bw)/2).toFixed(1);
@@ -810,7 +1096,6 @@ function barChart(wrapId,axId,yaxId,obj,col,kind){
   });
   out+='</svg>';
   if(wrap)wrap.innerHTML=out;
-  /* x axis */
   var step=Math.max(1,Math.ceil(n/7));
   if(ax)ax.innerHTML=keys.map(function(k,i){return'<span>'+(i%step===0||i===n-1?k:'')+'</span>'}).join('');
 }
@@ -827,14 +1112,13 @@ function st(cls,msg){document.getElementById('sdot').className='sdot '+cls;docum
 /* ═══════════════════════════════
    ALL JOURNALS VIEW
 ═══════════════════════════════ */
-var AV_PUBS=[];   /* flat array with .j = journal ref */
-var AV_FILT_J='',AV_FILT_Y='',AV_SORT='newest';
-var AV_HIDDEN={};  /* slug -> bool (legend toggle) */
-var AV_CHART_MODE='stacked'; /* 'stacked' | 'grouped' */
+var AV_PUBS=[];
+var AV_FILT_J='',AV_SORT='newest';
+var AV_HIDDEN={};
+var AV_CHART_MODE='stacked';
 
 function setChartMode(mode){
   AV_CHART_MODE=mode;
-  /* update both toggles */
   ['ct-pub','ct-cite'].forEach(function(id){
     var el=document.getElementById(id);
     if(!el)return;
@@ -870,13 +1154,11 @@ async function showAll(){
   var ic=document.getElementById('jicon');ic.textContent='—';ic.className='jabbr none';ic.style.background='';
   document.getElementById('jlbl').innerHTML='Choose a journal<small>'+J.length+' journals</small>';
 
-  /* Build journal filter dropdown */
   var jsel=document.getElementById('av-journal');
   jsel.innerHTML='<option value="">All journals</option>'+J.filter(function(j){return!j.nd}).map(function(j){
     return'<option value="'+j.slug+'">'+e(j.abbr)+' – '+e(j.name)+'</option>';
   }).join('');
 
-  /* Build legend */
   var leg=document.getElementById('jlegend');
   leg.innerHTML=J.filter(function(j){return!j.nd&&j.dp.length}).map(function(j){
     return'<div class="jleg-it" id="leg-'+j.slug+'" onclick="toggleLegend(\''+j.slug+'\')">'
@@ -885,13 +1167,19 @@ async function showAll(){
 
   avSt('L','Loading all journals…');
   AV_PUBS=[];
+  AV_YR_YEARS=[];AV_YR_MIN_IDX=0;AV_YR_MAX_IDX=0;
+  document.getElementById('av-yr-slider-wrap').style.display='none';
 
   var trackableJ=J.filter(function(j){return!j.nd&&j.dp.length});
   var loaded=0;
 
+  progShow(2,'Loading all journals…',0);
+
   for(var ji=0;ji<trackableJ.length;ji++){
     if(rid!==AV_RID)return;
     var j=trackableJ[ji];
+    var overallPct=Math.round((ji/trackableJ.length)*100);
+    progShow(overallPct,'Loading '+j.name+' ('+loaded+' / '+trackableJ.length+')',0);
     avSt('L','Loading '+e(j.name)+' ('+loaded+' / '+trackableJ.length+')…');
 
     var jPubs;
@@ -912,13 +1200,14 @@ async function showAll(){
     AV_PUBS=AV_PUBS.concat(jPubs);
     loaded++;
 
-    buildYearFilter(AV_PUBS,'av-year');
+    buildAvYrSlider(AV_PUBS);
     applyAllFilter();
   }
 
   if(rid!==AV_RID)return;
   avSt('D','Loaded '+fn(AV_PUBS.length)+' publications from '+loaded+' journals');
   document.getElementById('ftu').textContent=new Date().toISOString().slice(0,10);
+  progDone('Loaded '+fn(AV_PUBS.length)+' publications from '+loaded+' journals');
 }
 
 function toggleLegend(slug){
@@ -928,16 +1217,17 @@ function toggleLegend(slug){
   applyAllFilter();
 }
 
-/* Single function that filters, updates charts, stats AND list */
 function applyAllFilter(){
-  AV_FILT_Y=document.getElementById('av-year').value||'';
   AV_FILT_J=document.getElementById('av-journal').value||'';
   AV_SORT=document.getElementById('av-sort').value||'newest';
   _updateAll();
 }
 function clearAllFilter(){
-  AV_FILT_Y='';AV_FILT_J='';AV_SORT='newest';
-  document.getElementById('av-year').value='';
+  AV_FILT_J='';AV_SORT='newest';
+  AV_YR_MIN_IDX=0;AV_YR_MAX_IDX=AV_YR_YEARS.length?AV_YR_YEARS.length-1:0;
+  var mn=document.getElementById('av-yr-min');var mx=document.getElementById('av-yr-max');
+  if(mn){mn.value=0}if(mx&&AV_YR_YEARS.length){mx.value=AV_YR_YEARS.length-1}
+  updateAvYrDisplay();
   document.getElementById('av-journal').value='';
   document.getElementById('av-sort').value='newest';
   _updateAll();
@@ -946,27 +1236,31 @@ function clearAllFilter(){
 function _filteredAVPubs(){
   return AV_PUBS.filter(function(p){
     if(AV_HIDDEN[p.j&&p.j.slug])return false;
-    if(AV_FILT_Y&&String(p.yr)!==AV_FILT_Y)return false;
     if(AV_FILT_J&&p.j&&p.j.slug!==AV_FILT_J)return false;
+    /* Year range */
+    if(AV_YR_YEARS.length){
+      var allYrs=(AV_YR_MIN_IDX===0&&AV_YR_MAX_IDX===AV_YR_YEARS.length-1);
+      if(!allYrs){
+        var yMin=AV_YR_YEARS[AV_YR_MIN_IDX],yMax=AV_YR_YEARS[AV_YR_MAX_IDX];
+        if(!p.yr||p.yr<yMin||p.yr>yMax)return false;
+      }
+    }
     return true;
   });
 }
 
 function _updateAll(){
   var pubs=_filteredAVPubs();
-  /* Sort */
   if(AV_SORT==='newest')pubs.sort(function(a,b){return b.key-a.key});
   else if(AV_SORT==='oldest')pubs.sort(function(a,b){return a.key-b.key});
   else if(AV_SORT==='cites')pubs.sort(function(a,b){return(b.oa||0)-(a.oa||0)});
   else if(AV_SORT==='journal')pubs.sort(function(a,b){return(a.j?a.j.name:'').localeCompare(b.j?b.j.name:'')});
 
-  /* Update summary stats from filtered set */
   avSumm(pubs);
-  /* Update charts from filtered set */
   drawAllCharts(pubs);
-  /* Update list */
   var cnt=document.getElementById('av-count');
-  if(cnt)cnt.textContent=(AV_FILT_Y||AV_FILT_J)?pubs.length+' of '+AV_PUBS.length+' shown':'';
+  var isFiltered=AV_FILT_J||(AV_YR_YEARS.length&&!(AV_YR_MIN_IDX===0&&AV_YR_MAX_IDX===AV_YR_YEARS.length-1));
+  if(cnt)cnt.textContent=isFiltered?pubs.length+' of '+AV_PUBS.length+' shown':'';
   var display=pubs.slice(0,300);
   var more=pubs.length>300?'<div class="note info" style="margin-top:12px"><strong>Showing 300 of '+pubs.length+' publications</strong><p>Use the year or journal filter to narrow the view.</p></div>':'';
   document.getElementById('avlist').innerHTML=display.map(function(p,i){return card(p,i,p.j,true)}).join('')+more;
@@ -977,8 +1271,6 @@ function renderAll(){_updateAll()}
 function drawAllCharts(pubs){
   if(!pubs)pubs=_filteredAVPubs();
   var trackable=J.filter(function(j){return!j.nd&&j.dp.length&&!AV_HIDDEN[j.slug]});
-  /* Build per-journal, per-year maps */
-  /* pb[year][slug]=count, cb[year][slug]=citations */
   var pb={},cb={},allYears={};
   pubs.forEach(function(p){
     if(!p.j)return;
@@ -1001,13 +1293,6 @@ function drawAllCharts(pubs){
     stackedBarChart('acpw','acpa','yaa',pb,years,trackable,'pub');
     stackedBarChart('accw','acca','yab',cb,years,trackable,'cite');
   }else{
-    /* Grouped: aggregate per year (same as old total bar, but per-journal coloured) */
-    var pbTot={},cbTot={};
-    years.forEach(function(yr){
-      pbTot[yr]=0;if(pb[yr])Object.values(pb[yr]).forEach(function(v){pbTot[yr]+=v});
-      cbTot[yr]=0;if(cb[yr])Object.values(cb[yr]).forEach(function(v){cbTot[yr]+=v});
-    });
-    /* For grouped, draw individual journals side by side */
     groupedBarChart('acpw','acpa','yaa',pb,years,trackable,'pub');
     groupedBarChart('accw','acca','yab',cb,years,trackable,'cite');
   }
@@ -1016,14 +1301,12 @@ function drawAllCharts(pubs){
 function stackedBarChart(wrapId,axId,yaxId,data,years,journals,kind){
   var wrap=document.getElementById(wrapId),ax=document.getElementById(axId),yax=document.getElementById(yaxId);
   if(!years.length){if(wrap)wrap.innerHTML='';if(ax)ax.innerHTML='';if(yax)yax.innerHTML='';return}
-  /* Compute totals per year for y-scale */
   var totals=years.map(function(yr){
     var t=0;journals.forEach(function(j){t+=(data[yr]&&data[yr][j.slug])||0});return t;
   });
   var maxV=Math.max.apply(null,totals)||1;
   var W=400,H=110,pT=4,pB=2,pL=2,pR=2,n=years.length;
   var slot=(W-pL-pR)/n,bw=Math.max(2,slot*.75);
-  /* Y-axis */
   if(yax){
     yax.innerHTML=[1,.75,.5,.25,0].map(function(t){
       return'<span class="y-tick">'+fn(Math.round(maxV*t))+'</span>';
@@ -1038,8 +1321,7 @@ function stackedBarChart(wrapId,axId,yaxId,data,years,journals,kind){
 
   years.forEach(function(yr,i){
     var x=(pL+i*slot+(slot-bw)/2);
-    var curY=pT+H; /* stacking from bottom */
-    var tot=totals[i]||1;
+    var curY=pT+H;
     journals.forEach(function(j){
       var v=(data[yr]&&data[yr][j.slug])||0;
       if(!v)return;
