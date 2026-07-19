@@ -5,23 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bibliometrics Dashboard for the e-Journals Münster</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230d2137'/%3E%3Crect x='3' y='20' width='6' height='9' rx='1' fill='%232e7dc4'/%3E%3Crect x='11' y='14' width='6' height='15' rx='1' fill='%232e7dc4'/%3E%3Crect x='19' y='8' width='6' height='21' rx='1' fill='%232e7dc4'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#0d2137;--navy2:#152d4a;--navy3:#1e3a5a;--navy-bdr:#2a4d70;
-  --accent:#2e7dc4;--accent-lt:#e8f2fb;--accent-bdr:#a8cde8;--accent-dk:#1a5490;
+  /* Aligned to the Uni Münster corporate design used by the unimuenster dashboard: */
+  --navy:#00305D;--navy2:#0a3f70;--navy3:#155184;--navy-bdr:#1f6396;
+  --accent:#009FE3;--accent-lt:#e5f6fd;--accent-bdr:#9adcf5;--accent-dk:#00729f;
   --bg:#f5f7fa;--bg-card:#fff;--bg-soft:#eef1f6;--bg-chip:#e2e7f0;
   --border:#d0d7e3;--border-mid:#b0bacb;
   --text:#0f1923;--text2:#374455;--textm:#6b7a8d;
   --green:#15803d;--green-bg:#f0fdf4;--green-bdr:#86efac;
   --amber:#b45309;--amber-bg:#fffbeb;--amber-bdr:#fde68a;
   --red:#dc2626;--red-bg:#fef2f2;--red-bdr:#fecaca;
-  --serif:'Source Serif 4',Georgia,serif;
-  --sans:'Source Sans 3',system-ui,sans-serif;
-  --mono:'Source Code Pro',monospace;
+  --serif:Calibri,Carlito,'Segoe UI',system-ui,sans-serif;
+  --sans:Calibri,Carlito,'Segoe UI',system-ui,sans-serif;
+  --mono:Consolas,'Courier New',monospace;
 }
 html{scroll-behavior:smooth}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
@@ -35,7 +33,9 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14
 @keyframes progressPulse{0%,100%{opacity:.7}50%{opacity:1}}
 
 /* ── HEADER ── */
-.hdr{background:var(--navy);padding:0 36px;display:flex;align-items:stretch;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.35);min-height:56px;animation:fadeIn .3s ease}
+.hdr{background:var(--navy);padding:0 36px;display:flex;align-items:stretch;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.35);min-height:56px;animation:fadeIn .3s ease;overflow:hidden}
+/* Decorative corner triangle, matching the unimuenster dashboard's hero accent */
+.hdr::before{content:"";position:absolute;top:0;left:0;width:130px;height:100%;background:var(--accent);clip-path:polygon(0 0,0 100%,70% 0);pointer-events:none;opacity:.9}
 .wordmark{display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer;padding:10px 0}
 .wm-title{font-family:var(--sans);font-size:15px;font-weight:700;color:#fff;letter-spacing:.01em;line-height:1}
 .hdr-nav{display:flex;align-items:center;gap:2px;padding:8px 0}
@@ -486,7 +486,7 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
   <span class="fts">·</span>
   <span>An independent project by <a href="https://lukasroeseler.github.io" target="_blank">Lukas Röseler</a></span>
   <span class="fts">·</span>
-  <span>Data: <a href="https://datacite.org" target="_blank">DataCite</a> + <a href="https://openalex.org" target="_blank">OpenAlex</a> + <a href="https://www.altmetric.com" target="_blank">Altmetric</a></span>
+  <span>Data: <a href="https://datacite.org" target="_blank">DataCite</a> + <a href="https://openalex.org" target="_blank">OpenAlex</a> + <a href="https://www.altmetric.com" target="_blank">Altmetric</a> (DOI and citation data refreshed monthly)</span>
   <span class="fts">·</span>
   <span><a href="https://ejournals.uni-muenster.de" target="_blank">ULB Münster ↗</a></span>
   <span class="fts">·</span>
@@ -607,7 +607,6 @@ function tryLogo(cands,onSuccess,onFail){
 /* ═══════════════════════════════
    STATE
 ═══════════════════════════════ */
-var MAXP=500,DCP=200;
 var PUBS=[],CJ=null,RID=0,CSORT='newest';
 var YR_FROM='',YR_TO='';
 var AV_YR_FROM='',AV_YR_TO='';
@@ -617,6 +616,23 @@ var AV_PUBS=[];
 var AV_SORT='newest';
 var AV_HIDDEN={};
 var AV_CHART_MODE='stacked';
+
+/* Publications are no longer fetched live from DataCite/OpenAlex on every visit --
+   a monthly GitHub Action (scripts/crawl-ejournals.js) does that once and commits
+   the results here, so opening the dashboard just reads two small static files. */
+var STATIC_PUBS={},STATIC_META={};
+var staticCacheReady=null;
+function loadStaticCache(){
+  if(!staticCacheReady){
+    staticCacheReady=Promise.all([fj('data/publications.json',20000),fj('data/meta.json',10000)]).then(function(r){
+      if(r[0])STATIC_PUBS=r[0];
+      if(r[1])STATIC_META=r[1];
+      var ftu=document.getElementById('ftu');
+      if(ftu)ftu.textContent=STATIC_META.generatedAt?STATIC_META.generatedAt.slice(0,10):'—';
+    });
+  }
+  return staticCacheReady;
+}
 
 /* ── HELPERS ── */
 function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
@@ -871,92 +887,26 @@ async function load(j){
     return;
   }
 
-  progShow(5,'Fetching DOI records from DataCite…',0);
-  var recs=await fetchDC(j,rid,function(msg,pct){
-    if(rid===RID){st('L',msg);progShow(pct||10,'Fetching DOI records… '+msg,0)}
-  });
+  progShow(20,'Loading from monthly cache…',0);
+  await loadStaticCache();
   if(rid!==RID)return;
-  if(!recs.length){
+
+  var cached=STATIC_PUBS[j.slug];
+  if(!cached||!cached.length){
     progHide();
-    st('E','No records found in DataCite.');
+    st('E','No cached records for this journal yet.');
     document.getElementById('plist').innerHTML='<div class="note err"><strong>No publications found</strong>'
-      +'<p>DataCite returned no records for <code>'+j.dp.map(function(p){return'10.17879/'+p}).join(', ')+'</code>.</p></div>';
+      +'<p>The monthly data refresh has not cached any records for <code>'+e(j.slug)+'</code> yet. It updates on the 1st of each month.</p></div>';
     return;
   }
 
-  PUBS=recs.map(parseDC).filter(Boolean);
+  PUBS=cached.map(function(p){return Object.assign({},p)});
   buildYrSelects(PUBS);
   render();drawCharts();summ();
-  progShow(50,'DOI records loaded. Fetching citations from OpenAlex…',1);
-  st('L','Fetching citations from OpenAlex…');
-
-  for(var i=0;i<PUBS.length;i+=25){
-    if(rid!==RID)return;
-    await oaBatch(PUBS.slice(i,i+25));
-    var pct=50+Math.round(((i+25)/PUBS.length)*45);
-    progShow(Math.min(pct,94),'OpenAlex: '+Math.min(i+25,PUBS.length)+' / '+PUBS.length+' processed',1);
-    render();summ();drawCharts();
-    if(PUBS.length>25)st('L','OpenAlex: '+Math.min(i+25,PUBS.length)+' / '+PUBS.length+'…');
-  }
   if(rid!==RID)return;
-  document.getElementById('ftu').textContent=new Date().toISOString().slice(0,10);
-  st('D','Loaded '+fn(PUBS.length)+' publications · DataCite + OpenAlex');
+  st('D','Loaded '+fn(PUBS.length)+' publications · DataCite + OpenAlex (monthly cache)');
   progDone('Loaded '+fn(PUBS.length)+' publications');
   AV_CACHE[j.slug]=PUBS.slice();
-}
-
-/* ── DATACITE ── */
-async function fetchDC(j,rid,cb){
-  var all=[],seen={};
-  var totalPfx=j.dp.length;
-  for(var pi=0;pi<j.dp.length;pi++){
-    var pfx=j.dp[pi];
-    var q='prefix:10.17879 AND suffix:'+pfx+'*';
-    for(var pg=1;all.length<MAXP;pg++){
-      if(rid!==RID)return[];
-      var pct=5+Math.round(((pi/totalPfx)+(1/(totalPfx*(pg+1))))*40);
-      if(cb)cb('DataCite "'+pfx+'" page '+pg+' ('+all.length+' so far)…',pct);
-      var url='https://api.datacite.org/dois?query='+encodeURIComponent(q)+'&page%5Bsize%5D='+DCP+'&page%5Bnumber%5D='+pg;
-      var d=await fj(url,20000);
-      if(!d||!d.data||!d.data.length)break;
-      d.data.forEach(function(r){
-        var doi=r.attributes&&r.attributes.doi;
-        if(doi&&!seen[doi]){seen[doi]=1;all.push(r)}
-      });
-      if(d.data.length<DCP)break;
-    }
-  }
-  return all.slice(0,MAXP);
-}
-function parseDC(r){
-  try{
-    var a=r.attributes;if(!a||!a.doi)return null;
-    var title=(a.titles&&a.titles.length)?a.titles[0].title||'':'';
-    var auth=[];
-    (a.creators||[]).forEach(function(c){
-      var n=c.familyName?(c.familyName+(c.givenName?', '+c.givenName:'')):(c.name||'');
-      var orc=null;
-      (c.nameIdentifiers||[]).forEach(function(ni){
-        if((ni.nameIdentifierScheme||'').toUpperCase()==='ORCID')
-          orc=(ni.nameIdentifier||'').replace(/^https?:\/\/orcid\.org\//,'');
-      });
-      if(n)auth.push({n:n,o:orc});
-    });
-    var yr=a.publicationYear?+a.publicationYear:null;
-    return{doi:a.doi,title:title,auth:auth,yr:yr,url:a.url||('https://doi.org/'+a.doi),key:dk(a.doi),oa:null,cby:[]};
-  }catch(ex){return null}
-}
-async function oaBatch(batch){
-  var filter=batch.map(function(p){return'https://doi.org/'+p.doi}).join('|');
-  var d=await fj('https://api.openalex.org/works?filter=doi:'+encodeURIComponent(filter)+'&per-page=50&select=doi,cited_by_count,counts_by_year',15000);
-  if(!d||!d.results)return;
-  var bd={};
-  d.results.forEach(function(w){if(w.doi)bd[w.doi.toLowerCase().replace(/^https?:\/\/doi\.org\//,'')]=w});
-  batch.forEach(function(p){
-    var w=bd[p.doi.toLowerCase()];if(!w)return;
-    p.oa=w.cited_by_count!=null?w.cited_by_count:0;
-    p.cby=w.counts_by_year||[];
-  });
 }
 
 /* ── FILTER + SORT (journal view) ── */
@@ -1200,41 +1150,29 @@ async function showAll(){
   AV_PUBS=[];AV_YR_FROM='';AV_YR_TO='';
   document.getElementById('av-yr-filter-wrap').style.display='none';
 
+  progShow(20,'Loading from monthly cache…',0);
+  await loadStaticCache();
+  if(rid!==AV_RID)return;
+
   var trackableJ=J.filter(function(j){return!j.nd&&j.dp.length});
   var loaded=0;
-  progShow(2,'Loading all journals…',0);
 
   for(var ji=0;ji<trackableJ.length;ji++){
     if(rid!==AV_RID)return;
     var j=trackableJ[ji];
-    var overallPct=Math.round((ji/trackableJ.length)*100);
-    progShow(overallPct,'Loading '+j.name+' ('+loaded+' / '+trackableJ.length+')',0);
-    avSt('L','Loading '+e(j.name)+' ('+loaded+' / '+trackableJ.length+')…');
-
-    var jPubs;
-    if(AV_CACHE[j.slug]){
-      jPubs=AV_CACHE[j.slug];
-    }else{
-      var recs=await fetchDC(j,rid,null);
-      if(rid!==AV_RID)return;
-      jPubs=recs.map(parseDC).filter(Boolean);
-      for(var oi=0;oi<jPubs.length;oi+=25){
-        if(rid!==AV_RID)return;
-        await oaBatch(jPubs.slice(oi,oi+25));
-      }
-      AV_CACHE[j.slug]=jPubs.slice();
-    }
+    var jPubs=(STATIC_PUBS[j.slug]||[]).map(function(p){return Object.assign({},p)});
+    if(!jPubs.length)continue;
+    AV_CACHE[j.slug]=jPubs;
 
     jPubs.forEach(function(p){p.j=j});
     AV_PUBS=AV_PUBS.concat(jPubs);
     loaded++;
     buildAvYrSelects(AV_PUBS);
-    applyAllFilter();
   }
+  applyAllFilter();
 
   if(rid!==AV_RID)return;
   avSt('D','Loaded '+fn(AV_PUBS.length)+' publications from '+loaded+' journals');
-  document.getElementById('ftu').textContent=new Date().toISOString().slice(0,10);
   progDone('Loaded '+fn(AV_PUBS.length)+' publications from '+loaded+' journals');
 }
 
@@ -1402,6 +1340,7 @@ function avSt(cls,msg){
 /* ── INIT ── */
 buildGrid();buildDD('');
 document.getElementById('hs').style.display='block';
+loadStaticCache(); /* kick off in the background so it's usually ready before the first click */
 </script>
 <script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
 </body>
