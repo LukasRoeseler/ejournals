@@ -34,9 +34,11 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14
 
 /* ── HEADER ── */
 .hdr{background:var(--navy);padding:0 36px;display:flex;align-items:stretch;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.35);min-height:56px;animation:fadeIn .3s ease;overflow:hidden}
-/* Decorative corner triangle, matching the unimuenster dashboard's hero accent */
-.hdr::before{content:"";position:absolute;top:0;left:0;width:130px;height:100%;background:var(--accent);clip-path:polygon(0 0,0 100%,70% 0);pointer-events:none;opacity:.9}
-.wordmark{display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer;padding:10px 0}
+/* Decorative corner triangle, matching the unimuenster dashboard's hero accent.
+   Sized to sit fully behind the header's left padding, with the wordmark given
+   matching clearance below so the two never overlap regardless of title length. */
+.hdr::before{content:"";position:absolute;top:0;left:0;width:70px;height:100%;background:var(--accent);clip-path:polygon(0 0,0 100%,70% 0);pointer-events:none;opacity:.9}
+.wordmark{display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer;padding:10px 0;margin-left:44px}
 .wm-title{font-family:var(--sans);font-size:15px;font-weight:700;color:#fff;letter-spacing:.01em;line-height:1}
 .hdr-nav{display:flex;align-items:center;gap:2px;padding:8px 0}
 .hdr-tab{padding:6px 14px;border:none;background:transparent;color:rgba(255,255,255,.65);font-family:var(--sans);font-size:12.5px;font-weight:500;cursor:pointer;border-radius:5px;transition:all .2s;white-space:nowrap}
@@ -261,6 +263,8 @@ select.fb-select:hover,select.fb-select:focus{border-color:var(--accent)}
 
 @media(max-width:760px){
   .hdr,.ft{padding:0 14px}
+  .hdr::before{display:none}
+  .wordmark{margin-left:0}
   .wrap{padding:0 14px 60px}
   .jsel-btn{min-width:140px}
   .jdd{width:calc(100vw - 20px);right:-10px}
